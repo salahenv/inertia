@@ -8,11 +8,12 @@ export default function Home() {
   const [time, setTime] = useState('10');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
-  const [activeFocus, setActiveFocus] = useState({});
+  const [activeFocus, setActiveFocus] = useState({_id: ''});
   const [focus, setFocus] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
+    console.log(process.env);
     getFocus();
   }, []);
 
@@ -27,7 +28,7 @@ export default function Home() {
   }
   const getFocus = async () => {
     try {
-      const res = await fetch("http://localhost:3001/focus",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus`,
         {
             headers: {
               'Accept': 'application/json',
@@ -50,7 +51,7 @@ export default function Home() {
   }
   const onCreateFocus = async () => {
     try {
-      const res = await fetch("http://localhost:3001/focus/create",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/create`,
         {
             headers: {
               'Accept': 'application/json',
@@ -89,7 +90,7 @@ export default function Home() {
   } 
   const onUpdateFocus = async () => {
     try {
-      const res = await fetch(`http://localhost:3001/focus/update/${activeFocus._id}`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocus?._id}`,
         {
             headers: {
               'Accept': 'application/json',
@@ -194,7 +195,7 @@ export default function Home() {
         {
           focus && focus.length ? focus.map((f: any) => {
             return (
-              <div className="flex flex-row mb-1">
+              <div className="flex flex-row mb-1" key={f.index}>
                 <div className="w-2/5">{f.name}</div>
                 <div className="w-1/5">{formatDate(f.startTime)}</div>
                 <div className="w-1/5">{formatDate(f.endTime)}</div>

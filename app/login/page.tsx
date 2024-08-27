@@ -11,7 +11,7 @@ export default function Login() {
 
   const onLogin = async () => {
     try {
-      const res = await fetch("http://localhost:3001/auth/login",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
         {
             headers: {
               'Accept': 'application/json',

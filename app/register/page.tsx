@@ -12,7 +12,7 @@ export default function Register() {
 
   const onRegister = async () => {
     try {
-      await fetch("http://localhost:3001/auth/register",
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
         {
             headers: {
               'Accept': 'application/json',
