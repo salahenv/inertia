@@ -190,7 +190,7 @@ export default function Home() {
           <div className="w-2/5 font-bold text-lg">Name</div>
           <div className="w-1/5 font-bold text-lg">Start</div>
           <div className="w-1/5 font-bold text-lg">End</div>
-          <div className="w-1/5 font-bold text-lg">Time(Minutes)</div>
+          <div className="w-1/5 font-bold text-lg">Time</div>
         </div>
         {
           focus && focus.length ? focus.map((f: any) => {
