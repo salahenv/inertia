@@ -29,7 +29,7 @@ export default function Register() {
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col mb-16">
           <div className="mb-4 text-gray-800">Create Account</div>
           <input className="py-2 px-4 mb-2" placeholder="name" value={name} onChange={(e) => setName(e.target.value)}></input>
           <input className="py-2 px-4 mb-2" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
