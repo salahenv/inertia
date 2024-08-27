@@ -120,8 +120,8 @@ export default function Home() {
     <div className="bg-neutral-100 p-4 min-h-screen">
       {
         showProgressModal ? 
-          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-neutral-100 rounded-lg shadow-lg w-full max-w-lg p-6 relative">  
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-neutral-100 rounded-lg shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
               <div className="mt-4">
                   <Timer 
                     timeInMinutes = {parseInt(time)}
@@ -135,7 +135,7 @@ export default function Home() {
       }
       { showCreateModal ?
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-neutral-100 rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+            <div className="bg-neutral-100 rounded-lg shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
                 <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold">Create Focus</h2>
                     <button 
