@@ -16,7 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="font-bold text-xl sticky top-0 bg-neutral-100 px-4 py-2 border-b border-solid border-gray-400">Inertia</div>
+        {children}
+      </body>
     </html>
   );
 }
