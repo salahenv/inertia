@@ -225,8 +225,8 @@ export default function Home() {
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
           <div className="w-3/6 font-medium text-gray-500">Name</div>
           <div className="w-1/6 font-medium text-gray-500">Start</div>
-          <div className="w-1/6 font-medium text-gray-500">End</div>
-          <div className="w-1/6 font-medium text-gray-500">Time</div>
+          {/* <div className="w-1/6 font-medium text-gray-500">End</div> */}
+          <div className="w-2/6 font-medium text-gray-500">Time</div>
         </div>
         <>{
           isFocusLoading ? <SkeletonLoaderFocus classNames = ' mt-2'/> :
@@ -247,7 +247,7 @@ export default function Home() {
                       <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
                       <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
-                      <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div>
+                      {/* <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div> */}
                       <div className="w-1/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
                     </div>
                   )
