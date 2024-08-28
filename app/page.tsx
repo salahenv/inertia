@@ -1,7 +1,8 @@
 "use client"
 import { useEffect, useState } from "react";
 import Timer from "./components/Timer";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import Spinner from "./components/Spinner";
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
@@ -12,6 +13,8 @@ export default function Home() {
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
   const router = useRouter();
+  const [isFocusLoading, setIsFocusLoading] = useState(true);
+  const [isCreateFocusLoading, setIsCreatFocusLoading] = useState(false);
 
   useEffect(() => {
     console.log(process.env);
@@ -28,6 +31,7 @@ export default function Home() {
     setShowCreateModal(false);
   }
   const getFocus = async () => {
+    setIsFocusLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus`,
         {
@@ -41,23 +45,25 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-
         const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.endTime).getTime()/60000 - new Date(curr.startTime).getTime()/60000)}, 0);
         const minutes = Math.floor(totalFocusTime / 60);
         const remainingSeconds = totalFocusTime % 60;
         const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
         setFocused(totalfocusedValue);
-        
         setFocus(resData.data.focus);
+        setIsFocusLoading(false);
       }
       else {
+        setIsFocusLoading(false);
         router.push('/login');
       }
     } catch (error) {
+      setIsFocusLoading(false);
       console.log(error);
     }
   }
   const onCreateFocus = async () => {
+    setIsCreatFocusLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/create`,
         {
@@ -76,14 +82,19 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
+        setIsCreatFocusLoading(false);
         setActiveFocus(resData.data.focus);
         onCloseCreateFocusBtnClick();
         setShowProgressModal(true);
       }
       else {
+        setIsCreatFocusLoading(false);
         console.log("Error while creating focus", resData);
+        alert('Unable to create focus');
       }
     } catch (error) {
+      setIsCreatFocusLoading(false);
+      alert('Unable to create focus');
       console.log(error);
     }
   }
@@ -181,7 +192,7 @@ export default function Home() {
                     <button 
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                       onClick={ () => {onCreateFocus()}}
-                    >Create</button>
+                    >{isCreateFocusLoading ? <Spinner></Spinner> : "Create"}</button>
                 </div>
             </div>
         </div>
@@ -201,31 +212,36 @@ export default function Home() {
           <div className="w-1/6 font-medium text-gray-500">End</div>
           <div className="w-1/6 font-medium text-gray-500">Time</div>
         </div>
-        {
-          focus && focus.length ? focus.map((f: any) => {
+        <>{
+          isFocusLoading ? <Spinner /> :
+          <>
+             {
+                focus && focus.length ? focus.map((f: any) => {
 
-            const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000*60));
+                  const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000*60));
 
-            let bgClassName = '';
-            if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-green-300/25';
-            if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-green-200/25';
-            if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-orange-200/25';
-            if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-red-400/25';
+                  let bgClassName = '';
+                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-green-300/25';
+                  if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-green-200/25';
+                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-orange-200/25';
+                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-red-400/25';
 
-            return (
-              <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
-                <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
-                <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
-                <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
-                <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div>
-                <div className="w-1/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
-              </div>
-            )
-          }) : <div>
-            <div className="text-2xl text-center mt-16 text-red-500">No Focus</div>
-            <div className="text-lg text-center mt-2 text-gray-500">Create focus from top right button</div>
-          </div>
-        }
+                  return (
+                    <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
+                      <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
+                      <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
+                      <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
+                      <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div>
+                      <div className="w-1/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
+                    </div>
+                  )
+                }) : <div>
+                  <div className="text-2xl text-center mt-16 text-red-500">No Focus</div>
+                  <div className="text-lg text-center mt-2 text-gray-500">Create focus from top right button</div>
+                </div>
+              }
+          </>
+        }</>
       </div>
     </div>
   );
