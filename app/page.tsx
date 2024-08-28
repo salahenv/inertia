@@ -186,20 +186,30 @@ export default function Home() {
         </button>
       </div>
       <div className="flex flex-col">
-        <div className="flex flex-row mb-2">
-          <div className="w-2/5 font-bold text-lg">Name</div>
-          <div className="w-1/5 font-bold text-lg">Start</div>
-          <div className="w-1/5 font-bold text-lg">End</div>
-          <div className="w-1/5 font-bold text-lg">Time</div>
+        <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gray-500/25">
+          <div className="w-3/6 font-bold text-lg text-gray-500">Name</div>
+          <div className="w-1/6 font-bold text-lg text-gray-500">Start</div>
+          <div className="w-1/6 font-bold text-lg text-gray-500">End</div>
+          <div className="w-1/6 font-bold text-lg text-gray-500">Time</div>
         </div>
         {
           focus && focus.length ? focus.map((f: any) => {
+
+            const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000*60));
+
+            let bgClassName = '';
+            if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-green-300/25';
+            if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-green-200/25';
+            if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-orange-200/25';
+            if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-red-400/25';
+
             return (
-              <div className="flex flex-row mb-1" key={f.index}>
-                <div className="w-2/5">{f.name}</div>
-                <div className="w-1/5">{formatDate(f.startTime)}</div>
-                <div className="w-1/5">{formatDate(f.endTime)}</div>
-                <div className="w-1/5">{Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000*60))}</div>
+              <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center ${bgClassName}`} key={f.index}>
+                <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
+                <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
+                <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
+                <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div>
+                <div className="w-1/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
               </div>
             )
           }) : <div>
