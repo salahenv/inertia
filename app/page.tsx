@@ -222,7 +222,7 @@ export default function Home() {
         </button>
       </div>
       <div className="flex flex-col">
-        <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gray-500/25">
+        <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
           <div className="w-3/6 font-medium text-gray-500">Name</div>
           <div className="w-1/6 font-medium text-gray-500">Start</div>
           <div className="w-1/6 font-medium text-gray-500">End</div>
