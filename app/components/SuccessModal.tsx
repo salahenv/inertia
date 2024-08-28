@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Congrats from "./Congrats";
 
 const SuccessModal = ({ timeInMinutes, toggleSuccessModal }: any) => {
-  const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     // Play audio on component mount
     if (audioRef.current) {
-        try {
-            audioRef.current.play();
-        } catch (error) {
-            console.log(error);
-        }
+      try {
+        audioRef?.current?.play();
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, []);
 
