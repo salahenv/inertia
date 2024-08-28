@@ -190,7 +190,7 @@ export default function Home() {
                 </div>
                 <div className="mt-6">
                     <button 
-                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
                       onClick={ () => {onCreateFocus()}}
                     >{isCreateFocusLoading ? <Spinner></Spinner> : "Create"}</button>
                 </div>
