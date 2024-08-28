@@ -7,14 +7,17 @@ const formatTime = (seconds: number) => {
   return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 };
 
-const Timer = ({timeInMinutes, onUpdateFocus, focus} : any) => {
+const Timer = ({timeInMinutes, onUpdateFocus, focus, toggleSuccessModal} : any) => {
   const [time, setTime] = useState(timeInMinutes * 60);
   const [progress, setProgress] = useState('100%');
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     let interval: any;
-    if (time === 0) return;
+    if (time === 0) {
+      clearInterval(interval);
+      toggleSuccessModal();
+    };
     if(isActive && time >= 0) {
         interval = setInterval(() => {
             setTime((prevTime) => prevTime - 1);

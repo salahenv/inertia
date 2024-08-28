@@ -4,12 +4,14 @@ import Timer from "./components/Timer";
 import { useRouter } from 'next/navigation';
 import Spinner from "./components/Spinner";
 import { SkeletonLoaderFocus } from "./components/Loader";
+import SuccessModal from "./components/SuccessModal";
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
   const [time, setTime] = useState('10');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
+  const [showSuccessModal, setSuccessModal] = useState(false);
   const [activeFocus, setActiveFocus] = useState({_id: ''});
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
@@ -31,7 +33,6 @@ export default function Home() {
     setShowCreateModal(false);
   }
   const getFocus = async () => {
-    
     try {
       setIsFocusLoading(true);
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus`,
@@ -134,9 +135,22 @@ export default function Home() {
       console.log(error);
     }
   }
+  const toggleSuccessModal = () => {
+    setShowProgressModal(false);
+    setSuccessModal(!showSuccessModal);
+  }
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
+      {
+        showSuccessModal ?
+          <SuccessModal  
+            timeInMinutes = {parseInt(time)}
+            toggleSuccessModal = {toggleSuccessModal}
+          />
+          : 
+          null
+      }
       {
         showProgressModal ? 
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
@@ -146,6 +160,7 @@ export default function Home() {
                     timeInMinutes = {parseInt(time)}
                     onUpdateFocus = {onUpdateFocus}
                     focus = {activeFocus}
+                    toggleSuccessModal = {toggleSuccessModal}
                   />  
               </div>
               </div>

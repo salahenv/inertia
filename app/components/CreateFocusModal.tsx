@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
-const CreateFocusModal = ({} : any) => {
-    const [focusName, setFocusName] = useState('');
-    const [time, setTime] = useState('10');
+const SuccessModal = ({time} : any) => {
     return (
-        <div>Test</div>
+        <div className="flex flex-col items-center"> 
+            <div>👏👏👏</div>
+            <div>Congratulation</div>
+            <div>{`Compleated the focus for ${time}`}</div>
+        </div>
     );
 }
-export default CreateFocusModal;
+export default SuccessModal;
