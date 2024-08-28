@@ -18,7 +18,6 @@ export default function Home() {
   const [isCreateFocusLoading, setIsCreatFocusLoading] = useState(false);
 
   useEffect(() => {
-    console.log(process.env);
     getFocus();
   }, []);
 
@@ -214,7 +213,7 @@ export default function Home() {
           <div className="w-1/6 font-medium text-gray-500">Time</div>
         </div>
         <>{
-          isFocusLoading ? <SkeletonLoaderFocus /> :
+          isFocusLoading ? <SkeletonLoaderFocus classNames = 'mt-2'/> :
           <>
              {
                 focus && focus.length ? focus.map((f: any) => {
