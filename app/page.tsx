@@ -10,6 +10,7 @@ export default function Home() {
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [activeFocus, setActiveFocus] = useState({_id: ''});
   const [focus, setFocus] = useState([]);
+  const [focused, setFocused] = useState("00:00");
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +41,13 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
+
+        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.endTime).getTime()/60000 - new Date(curr.startTime).getTime()/60000)}, 0);
+        const minutes = Math.floor(totalFocusTime / 60);
+        const remainingSeconds = totalFocusTime % 60;
+        const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        setFocused(totalfocusedValue);
+        
         setFocus(resData.data.focus);
       }
       else {
@@ -178,19 +186,20 @@ export default function Home() {
             </div>
         </div>
       : null }
-      <div className="flex flex-row justify-end items-center mb-4">
+      <div className="flex flex-row justify-between items-center mb-4">
+        <div className="font-medium">Focused <span className="text-green-900">{focused}</span>{" "+ "hours"}</div>
         <button 
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded" 
           onClick={() => onCreateFocusBtnClick()}>
           + Add Focus
         </button>
       </div>
       <div className="flex flex-col">
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gray-500/25">
-          <div className="w-3/6 font-bold text-lg text-gray-500">Name</div>
-          <div className="w-1/6 font-bold text-lg text-gray-500">Start</div>
-          <div className="w-1/6 font-bold text-lg text-gray-500">End</div>
-          <div className="w-1/6 font-bold text-lg text-gray-500">Time</div>
+          <div className="w-3/6 font-medium text-gray-500">Name</div>
+          <div className="w-1/6 font-medium text-gray-500">Start</div>
+          <div className="w-1/6 font-medium text-gray-500">End</div>
+          <div className="w-1/6 font-medium text-gray-500">Time</div>
         </div>
         {
           focus && focus.length ? focus.map((f: any) => {
@@ -204,7 +213,7 @@ export default function Home() {
             if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-red-400/25';
 
             return (
-              <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center ${bgClassName}`} key={f.index}>
+              <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
                 <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
                 <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                 <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
