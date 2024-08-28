@@ -237,10 +237,10 @@ export default function Home() {
                   const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000*60));
 
                   let bgClassName = '';
-                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-300/25 to-green-200/25';
-                  if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-gradient-to-r from-green-200/25 to-green-100/25';
-                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-gradient-to-r from-orange-300/25 to-orange-200/25';
-                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-gradient-to-r from-red-400/25 to-red-300/25';
+                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-400';
+                  if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-gradient-to-r from-green-200';
+                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-gradient-to-r from-orange-300';
+                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-gradient-to-r from-red-400';
 
                   return (
                     <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
