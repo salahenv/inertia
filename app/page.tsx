@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Timer from "./components/Timer";
 import { useRouter } from 'next/navigation';
 import Spinner from "./components/Spinner";
+import { SkeletonLoaderFocus } from "./components/Loader";
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
@@ -31,8 +32,9 @@ export default function Home() {
     setShowCreateModal(false);
   }
   const getFocus = async () => {
-    setIsFocusLoading(true);
+    
     try {
+      setIsFocusLoading(true);
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus`,
         {
             headers: {
@@ -51,15 +53,14 @@ export default function Home() {
         const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
         setFocused(totalfocusedValue);
         setFocus(resData.data.focus);
-        setIsFocusLoading(false);
       }
       else {
-        setIsFocusLoading(false);
         router.push('/login');
       }
     } catch (error) {
-      setIsFocusLoading(false);
       console.log(error);
+    } finally {
+      setIsFocusLoading(false);
     }
   }
   const onCreateFocus = async () => {
@@ -213,7 +214,7 @@ export default function Home() {
           <div className="w-1/6 font-medium text-gray-500">Time</div>
         </div>
         <>{
-          isFocusLoading ? <Spinner /> :
+          isFocusLoading ? <SkeletonLoaderFocus /> :
           <>
              {
                 focus && focus.length ? focus.map((f: any) => {

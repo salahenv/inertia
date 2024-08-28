@@ -1,15 +1,18 @@
 "use client"
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
+import Spinner from "../components/Spinner";
 
 
 export default function Login() {
   const[email, setEmail] = useState('');
   const[password, setPassword] = useState('');
   const[errorMessage, setErrorMessage] = useState('');
+  const[isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const onLogin = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
         {
@@ -31,7 +34,9 @@ export default function Login() {
       }
         
     } catch (error) {
-      console.log("error", error);
+      alert(JSON.stringify(error))
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -42,7 +47,7 @@ export default function Login() {
           <input className="py-2 px-4 mb-2" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
           <input className='py-2 px-4 mb-2' placeholder="password" value = {password} onChange={(e) => setPassword(e.target.value)}></input>
           <button disabled ={!email || !password} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick = {() => onLogin()}>
-            Login
+            {isLoading ? <Spinner/> : "Login"}
           </button>
         </div> 
     

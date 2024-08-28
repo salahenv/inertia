@@ -2,16 +2,19 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
+import Spinner from "../components/Spinner";
 
 
 export default function Register() {
   const[name, setName] = useState('');
   const[email, setEmail] = useState('');
   const[password, setPassword] = useState('');
+  const[isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const onRegister = async () => {
     try {
+      setIsLoading(true);
       await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
         {
             headers: {
@@ -23,7 +26,9 @@ export default function Register() {
         });
         router.push('/login', { scroll: false });
     } catch (error) {
-      console.log("error", error);
+      alert(JSON.stringify(error));
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -35,7 +40,7 @@ export default function Register() {
           <input className="py-2 px-4 mb-2" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
           <input className='py-2 px-4 mb-2' placeholder="password" value = {password} onChange={(e) => setPassword(e.target.value)}></input>
           <button disabled={!name || !email || !password} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick = {() => onRegister()}>
-            Register
+          {isLoading ? <Spinner/> : "Register"}
           </button>
         </div> 
     
