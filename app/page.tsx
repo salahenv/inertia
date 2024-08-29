@@ -191,7 +191,7 @@ export default function Home() {
                       <span className="font-bold text-green-800">{" "}{time} minutes</span>
                     </div>
                     <div className="flex items-center space-x-4">
-                      <input
+                    <input
                         id="slider"
                         type="range"
                         min="1"
@@ -200,7 +200,10 @@ export default function Home() {
                         placeholder="select focus time"
                         className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onChange={(e) => { onSlideChange(e.target.value)}}
-                      />
+                        style={{
+                          background: `linear-gradient(to right, #4f46e5 ${(time - 1) / 59 * 100}%, #e5e7eb ${(time - 1) / 59 * 100}%)`
+                        }}
+                    />
                     </div>
                   </div>
                 </div>
@@ -248,7 +251,7 @@ export default function Home() {
                       <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
                       {/* <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div> */}
-                      <div className="w-1/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
+                      <div className="w-2/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
                     </div>
                   )
                 }) : <div>
