@@ -5,24 +5,23 @@ const SuccessModal = ({ timeInMinutes, toggleSuccessModal }: any) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Play audio on component mount
-    if (audioRef.current) {
-      try {
-        audioRef?.current?.play();
-      } catch (error) {
-        console.log(error);
-      }
+    const audio = new Audio('/positive_beeps-85504.mp3');
+    try {
+      audio.play();
+    } catch (error) {
+      alert("Some error while playing sound" + JSON.stringify(error));
     }
+    
   }, []);
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-neutral-100 rounded-lg shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
         <div className="flex flex-col items-center">
-          <audio ref={audioRef}>
+          {/* <audio ref={audioRef}>
             <source src="/positive_beeps-85504.mp3" type="audio/mpeg" />
             Your browser does not support the audio element.
-          </audio>
+          </audio> */}
           <div className="mb-4">
             <Congrats />
           </div>
