@@ -201,7 +201,7 @@ export default function Home() {
                         className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onChange={(e) => { onSlideChange(e.target.value)}}
                         style={{
-                          background: `linear-gradient(to right, #4f46e5 ${(time - 1) / 59 * 100}%, #e5e7eb ${(time - 1) / 59 * 100}%)`
+                          background: `linear-gradient(to right, #4f46e5 ${(parseInt(time) - 1) / 59 * 100}%, #e5e7eb ${(parseInt(time) - 1) / 59 * 100}%)`
                         }}
                     />
                     </div>
