@@ -59,7 +59,9 @@ const Timer = ({timeInMinutes, onUpdateFocus, focus, toggleSuccessModal} : any) 
       <div className='text-center mb-3 font-medium text-gray-600 text-xl'>{focus?.name}</div>
       <div className='text-center mb-2 font-bold text-blue-600 text-6xl'>{formatTime(time)}</div>
       <div className="w-full h-6 bg-gray-300 rounded-full">
-        <div className="h-6 bg-blue-600 rounded-full" style={{width: progress}}></div>
+        <div className="h-6 bg-blue-600 rounded-full flex items-center justify-center" style={{width: progress}}>
+          {parseInt(progress) > 5 && <span className="text-white font-bold">{Math.ceil(parseInt(progress))}%</span>}
+        </div>
       </div>
       <div className="flex justify-center mt-6">
         <button 

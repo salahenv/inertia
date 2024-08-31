@@ -55,10 +55,10 @@ export default function Home() {
         setFocus(resData.data.focus);
       }
       else {
-        router.push('/login');
+        alert(JSON.stringify(resData));
       }
     } catch (error) {
-      console.log(error);
+      alert(JSON.stringify(error));
     } finally {
       setIsFocusLoading(false);
     }
@@ -194,7 +194,7 @@ export default function Home() {
                     <input
                         id="slider"
                         type="range"
-                        min="1"
+                        min="0"
                         max="60"
                         value={time}
                         placeholder="select focus time"
@@ -210,6 +210,7 @@ export default function Home() {
                 <div className="mt-6">
                     <button 
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+                      disabled = {isCreateFocusLoading}
                       onClick={ () => {onCreateFocus()}}
                     >{isCreateFocusLoading ? <Spinner></Spinner> : "Create"}</button>
                 </div>
