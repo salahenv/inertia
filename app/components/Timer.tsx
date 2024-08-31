@@ -18,7 +18,7 @@ const Timer = ({timeInMinutes, onUpdateFocus, focus, toggleSuccessModal} : any) 
 
   useEffect(() => {
     // Start the timer when component mounts or when `isActive` changes
-    if (isActive) {
+    if (!!isActive) {
       startTimeRef.current = Date.now(); // Capture the start time
       
       const updateTimer = () => {
