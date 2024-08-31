@@ -55,7 +55,7 @@ export default function Home() {
         setFocus(resData.data.focus);
       }
       else {
-        router.push('/')
+        router.push('/login')
         // alert(JSON.stringify(resData));
       }
     } catch (error) {
