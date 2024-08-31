@@ -30,7 +30,8 @@ export default function Login() {
         router.push('/');
       }
       else {
-        alert(resData.message);
+        router.push('/login');
+        // alert(resData.message);
       }
         
     } catch (error) {
