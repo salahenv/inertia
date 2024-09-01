@@ -6,6 +6,29 @@ import Spinner from "./components/Spinner";
 import { SkeletonLoaderFocus } from "./components/Loader";
 import SuccessModal from "./components/SuccessModal";
 
+const tags = [
+  {
+    label: 'Learning',
+    value: 'LEARNING',
+  },
+  {
+    label: 'Home Work',
+    value: 'HOMEWORK',
+  },
+  {
+    label: 'Waste',
+    value: 'WASTE',
+  },
+  {
+    label: 'Personal',
+    value: 'PERSONAL',
+  },
+  {
+    label: 'Other',
+    value: 'other',
+  }
+]
+
 export default function Home() {
   const [focusName, setFocusName] = useState('');
   const [startTime, setStartTime] = useState(Date.now());
@@ -20,6 +43,7 @@ export default function Home() {
   const router = useRouter();
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
+  const [selectedTag, setSelectedTag] = useState(tags[0].value);
 
   useEffect(() => {
     getFocus();
@@ -70,7 +94,8 @@ export default function Home() {
     const payload = {
       name: focusName, 
       startTime,
-      endTime
+      endTime,
+      tag: selectedTag,
     }
     setIsSaveFocusLoading(true);
     try {
@@ -203,21 +228,31 @@ export default function Home() {
                       <span className="font-bold text-green-800">{" "}{time} minutes</span>
                     </div>
                     <div className="flex items-center space-x-4">
-                    <input
-                        id="slider"
-                        type="range"
-                        min="0"
-                        max="60"
-                        value={time}
-                        placeholder="select focus time"
-                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        onChange={(e) => { onSlideChange(e.target.value)}}
-                        style={{
-                          background: `linear-gradient(to right, #4f46e5 ${(parseInt(time) - 1) / 59 * 100}%, #e5e7eb ${(parseInt(time) - 1) / 59 * 100}%)`
-                        }}
-                    />
+                      <input
+                          id="slider"
+                          type="range"
+                          min="0"
+                          max="60"
+                          value={time}
+                          placeholder="select focus time"
+                          className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          onChange={(e) => { onSlideChange(e.target.value)}}
+                          style={{
+                            background: `linear-gradient(to right, #4f46e5 ${(parseInt(time) - 1) / 59 * 100}%, #e5e7eb ${(parseInt(time) - 1) / 59 * 100}%)`
+                          }}
+                      />
                     </div>
                   </div>
+                  <div className="overflow-x-scroll mt-6 flex items-center justify-between">{
+                    tags.map(({label, value}) => {
+                      return (
+                        <button 
+                          className= {`text-blue-600 whitespace-nowrap m-1 px-2 py-1 rounded border border-solid border-blue-600" ${selectedTag===value ? " bg-blue-600 text-white" : ""}`} 
+                          onClick={ () => {setSelectedTag(value)}}
+                      >{label}</button>
+                      )
+                    })  
+                  }</div>
                 </div>
                 <div className="mt-6">
                     <button 
