@@ -244,9 +244,10 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="overflow-x-scroll mt-6 flex items-center justify-between">{
-                    tags.map(({label, value}) => {
+                    tags.map(({label, value}, index) => {
                       return (
-                        <button 
+                        <button
+                          key = {index}
                           className= {`text-blue-600 whitespace-nowrap m-1 px-2 py-1 rounded border border-solid border-blue-600" ${selectedTag===value ? " bg-blue-600 text-white" : ""}`} 
                           onClick={ () => {setSelectedTag(value)}}
                       >{label}</button>
