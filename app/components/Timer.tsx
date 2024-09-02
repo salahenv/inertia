@@ -38,6 +38,7 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
           setProgress('0%');
           toggleSuccessModal();
           setEndTime(Date.now());
+          saveFocus();
           return;
         } else {
           setTime(newTime);
