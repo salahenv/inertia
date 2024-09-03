@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Spinner from './Spinner';
+import { getFontOverrideCss } from 'next/dist/server/font-utils';
 
-const map: any = {
+let map: any = {
   '20%': {
     updated: false,
   },
@@ -26,7 +27,16 @@ const formatTime = (seconds: number) => {
   return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 };
 
-const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal,toggleProgressModal, setEndTime, updateFocus, saveFocus} : any) => {
+const Timer = ({
+    timeInMinutes, 
+    isSaveFocusLoading, 
+    focusName, 
+    toggleSuccessModal, 
+    toggleProgressModal,
+    setEndTime, 
+    updateFocus, 
+    getFocus
+  } : any) => {
   const [time, setTime] = useState(timeInMinutes * 60); // Initial time in seconds
   const [progress, setProgress] = useState('100%');
   const [isActive, setIsActive] = useState(true);
@@ -52,10 +62,11 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
         if (newTime <= 0) {
           setTime(0);
           setProgress('0%');
-          toggleProgressModal();
-          toggleSuccessModal();
           setEndTime(Date.now());
           updateFocus();
+          toggleProgressModal();
+          toggleSuccessModal();
+          localStorage.removeItem('activeFocusId');
           return;
         } else {
           setTime(newTime);
@@ -98,7 +109,8 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
 
   const onYesClick = () => {
     setEndTime(Date.now());
-    saveFocus();
+    setShowConfirmation(false);
+    getFocus();
   }
 
   return (

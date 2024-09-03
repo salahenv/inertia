@@ -46,7 +46,7 @@ export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showSuccessModal, setSuccessModal] = useState(false);
-  const [activeFocusId, setActiveFocusId] = useState <string>('salah');
+  const [activeFocusId, setActiveFocusId] = useState <string>('');
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
   const router = useRouter();
@@ -130,9 +130,8 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        setActiveFocusId(resData.data.focus._id);
-        console.log('activeFocusId', activeFocusId);
-        setTimeout(() => console.log('activeFocusId', activeFocusId), 0);
+        const id = resData.data.focus._id;
+        localStorage.setItem('activeFocusId', id);
       }
       else {
         alert('Unable to create focus');
@@ -141,46 +140,10 @@ export default function Home() {
       alert(JSON.stringify(error));
     } finally {
       setIsSaveFocusLoading(false);
-    }
-  } 
-  const saveFocus = async () => {
-    const payload = {
-      name: focusName, 
-      startTime,
-      endTime,
-      tag: selectedTag,
-    }
-    setIsSaveFocusLoading(true);
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/create`,
-        {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            method: "POST",
-            body: JSON.stringify(payload),
-            credentials: 'include'
-        }
-      );
-      const resData = await res.json();
-      if(resData.success) {
-        setActiveFocus(resData.data.focus);
-        toogleAddFocusModal();
-        setShowProgressModal(true);
-      }
-      else {
-        alert('Unable to create focus');
-      }
-    } catch (error) {
-      alert(JSON.stringify(error));
-    } finally {
-      setIsSaveFocusLoading(false);
-      setShowProgressModal(false);
-      getFocus();
     }
   } 
   const onUpdateFocus = async () => {
+    const activeFocusId = localStorage.getItem('activeFocusId');
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocusId}`,
         {
@@ -197,11 +160,9 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        setShowProgressModal(false);
-        getFocus();
       }
       else {
-        alert("unable to complete");
+        // alert("unable to complete");
       }
     } catch (error) {
       console.log(error);
@@ -232,8 +193,8 @@ export default function Home() {
                     toggleSuccessModal = {toggleSuccessModal}
                     setEndTime = {setEndTime}
                     toggleProgressModal = {toggleProgressModal}
-                    saveFocus = {saveFocus}
                     updateFocus = {onUpdateFocus}
+                    getFocus = {getFocus}
                   />  
               </div>
               </div>
@@ -318,7 +279,7 @@ export default function Home() {
           isFocusLoading ? <SkeletonLoaderFocus classNames = ' mt-2'/> :
           <>
              {
-                focus && focus.length ? focus.map((f: any) => {
+                focus && focus.length ? focus.map((f: any, index) => {
 
                   const timeSpendInMinutes = Math.ceil((new Date(f.startTime).getTime() - new Date(f.endTime).getTime()) / (1000 * 60));
 
@@ -329,7 +290,7 @@ export default function Home() {
                   if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-gradient-to-r from-red-400';
 
                   return (
-                    <div className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
+                    <div key={index} className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
                       <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
                       <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
