@@ -29,6 +29,16 @@ const tags = [
   }
 ]
 
+const formatDate = (date: any) => {
+  date = new Date(date);
+  const formattedTime = date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false
+  });
+  return formattedTime;
+}
+
 export default function Home() {
   const [focusName, setFocusName] = useState('');
   const [startTime, setStartTime] = useState(Date.now());
@@ -52,11 +62,17 @@ export default function Home() {
   const onSlideChange = (value: string) => {
     setTime(value);
   };
-  const onCreateFocusBtnClick = () => {
-    setShowCreateModal(true);
+  const toogleAddFocusModal = () => {
+    setShowCreateModal(!showCreateModal);
   }
-  const onCloseCreateFocusBtnClick = () => {
-    setShowCreateModal(false);
+  const onCreateFocus = async () => {
+    const now = Date.now();
+    setStartTime(now);
+    toogleAddFocusModal();
+    setShowProgressModal(true);
+  }
+  const toggleSuccessModal = () => {
+    setSuccessModal(!showSuccessModal);
   }
   const getFocus = async () => {
     try {
@@ -113,7 +129,7 @@ export default function Home() {
       const resData = await res.json();
       if(resData.success) {
         setActiveFocus(resData.data.focus);
-        onCloseCreateFocusBtnClick();
+        toogleAddFocusModal();
         setShowProgressModal(true);
       }
       else {
@@ -127,20 +143,6 @@ export default function Home() {
       getFocus();
     }
 
-  }
-  const onCreateFocus = async () => {
-    setStartTime(Date.now());
-    onCloseCreateFocusBtnClick();
-    setShowProgressModal(true);
-  }
-  const formatDate = (date: any) => {
-    date = new Date(date);
-    const formattedTime = date.toLocaleString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false
-    });
-    return formattedTime;
   } 
   const onUpdateFocus = async () => {
     try {
@@ -168,10 +170,6 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  }
-  const toggleSuccessModal = () => {
-    setShowProgressModal(false);
-    setSuccessModal(!showSuccessModal);
   }
 
   return (
@@ -211,7 +209,7 @@ export default function Home() {
                     <h2 className="text-xl font-semibold">Create Focus</h2>
                     <button 
                       className="text-gray-500 hover:text-gray-700" 
-                      onClick={ () => {onCloseCreateFocusBtnClick()}}
+                      onClick={ () => {toogleAddFocusModal()}}
                     >✖</button>
                 </div>
                 <div className="mt-4">
@@ -268,7 +266,7 @@ export default function Home() {
         <div className="font-medium">Focused <span className="text-green-900">{focused}</span>{" "+ "hours"}</div>
         <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded" 
-          onClick={() => onCreateFocusBtnClick()}>
+          onClick={() => toogleAddFocusModal()}>
           + Add Focus
         </button>
       </div>
@@ -276,7 +274,6 @@ export default function Home() {
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
           <div className="w-3/6 font-medium text-gray-500">Name</div>
           <div className="w-1/6 font-medium text-gray-500">Start</div>
-          {/* <div className="w-1/6 font-medium text-gray-500">End</div> */}
           <div className="w-2/6 font-medium text-gray-500">Time</div>
         </div>
         <>{
@@ -298,7 +295,6 @@ export default function Home() {
                       <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
                       <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
-                      {/* <div className="w-1/6 text-gray-500">{formatDate(f.endTime)}</div> */}
                       <div className="w-2/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
                     </div>
                   )
