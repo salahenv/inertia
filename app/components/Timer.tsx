@@ -1,6 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Spinner from './Spinner';
 
+const map: any = {
+  '20%': {
+    updated: false,
+  },
+  '40%': {
+    updated: false,
+  },
+  '60%': {
+    updated: false,
+  },
+  '80%': {
+    updated: false,
+  },
+}
+
 // Function to format time as MM:SS
 const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -8,7 +23,7 @@ const formatTime = (seconds: number) => {
   return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 };
 
-const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal, setEndTime, saveFocus} : any) => {
+const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal,toggleProgressModal, setEndTime, updateFocus, saveFocus} : any) => {
   const [time, setTime] = useState(timeInMinutes * 60); // Initial time in seconds
   const [progress, setProgress] = useState('100%');
   const [isActive, setIsActive] = useState(true);
@@ -34,19 +49,21 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
         if (newTime <= 0) {
           setTime(0);
           setProgress('0%');
+          toggleProgressModal();
           toggleSuccessModal();
           setEndTime(Date.now());
-          saveFocus();
+          updateFocus();
           return;
         } else {
           setTime(newTime);
           const progressVal = `${(100 / (timeInMinutes * 60) * newTime)}%`;
           setProgress(progressVal);
+
           // saving focus at interval
-          const shouldSave = ['20%', '40%', '60%', '80%'].includes(progressVal);
-          if(shouldSave) {
+          const m = map[progressVal];
+          if(m && !m.updated) {
             setEndTime(Date.now());
-            saveFocus();
+            updateFocus();
           }
         }
   

@@ -69,9 +69,13 @@ export default function Home() {
     setStartTime(now);
     toogleAddFocusModal();
     setShowProgressModal(true);
+    createFocus();
   }
   const toggleSuccessModal = () => {
     setSuccessModal(!showSuccessModal);
+  }
+  const toggleProgressModal = () => {
+    setShowProgressModal(!showProgressModal);
   }
   const getFocus = async () => {
     try {
@@ -88,7 +92,7 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.endTime).getTime()/60000 - new Date(curr.startTime).getTime()/60000)}, 0);
+        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.startTime).getTime()/60000 - new Date(curr.endTime).getTime()/60000)}, 0);
         const minutes = Math.floor(totalFocusTime / 60);
         const remainingSeconds = totalFocusTime % 60;
         const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
@@ -105,6 +109,38 @@ export default function Home() {
       setIsFocusLoading(false);
     }
   }
+  const createFocus = async () => {
+    const payload = {
+      name: focusName, 
+      startTime,
+      endTime,
+      tag: selectedTag,
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/create`,
+        {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            method: "POST",
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+      );
+      const resData = await res.json();
+      if(resData.success) {
+        setActiveFocus(resData.data.focus);
+      }
+      else {
+        alert('Unable to create focus');
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
+    } finally {
+      setIsSaveFocusLoading(false);
+    }
+  } 
   const saveFocus = async () => {
     const payload = {
       name: focusName, 
@@ -141,7 +177,6 @@ export default function Home() {
       setShowProgressModal(false);
       getFocus();
     }
-
   } 
   const onUpdateFocus = async () => {
     try {
@@ -171,6 +206,7 @@ export default function Home() {
     }
   }
 
+
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
       {
@@ -191,10 +227,12 @@ export default function Home() {
                     timeInMinutes = {parseInt(time)}
                     onUpdateFocus = {onUpdateFocus}
                     focusName = {focusName}
+                    isSaveFocusLoading = {isSaveFocusLoading}
                     toggleSuccessModal = {toggleSuccessModal}
                     setEndTime = {setEndTime}
+                    toggleProgressModal = {toggleProgressModal}
                     saveFocus = {saveFocus}
-                    isSaveFocusLoading = {isSaveFocusLoading}
+                    updateFocus = {onUpdateFocus}
                   />  
               </div>
               </div>
@@ -281,7 +319,7 @@ export default function Home() {
              {
                 focus && focus.length ? focus.map((f: any) => {
 
-                  const timeSpendInMinutes = Math.ceil(new Date(f.startTime).getTime() - new Date(f.endTime).getTime());
+                  const timeSpendInMinutes = Math.ceil((new Date(f.startTime).getTime() - new Date(f.endTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
                   if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-400';
