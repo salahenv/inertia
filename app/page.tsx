@@ -290,7 +290,7 @@ export default function Home() {
                   if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-gradient-to-r from-red-400';
 
                   return (
-                    <div key={index} className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`} key={f.index}>
+                    <div key={index} className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`}>
                       <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
                       <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
