@@ -92,7 +92,7 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.startTime).getTime()/60000 - new Date(curr.endTime).getTime()/60000)}, 0);
+        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.endTime).getTime()/60000 - new Date(curr.startTime).getTime()/60000)}, 0);
         const minutes = Math.floor(totalFocusTime / 60);
         const remainingSeconds = totalFocusTime % 60;
         const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
@@ -281,7 +281,7 @@ export default function Home() {
              {
                 focus && focus.length ? focus.map((f: any, index) => {
 
-                  const timeSpendInMinutes = Math.ceil((new Date(f.startTime).getTime() - new Date(f.endTime).getTime()) / (1000 * 60));
+                  const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
                   if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-400';
