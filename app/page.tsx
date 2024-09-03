@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Timer from "./components/Timer";
 import { useRouter } from 'next/navigation';
-import Spinner from "./components/Spinner";
 import { SkeletonLoaderFocus } from "./components/Loader";
 import SuccessModal from "./components/SuccessModal";
 
@@ -154,7 +153,7 @@ export default function Home() {
             },
             method: "PATCH",
             body: JSON.stringify({
-              endTime: new Date(new Date().getTime())
+              endTime: Date.now()
             }),
             credentials: 'include',
         }
@@ -282,7 +281,7 @@ export default function Home() {
              {
                 focus && focus.length ? focus.map((f: any) => {
 
-                  const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000*60));
+                  const timeSpendInMinutes = Math.ceil(new Date(f.startTime).getTime() - new Date(f.endTime).getTime());
 
                   let bgClassName = '';
                   if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-400';

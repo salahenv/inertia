@@ -24,8 +24,6 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
       if (!startTimeRef.current) {
         startTimeRef.current = Date.now(); // Capture start time on first activation
       } else {
-        // Adjust start time to account for the time already elapsed
-        console.log(elapsedRef.current);
         startTimeRef.current = Date.now() - elapsedRef.current;
       }
       const updateTimer = () => {
@@ -44,6 +42,12 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
           setTime(newTime);
           const progressVal = `${(100 / (timeInMinutes * 60) * newTime)}%`;
           setProgress(progressVal);
+          // saving focus at interval
+          const shouldSave = ['20%', '40%', '60%', '80%'].includes(progressVal);
+          if(shouldSave) {
+            setEndTime(Date.now());
+            saveFocus();
+          }
         }
   
         animationFrameRef.current = requestAnimationFrame(updateTimer); // Continue the animation loop
