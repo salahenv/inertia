@@ -46,7 +46,7 @@ export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showSuccessModal, setSuccessModal] = useState(false);
-  const [activeFocus, setActiveFocus] = useState({_id: ''});
+  const [activeFocusId, setActiveFocusId] = useState <string>('salah');
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
   const router = useRouter();
@@ -130,7 +130,9 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        setActiveFocus(resData.data.focus);
+        setActiveFocusId(resData.data.focus._id);
+        console.log('activeFocusId', activeFocusId);
+        setTimeout(() => console.log('activeFocusId', activeFocusId), 0);
       }
       else {
         alert('Unable to create focus');
@@ -180,7 +182,7 @@ export default function Home() {
   } 
   const onUpdateFocus = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocus?._id}`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocusId}`,
         {
             headers: {
               'Accept': 'application/json',
@@ -205,7 +207,6 @@ export default function Home() {
       console.log(error);
     }
   }
-
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">

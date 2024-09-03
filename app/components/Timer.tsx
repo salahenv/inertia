@@ -14,6 +14,9 @@ const map: any = {
   '80%': {
     updated: false,
   },
+  '95%': {
+    updated: false,
+  },
 }
 
 // Function to format time as MM:SS
@@ -58,10 +61,11 @@ const Timer = ({timeInMinutes, isSaveFocusLoading, focusName, toggleSuccessModal
           setTime(newTime);
           const progressVal = `${(100 / (timeInMinutes * 60) * newTime)}%`;
           setProgress(progressVal);
-
+         
           // saving focus at interval
           const m = map[progressVal];
           if(m && !m.updated) {
+            map[progressVal].updated = true;
             setEndTime(Date.now());
             updateFocus();
           }
