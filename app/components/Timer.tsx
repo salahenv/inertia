@@ -1,23 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Spinner from './Spinner';
-import { getFontOverrideCss } from 'next/dist/server/font-utils';
 
 let map: any = {
-  '20%': {
+  '10%': {
     updated: false,
   },
-  '40%': {
+  '35%': {
     updated: false,
   },
-  '60%': {
+  '70%': {
     updated: false,
-  },
-  '80%': {
-    updated: false,
-  },
-  '95%': {
-    updated: false,
-  },
+  }
 }
 
 // Function to format time as MM:SS

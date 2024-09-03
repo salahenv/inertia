@@ -24,7 +24,7 @@ const tags = [
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'OTHER',
   }
 ]
 
