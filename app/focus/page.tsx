@@ -105,6 +105,7 @@ export default function Home() {
       }
     } catch (error) {
       alert(JSON.stringify(error));
+      router.push('/login');
     } finally {
       setIsFocusLoading(false);
     }
