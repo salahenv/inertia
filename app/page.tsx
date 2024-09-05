@@ -22,7 +22,7 @@ export default function Home() {
           <Link href="/kanban">
             <div className="bg-cyan-100 p-8">
               <div className="flex text-blue-600 font-medium text-xl items-center">
-                <div>Kanban</div>
+                <div>Todo (comming soon...)</div>
               </div>
             </div>
           </Link>
