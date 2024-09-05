@@ -134,7 +134,7 @@ export default function Todo() {
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
       <div className="flex flex-row justify-between items-center mb-4">
-        <div className="font-medium text-xl">Todo's</div>
+        <div className="font-medium text-xl">Todos</div>
       </div>
       <div>
         {todos.map((todo, index) => {
