@@ -4,29 +4,7 @@ import Timer from "../components/Timer";
 import { useRouter } from 'next/navigation';
 import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
-
-const tags = [
-  {
-    label: 'Learning',
-    value: 'LEARNING',
-  },
-  {
-    label: 'Home Work',
-    value: 'HOMEWORK',
-  },
-  {
-    label: 'Waste',
-    value: 'WASTE',
-  },
-  {
-    label: 'Personal',
-    value: 'PERSONAL',
-  },
-  {
-    label: 'Other',
-    value: 'OTHER',
-  }
-]
+import Spinner from "../components/Spinner";
 
 const formatDate = (date: any) => {
   date = new Date(date);
@@ -46,24 +24,30 @@ export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showSuccessModal, setSuccessModal] = useState(false);
-  const [activeFocusId, setActiveFocusId] = useState <string>('');
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
   const router = useRouter();
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
-  const [selectedTag, setSelectedTag] = useState(tags[0].value);
+  const [area, setAreas] = useState<{label: string; value: string, _id:string}[]>([]);
+  const [selectedTag, setSelectedTag] = useState(area[0]?.value);
+  const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] = useState(false);
+  const [areaName, setAreaName] = useState('');
+  const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
 
   useEffect(() => {
     getFocus();
+    getTags()
   }, []);
 
   const onSlideChange = (value: string) => {
     setTime(value);
   };
+
   const toogleAddFocusModal = () => {
     setShowCreateModal(!showCreateModal);
   }
+
   const onCreateFocus = async () => {
     const now = Date.now();
     setStartTime(now);
@@ -71,12 +55,15 @@ export default function Home() {
     setShowProgressModal(true);
     createFocus();
   }
+
   const toggleSuccessModal = () => {
     setSuccessModal(!showSuccessModal);
   }
+
   const toggleProgressModal = () => {
     setShowProgressModal(!showProgressModal);
   }
+  
   const getFocus = async () => {
     try {
       setIsFocusLoading(true);
@@ -110,6 +97,32 @@ export default function Home() {
       setIsFocusLoading(false);
     }
   }
+
+  const getTags = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/area`,
+        {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            method: "GET",
+            credentials: 'include'
+        }
+      );
+      const resData = await res.json();
+      if(resData.success) {
+        const area = resData.data.area || [];
+        setAreas(area);
+      }
+      else {
+        setAreas([]);
+      }
+    } catch (error) {
+      setAreas([]);
+    } finally {}
+  }
+
   const createFocus = async () => {
     const payload = {
       name: focusName, 
@@ -143,6 +156,7 @@ export default function Home() {
       setIsSaveFocusLoading(false);
     }
   } 
+
   const onUpdateFocus = async () => {
     const activeFocusId = localStorage.getItem('activeFocusId');
     try {
@@ -169,6 +183,90 @@ export default function Home() {
       console.log(error);
     }
   }
+
+  const toggleCreateFocusAreaClick = () => {
+    setShowCreateFocusAreaInput(!showCreateFocusAreaInput);
+  }
+
+  const onSaveFocusArea =  async() => {
+    setIsSaveFocusAreaLoading(true);
+    const payload = {
+      label: areaName
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/area/create`,
+        {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            method: "POST",
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+      );
+      const resData = await res.json();
+      if(resData.success) {
+        setAreas([...area, resData.data.area])
+      }
+      else {
+        alert('Unable to create focus area');
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
+    } finally {
+      setAreaName('');
+      toggleCreateFocusAreaClick();
+      setIsSaveFocusAreaLoading(false);
+    }
+  }
+
+  const onDeleteFocusArea =  async(a: any) => {
+    const payload = {
+      label: areaName
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/area/remove/${a._id}`,
+        {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            method: "DELETE",
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+      );
+      const resData = await res.json();
+      if(resData.success) {
+        setAreas([...area.filter((ar) => ar._id !== a._id)])
+      }
+      else {
+        alert('Unable to remove focus area');
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
+    } finally {
+    }
+  }
+
+  const areaElement = area.map((ar, index) => {
+    return (
+      <button
+        key={index}
+        className={`relative text-blue-600 whitespace-nowrap m-2 px-2 py-1 rounded border border-solid border-blue-600 ${selectedTag === ar.value ? "bg-blue-600 text-white" : ""} group`}
+        onClick={() => setSelectedTag(ar.value)}
+      >
+        {ar.label}
+        <span
+          className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-red-500 text-xl font-medium rounded-full p-0 hidden group-hover:inline cursor-pointer hover:text-3xl"
+          onClick={() => onDeleteFocusArea(ar)}
+          >
+            &times;
+        </span>
+      </button>
+    )
+  });
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
@@ -241,23 +339,36 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  <div className="overflow-x-scroll mt-6 flex items-center justify-between">{
-                    tags.map(({label, value}, index) => {
-                      return (
-                        <button
-                          key = {index}
-                          className= {`text-blue-600 whitespace-nowrap m-1 px-2 py-1 rounded border border-solid border-blue-600" ${selectedTag===value ? " bg-blue-600 text-white" : ""}`} 
-                          onClick={ () => {setSelectedTag(value)}}
-                      >{label}</button>
-                      )
-                    })  
-                  }</div>
-                </div>
-                <div className="mt-6">
+                  <div className="overflow-x-scroll mt-6 flex items-center justify-between">
+                    {areaElement}
+                    {
+                      showCreateFocusAreaInput ?
+                      <div className="flex">
+                        <input 
+                          type='text'
+                          required
+                          className="py-1 px-2 ml-4 w-[150px]" 
+                          placeholder="Focus Area Name" 
+                          value={areaName} 
+                          onChange={(e) => setAreaName(e.target.value)}>
+                        </input>
+                        <button 
+                          className="bg-green-500 text-white px-2 py-1 hover:bg-green-600 whitespace-nowrap"
+                          onClick={ () => {onSaveFocusArea()}}
+                        >{ isSaveFocusAreaLoading ? <Spinner></Spinner> : "Save"}</button>
+                      </div>
+                      : <button 
+                          className="ml-4 bg-green-500 text-white px-2 py-1 rounded hover:bg-greeb-600 whitespace-nowrap"
+                          onClick={ () => {toggleCreateFocusAreaClick()}}
+                        >{"+ Add new area"}</button>
+                    }
+                  </div>
+                  <div className="mt-6">
                     <button 
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
                       onClick={ () => {onCreateFocus()}}
                     >{"Create"}</button>
+                </div>
                 </div>
             </div>
         </div>
