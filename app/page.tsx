@@ -19,7 +19,7 @@ export default function Home() {
               </div>
             </div>
           </Link>
-          <Link href="/kanban">
+          <Link href="/todo">
             <div className="bg-cyan-100 p-8">
               <div className="flex text-blue-600 font-medium text-xl items-center">
                 <div>Todo (comming soon...)</div>
