@@ -340,6 +340,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="overflow-x-scroll mt-6 flex items-center justify-between">
+                    <div className="text-lg mr-2 whitespace-nowrap text-blue-600 font-medium">Focus Area: </div>
                     {areaElement}
                     {
                       showCreateFocusAreaInput ?
