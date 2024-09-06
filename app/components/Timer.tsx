@@ -34,28 +34,29 @@ const Timer = ({
   const [progress, setProgress] = useState('100%');
   const [isActive, setIsActive] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  
-  // To keep track of the start time and elapsed time when the timer is running
   const startTimeRef = useRef<number>(0);
   const animationFrameRef = useRef<number | null>(null);
-  const elapsedRef = useRef(0); // To track total elapsed time
+  const elapsedRef = useRef(0);
+  const halfTimeUpdatedRef = useRef(false);
   
   useEffect(() => {
     if (isActive) {
       if (!startTimeRef.current) {
-        startTimeRef.current = Date.now(); // Capture start time on first activation
+        startTimeRef.current = Date.now();
       } else {
         startTimeRef.current = Date.now() - elapsedRef.current;
       }
       const updateTimer = () => {
         const now = Date.now();
-        const elapsed = Math.floor((now - startTimeRef.current) / 1000); // Elapsed time in seconds
+        const elapsed = Math.floor((now - startTimeRef.current) / 1000);
         const newTime = timeInMinutes * 60 - elapsed;
-  
+      
+        const halfTime = timeInMinutes * 60 / 2;
+      
         if (newTime <= 0) {
           setTime(0);
           setProgress('0%');
-          setEndTime(Date.now());
+          setEndTime(now);
           updateFocus({
             completed: true
           });
@@ -67,19 +68,18 @@ const Timer = ({
           setTime(newTime);
           const progressVal = `${(100 / (timeInMinutes * 60) * newTime)}%`;
           setProgress(progressVal);
-         
-          // saving focus at interval
-          const m = map[progressVal];
-          if(m && !m.updated) {
-            map[progressVal].updated = true;
-            setEndTime(Date.now());
-            updateFocus();
+      
+          if (elapsed >= halfTime && !halfTimeUpdatedRef.current) {
+            halfTimeUpdatedRef.current = true;
+            setEndTime(now);
+            updateFocus({});
           }
         }
-  
+      
         animationFrameRef.current = requestAnimationFrame(updateTimer); // Continue the animation loop
       };
-      animationFrameRef.current = requestAnimationFrame(updateTimer); // Start animation loop
+      
+      animationFrameRef.current = requestAnimationFrame(updateTimer);
     } else if (animationFrameRef.current) {
       // Pause the timer and track elapsed time
       const now = Date.now();

@@ -48,7 +48,7 @@ export default function Home() {
     setShowCreateModal(!showCreateModal);
   }
 
-  const onCreateFocus = async () => {
+  const onCreateFocus = () => {
     const now = Date.now();
     setStartTime(now);
     toogleAddFocusModal();
@@ -126,7 +126,7 @@ export default function Home() {
   const createFocus = async () => {
     const payload = {
       name: focusName, 
-      startTime,
+      startTime: Date.now(),
       endTime,
       tag: selectedTag,
     }
@@ -185,6 +185,7 @@ export default function Home() {
       if(resData.success) {
         if(completed) {
           resetFocusStates();
+          getFocus();
         }
       }
       else {
@@ -408,6 +409,7 @@ export default function Home() {
                   const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
+                  if(timeSpendInMinutes > 61) bgClassName = 'bg-gradient-to-r from-green-500';
                   if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-400';
                   if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-gradient-to-r from-green-200';
                   if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-gradient-to-r from-orange-300';
