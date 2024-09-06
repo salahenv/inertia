@@ -262,6 +262,31 @@ export default function Home() {
     }
   }
 
+  const handleDelete =  async(a: any) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/remove/${a._id}`,
+        {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            method: "DELETE",
+            credentials: 'include'
+        }
+      );
+      const resData = await res.json();
+      if(resData.success) {
+        setFocus([...focus.filter((ar: any) => ar._id !== a._id)])
+      }
+      else {
+        alert('Unable to remove focus');
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
+    } finally {
+    }
+  }
+
   const areaElement = area.map((ar, index) => {
     return (
       <button
@@ -409,18 +434,27 @@ export default function Home() {
                   const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
-                  if(timeSpendInMinutes > 61) bgClassName = 'bg-gradient-to-r from-green-500';
-                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-gradient-to-r from-green-400';
-                  if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-gradient-to-r from-green-200';
-                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-gradient-to-r from-orange-300';
-                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-gradient-to-r from-red-400';
+                  if(timeSpendInMinutes > 61) bgClassName = 'bg-green-300';
+                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes < 61) bgClassName = 'bg-green-200';
+                  if(timeSpendInMinutes > 15 &&  timeSpendInMinutes < 31) bgClassName = 'bg-green-100';
+                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes < 16) bgClassName = 'bg-orange-300';
+                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes < 11) bgClassName = 'bg-red-400';
+                  // if(timeSpendInMinutes <= 0) return;
 
                   return (
-                    <div key={index} className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm ${bgClassName}`}>
+                    <div key={index} className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm cursor-pointer hover:bg-gray-100 hover:scale-y-110 ${bgClassName} relative group`}>
                       <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
                       <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
                       <div className="w-2/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
+                      <div className="absolute right-5 top-1 hidden group-hover:block cursor-pointer">
+                        <span
+                          className="text-2xl text-red-400 font-medium hover:text-red-500"
+                          onClick={() => handleDelete(f)}
+                        >
+                          &times;
+                        </span>
+                      </div>
                     </div>
                   )
                 }) : <div>
