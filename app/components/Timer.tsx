@@ -56,7 +56,9 @@ const Timer = ({
           setTime(0);
           setProgress('0%');
           setEndTime(Date.now());
-          updateFocus();
+          updateFocus({
+            completed: true
+          });
           toggleProgressModal();
           toggleSuccessModal();
           localStorage.removeItem('activeFocusId');

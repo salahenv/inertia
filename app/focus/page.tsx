@@ -18,8 +18,8 @@ const formatDate = (date: any) => {
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
-  const [startTime, setStartTime] = useState(Date.now());
-  const [endTime, setEndTime] = useState(Date.now());
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
   const [time, setTime] = useState('10');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -30,7 +30,7 @@ export default function Home() {
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
   const [area, setAreas] = useState<{label: string; value: string, _id:string}[]>([]);
-  const [selectedTag, setSelectedTag] = useState(area[0]?.value);
+  const [selectedTag, setSelectedTag] = useState('');
   const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] = useState(false);
   const [areaName, setAreaName] = useState('');
   const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
@@ -157,7 +157,15 @@ export default function Home() {
     }
   } 
 
-  const onUpdateFocus = async () => {
+  const resetFocusStates = () => {
+    setStartTime(0);
+    setEndTime(0);
+    setFocusName('');
+    setSelectedTag('');
+  }
+
+  const onUpdateFocus = async (obj:any) => {
+    const {completed} = obj;
     const activeFocusId = localStorage.getItem('activeFocusId');
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocusId}`,
@@ -175,6 +183,9 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
+        if(completed) {
+          resetFocusStates();
+        }
       }
       else {
         // alert("unable to complete");
