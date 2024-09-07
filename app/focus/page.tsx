@@ -51,8 +51,6 @@ export default function Home() {
   const onCreateFocus = () => {
     const now = Date.now();
     setStartTime(now);
-    toogleAddFocusModal();
-    setShowProgressModal(true);
     createFocus();
   }
 
@@ -144,6 +142,8 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
+        toogleAddFocusModal();
+        setShowProgressModal(true);
         const id = resData.data.focus._id;
         localStorage.setItem('activeFocusId', id);
       }

@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
+import { SkeletonLoaderTodo } from "../components/Loader";
 
 export default function Todo() {
   const [isTodoLoading, setIsTodoLoading] = useState(false);
   const [todos, setTodos] = useState<
   { name: string; completed: boolean; _id: string, createdAt: Date, updatedAt: Date }[]
   >([]);
+  const [isCompletedTodoLoading, setIsCompletedTodoLoading] = useState(false);
   const [todosCompleted, setTodosCompleted] = useState<
   { name: string; completed: boolean; _id: string, createdAt: Date, updatedAt: Date }[]
 >([]);
@@ -63,6 +65,7 @@ export default function Todo() {
   };
 
   const getTodoCompleted = async () => {
+    setIsCompletedTodoLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?page=${pageNumber}&limit=10`, {
         headers: {
@@ -82,6 +85,7 @@ export default function Todo() {
     } catch (error) {
       alert(JSON.stringify(error));
     } finally {
+      setIsCompletedTodoLoading(false);
     }
   };
 
@@ -181,31 +185,34 @@ export default function Todo() {
           <div className="font-medium text-xl">Todos</div>
         </div>
         <div>
-          {todos.map((todo, index) => {
-            return (
-              <div key={index} className="mb-2">
-                <div className="flex items-center space-x-2">
-                  <input
-                    onClick={() => onUpdateTodo(todo)}
-                    checked={todo.completed}
-                    type="checkbox"
-                    id="checkbox"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                  />
-                  <div className="relative text-gray-800 group">
-                    <span>{todo.name}</span>
-                    <span className="text-gray-600">{"(" + formatDate(todo.createdAt) + ")"}</span>
-                    <span
-                      onClick={() => onDeleteFocusTodo(todo)}
-                      className="absolute right-[-16px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold"
-                    >
-                      &times;
-                    </span>
+          {
+            isTodoLoading ? <SkeletonLoaderTodo/> :
+            todos.map((todo, index) => {
+              return (
+                <div key={index} className="mb-2">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      onClick={() => onUpdateTodo(todo)}
+                      checked={todo.completed}
+                      type="checkbox"
+                      id="checkbox"
+                      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    />
+                    <div className="relative text-gray-800 group">
+                      <span>{todo.name}</span>
+                      <span className="text-gray-600">{"(" + formatDate(todo.createdAt) + ")"}</span>
+                      <span
+                        onClick={() => onDeleteFocusTodo(todo)}
+                        className="absolute right-[-16px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold"
+                      >
+                        &times;
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          }
           {showAddTodo ? (
             <div className="mt-4">
               <input
@@ -238,25 +245,28 @@ export default function Todo() {
           <div className="font-medium text-xl">Completed Todos</div>
         </div>
         <div>
-          {todosCompleted.map((todo, index) => {
-            return (
-              <div key={index} className="mb-2">
-                <div className="flex items-center space-x-2">
-                  <input
-                    onClick={() => {}}
-                    checked={todo.completed}
-                    type="checkbox"
-                    id="checkbox"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                  />
-                  <div className="relative text-gray-800 group">
-                    <span>{todo.name}</span>
-                    <span className="text-gray-600">{"(" + formatDate(todo.updatedAt) + ")"}</span>
+          {
+            isCompletedTodoLoading ? <SkeletonLoaderTodo /> :
+            todosCompleted.map((todo, index) => {
+              return (
+                <div key={index} className="mb-2">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      onClick={() => {}}
+                      checked={todo.completed}
+                      type="checkbox"
+                      id="checkbox"
+                      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    />
+                    <div className="relative text-gray-800 group">
+                      <span>{todo.name}</span>
+                      <span className="text-gray-600">{"(" + formatDate(todo.updatedAt) + ")"}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          }
         </div>
         <div className="flex justify-between mt-8">
           <button
