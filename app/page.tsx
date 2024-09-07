@@ -4,6 +4,20 @@ import { useEffect, useState } from "react";
 import { RightChevron, FocusIcon, KanbanIcon } from "./icons";
 
 export default function Home() {
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission !== 'granted') {
+          console.log('Notification permission denied');
+        } else {
+          console.log('Notification permission granted');
+        }
+      });
+    }
+  }, []);
+
+
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
       <div className="block mt-8 sm:hidden">

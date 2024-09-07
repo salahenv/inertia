@@ -54,6 +54,7 @@ const Timer = ({
         const halfTime = timeInMinutes * 60 / 2;
       
         if (newTime <= 0) {
+          notifyCompletion();
           setTime(0);
           setProgress('0%');
           setEndTime(now);
@@ -91,6 +92,22 @@ const Timer = ({
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
   }, [isActive, timeInMinutes]);
+
+
+  const notifyCompletion = () => {
+    if (Notification.permission === 'granted') {
+      setTimeout(() => {
+        try {
+          new Notification('Timer Completed', {
+            body: 'Your timer has finished!'
+          });
+        } catch (error) {
+          console.log("error", error);
+        }
+        
+      },1000);
+    }
+  }
   
 
   const onPausePlay = () => {
