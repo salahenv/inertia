@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { RightChevron, FocusIcon, KanbanIcon } from "./icons";
+import { RightChevron, FocusIcon, TodoIcon } from "./icons";
 
 export default function Home() {
 
@@ -29,6 +29,9 @@ export default function Home() {
           <Link href="/focus">
             <div className="bg-orange-100 p-8">
               <div className="flex text-blue-600 font-medium text-xl items-center">
+                <div className="mr-1">
+                  <FocusIcon />
+                </div>
                 <div>Focus</div>
               </div>
             </div>
@@ -36,6 +39,9 @@ export default function Home() {
           <Link href="/todo">
             <div className="bg-cyan-100 p-8">
               <div className="flex text-blue-600 font-medium text-xl items-center">
+              <div className="mr-1">
+                  <TodoIcon />
+                </div>
                 <div>Todo</div>
               </div>
             </div>
