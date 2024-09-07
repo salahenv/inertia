@@ -5,19 +5,35 @@ import Spinner from "../components/Spinner";
 export default function Todo() {
   const [isTodoLoading, setIsTodoLoading] = useState(false);
   const [todos, setTodos] = useState<
-    { name: string; completed: boolean; _id: string }[]
+  { name: string; completed: boolean; _id: string, createdAt: Date, updatedAt: Date }[]
   >([]);
   const [todosCompleted, setTodosCompleted] = useState<
-  { name: string; completed: boolean; _id: string }[]
+  { name: string; completed: boolean; _id: string, createdAt: Date, updatedAt: Date }[]
 >([]);
   const [showAddTodo, setShowAddTodo] = useState(false);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  const formatDate = (isoDate: Date) => {
+    const date = new Date(isoDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const formattedDate = `${hours}:${minutes} ${day}/${month}/${year}`;
+    return formattedDate;
+  }
 
   useEffect(() => {
     getTodo();
-    getTodoCompleted();
   }, []);
+
+  useEffect(() => {
+    getTodoCompleted();
+  }, [pageNumber]);
 
   const toggleAddTodo = () => {
     setShowAddTodo(!showAddTodo);
@@ -48,8 +64,7 @@ export default function Todo() {
 
   const getTodoCompleted = async () => {
     try {
-      // setIsTodoLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?page=1&limit=10`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?page=${pageNumber}&limit=10`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -60,12 +75,13 @@ export default function Todo() {
       const resData = await res.json();
       if (resData.success) {
         setTodosCompleted(resData.data.todos);
+        setPageNumber(resData.data.currentPage);
+        setTotalPage(resData.data.totalPages);
       } else {
       }
     } catch (error) {
       alert(JSON.stringify(error));
     } finally {
-      // setIsTodoLoading(false);
     }
   };
 
@@ -176,8 +192,9 @@ export default function Todo() {
                     id="checkbox"
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
-                  <div className="relative text-gray-700 group">
+                  <div className="relative text-gray-800 group">
                     <span>{todo.name}</span>
+                    <span className="text-gray-600">{"(" + formatDate(todo.createdAt) + ")"}</span>
                     <span
                       onClick={() => onDeleteFocusTodo(todo)}
                       className="absolute right-[-16px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold"
@@ -232,13 +249,32 @@ export default function Todo() {
                     id="checkbox"
                     className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
-                  <div className="relative text-gray-700 group">
+                  <div className="relative text-gray-800 group">
                     <span>{todo.name}</span>
+                    <span className="text-gray-600">{"(" + formatDate(todo.createdAt) + ")"}</span>
                   </div>
                 </div>
               </div>
             );
           })}
+        </div>
+        <div className="flex justify-between mt-8">
+          <button
+            className="disabled:opacity-75 bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2"
+            disabled = { pageNumber <= 1}
+            onClick={() => {
+              pageNumber >=1 ?
+              setPageNumber(pageNumber - 1) : null
+            }}
+          >Prev</button>
+          <button
+            className="disabled:opacity-75 bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2"
+            disabled = { pageNumber >= totalPage}
+            onClick={() => {
+              pageNumber <= totalPage ?
+              setPageNumber(pageNumber + 1) : null
+            }}
+          >Next</button>
         </div>
       </div>
     </div>
