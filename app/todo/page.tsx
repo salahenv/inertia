@@ -160,7 +160,7 @@ export default function Todo() {
 
   return (
     <div className="bg-neutral-100 min-h-screen flex">
-      <div className="basis-1/2 bg-cyan-50 p-4">
+      <div className="basis-1/2 bg-indigo-100 p-4">
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl">Todos</div>
         </div>
