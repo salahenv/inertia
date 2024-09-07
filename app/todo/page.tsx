@@ -251,7 +251,7 @@ export default function Todo() {
                   />
                   <div className="relative text-gray-800 group">
                     <span>{todo.name}</span>
-                    <span className="text-gray-600">{"(" + formatDate(todo.createdAt) + ")"}</span>
+                    <span className="text-gray-600">{"(" + formatDate(todo.updatedAt) + ")"}</span>
                   </div>
                 </div>
               </div>
