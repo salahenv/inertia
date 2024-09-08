@@ -130,7 +130,7 @@ export default function Todo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setTodos([...todos, resData.data.todo]);
+        setinCompletedTodos([...incompletedTodos, resData.data.todo]);
         setTodoName("");
         toggleAddTodo();
       } else {
