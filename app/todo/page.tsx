@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { SkeletonLoaderTodo } from "../components/Loader";
-import { DeleteIcon } from "../icons";
+import { CompletedIcon, DeleteIcon, IncompletedIcon } from "../icons";
 
 export default function Todo() {
   const [isTodoLoading, setIsTodoLoading] = useState(false);
@@ -15,8 +15,6 @@ export default function Todo() {
       updatedAt: Date;
     }[]
   >([]);
-  const [incompletedTodos, setinCompletedTodos] = useState<any[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<any[]>([]);
   const [isCompletedTodoLoading, setIsCompletedTodoLoading] = useState(false);
   const [todosCompleted, setTodosCompleted] = useState<
     {
@@ -70,8 +68,8 @@ export default function Todo() {
       const resData = await res.json();
       if (resData.success) {
         setTodos(resData.data.todo);
-        setinCompletedTodos(resData.data.inCompletedTodos);
-        setCompletedTodos(resData.data.completedTodos);
+        // setinCompletedTodos(resData.data.inCompletedTodos);
+        // setCompletedTodos(resData.data.completedTodos);
       } else {
       }
     } catch (error) {
@@ -130,7 +128,7 @@ export default function Todo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setinCompletedTodos([...incompletedTodos, resData.data.todo]);
+        setTodos([...todos, resData.data.todo]);
         setTodoName("");
         toggleAddTodo();
       } else {
@@ -202,7 +200,10 @@ export default function Todo() {
     <div className="bg-neutral-100 min-h-screen flex">
       <div className="basis-1/2 bg-indigo-100 p-4">
         <div className="flex flex-row justify-between items-center mb-4">
-          <div className="font-medium text-xl">Todos</div>
+          <div className="font-medium text-xl flex">
+            <IncompletedIcon />
+            <div className="ml-2">Todo's</div>
+          </div>
         </div>
         <div>
           {isTodoLoading ? (
@@ -210,7 +211,7 @@ export default function Todo() {
           ) : (
             <div>
               <div>
-                {incompletedTodos.map((todo: any, index: number) => {
+                {todos.map((todo: any, index: number) => {
                   return (
                     <div key={index} className="mb-2">
                       <div className="flex items-center space-x-2">
@@ -230,34 +231,6 @@ export default function Todo() {
                             onClick={ () => onDeleteFocusTodo(todo) }
                             className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold">
                             <DeleteIcon color="#ef4444"/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div>
-                {completedTodos.map((todo: any, index: number) => {
-                  return (
-                    <div key={index} className="mb-2">
-                      <div className="flex items-center space-x-2">
-                        <input
-                          onClick={() => onUpdateTodo(todo)}
-                          checked={todo.completed}
-                          type="checkbox"
-                          id="checkbox"
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                        />
-                        <div className="relative text-gray-800 group">
-                          <span>{todo.name}</span>
-                          <span className="text-gray-600">
-                            {"(" + formatDate(todo.createdAt) + ")"}
-                          </span>
-                          <div
-                            onClick={ () => onDeleteFocusTodo(todo) }
-                            className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold">
-                            <DeleteIcon color = "#ef4444"/>
                           </div>
                         </div>
                       </div>
@@ -298,7 +271,10 @@ export default function Todo() {
       </div>
       <div className="basis-1/2 bg-fuchsia-50 p-4">
         <div className="flex flex-row justify-between items-center mb-4">
-          <div className="font-medium text-xl">Completed Todos</div>
+          <div className="font-medium text-xl flex">
+            <CompletedIcon />
+            <div className="ml-2">Completed Todo's</div>
+          </div>
         </div>
         <div>
           {isCompletedTodoLoading ? (
