@@ -218,7 +218,7 @@ export default function Todo() {
               <div>
                 {todos.map((todo: any, index: number) => {
                   return (
-                    <div key={index} className="mb-2">
+                    <div key={index} className="mb-2 cursor-pointer">
                       <div className="flex items-center space-x-2">
                         <input
                           onClick={() => onUpdateTodo(todo)}
