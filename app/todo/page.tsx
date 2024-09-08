@@ -229,7 +229,7 @@ export default function Todo() {
                           <div
                             onClick={ () => onDeleteFocusTodo(todo) }
                             className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold">
-                            <DeleteIcon />
+                            <DeleteIcon color="#ef4444"/>
                           </div>
                         </div>
                       </div>
