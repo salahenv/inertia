@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
+import { DeleteIcon } from "../icons";
 
 const formatDate = (date: any) => {
   date = new Date(date);
@@ -448,12 +449,11 @@ export default function Home() {
                       <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
                       <div className="w-2/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
                       <div className="absolute right-5 top-1 hidden group-hover:block cursor-pointer">
-                        <span
-                          className="text-2xl text-red-400 font-medium hover:text-red-500"
+                        <div 
                           onClick={() => handleDelete(f)}
-                        >
-                          &times;
-                        </span>
+                          className="text-2xl text-red-400 font-medium hover:text-red-500">
+                          <DeleteIcon color = "#ef4444"/>
+                        </div>
                       </div>
                     </div>
                   )
