@@ -365,8 +365,9 @@ export default function Home() {
                       <input
                           id="slider"
                           type="range"
-                          min="0"
-                          max="60"
+                          min="5"
+                          max="120"
+                          step="5"
                           value={time}
                           placeholder="select focus time"
                           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"

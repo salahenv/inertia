@@ -37,7 +37,7 @@ const Timer = ({
   const startTimeRef = useRef<number>(0);
   const animationFrameRef = useRef<number | null>(null);
   const elapsedRef = useRef(0);
-  const halfTimeUpdatedRef = useRef(false);
+  const milestonesRef = useRef<any>();
   
   useEffect(() => {
     if (isActive) {
@@ -46,13 +46,14 @@ const Timer = ({
       } else {
         startTimeRef.current = Date.now() - elapsedRef.current;
       }
+
+      milestonesRef.current = new Set(); // To track updated milestones (10%, 20%, etc.)
+
       const updateTimer = () => {
         const now = Date.now();
         const elapsed = Math.floor((now - startTimeRef.current) / 1000);
         const newTime = timeInMinutes * 60 - elapsed;
-      
-        const halfTime = timeInMinutes * 60 / 2;
-      
+
         if (newTime <= 0) {
           notifyCompletion();
           setTime(0);
@@ -67,19 +68,21 @@ const Timer = ({
           return;
         } else {
           setTime(newTime);
-          const progressVal = `${(100 / (timeInMinutes * 60) * newTime)}%`;
+          const progressPercentage = Math.floor((elapsed / (timeInMinutes * 60)) * 100); // Calculate percentage
+          const progressVal = `${100 - progressPercentage}%`;
           setProgress(progressVal);
-      
-          if (elapsed >= halfTime && !halfTimeUpdatedRef.current) {
-            halfTimeUpdatedRef.current = true;
-            setEndTime(now);
-            updateFocus({});
+
+          // Save focus at every 10% interval
+          const milestone = Math.floor(progressPercentage / 10) * 10;
+          if (!milestonesRef.current.has(milestone) && milestone > 0 && milestone < 100) {
+            milestonesRef.current.add(milestone);
+            updateFocus({ progress: milestone });
           }
         }
-      
+
         animationFrameRef.current = requestAnimationFrame(updateTimer); // Continue the animation loop
       };
-      
+
       animationFrameRef.current = requestAnimationFrame(updateTimer);
     } else if (animationFrameRef.current) {
       // Pause the timer and track elapsed time
@@ -87,11 +90,12 @@ const Timer = ({
       elapsedRef.current += Math.floor((now - startTimeRef.current)); // Update elapsed time in seconds
       cancelAnimationFrame(animationFrameRef.current); // Stop animation
     }
-  
+
     return () => {
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
   }, [isActive, timeInMinutes]);
+
 
 
   const notifyCompletion = () => {
