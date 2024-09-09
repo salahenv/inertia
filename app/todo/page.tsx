@@ -4,6 +4,51 @@ import Spinner from "../components/Spinner";
 import { SkeletonLoaderTodo } from "../components/Loader";
 import { CompletedIcon, DeleteIcon, IncompletedIcon } from "../icons";
 
+const formatDate = (isoDate: Date) => {
+  const date = new Date(isoDate);
+  const day = String(date.getDate()).padStart(2, "0");
+
+  // Array to map month numbers to abbreviated names
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = monthNames[date.getMonth()]; // Get month abbreviation
+
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  const formattedDate = `${hours}:${minutes} ${day} ${month} ${year}`;
+  return formattedDate;
+};
+
+function differenceFromToday(iso: string): number {
+  const givenDate = new Date(iso);
+  const today = new Date();
+  const diffInMs = today.getTime() - givenDate.getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  return diffInDays;
+}
+
+function TimeAndDate({todo}: any) {
+  const diff = differenceFromToday(todo.createdAt);
+  let bg = 'bg-green-100';
+  if(diff === 0) {
+    bg = 'bg-green-300';
+  } else if (diff === 1) {
+    bg = 'bg-orange-200';
+  } else if(diff === 2) {
+    bg = 'bg-orange-100';
+  } else if(diff === 3) {
+    bg = 'bg-red-100';
+  } else {
+    bg = 'bg-red-300';
+  }
+  return (
+    <span className={`rounded px-1 text-xs text-gray-600 border border-solid border-red-100 ${bg}`}>
+      {formatDate(todo.createdAt)}
+    </span>
+  )
+}
+
 export default function Todo() {
   const [isTodoLoading, setIsTodoLoading] = useState(false);
   const [todos, setTodos] = useState<
@@ -30,22 +75,6 @@ export default function Todo() {
   const [isSavingTodo, setIsSavingTodo] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-
-  const formatDate = (isoDate: Date) => {
-    const date = new Date(isoDate);
-    const day = String(date.getDate()).padStart(2, "0");
-  
-    // Array to map month numbers to abbreviated names
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[date.getMonth()]; // Get month abbreviation
-  
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-  
-    const formattedDate = `${hours}:${minutes} ${day} ${month} ${year}`;
-    return formattedDate;
-  };
 
   useEffect(() => {
     getTodo();
@@ -219,8 +248,8 @@ export default function Todo() {
                 {todos.map((todo: any, index: number) => {
                   return (
                     <div key={index} className="mb-2 cursor-pointer">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center">
+                      <div className="flex items-start space-x-2">
+                        <div className="flex">
                           <input
                             onClick={() => onUpdateTodo(todo)}
                             checked={todo.completed}
@@ -229,16 +258,16 @@ export default function Todo() {
                             className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                           />
                         </div>
-                        <div className="relative text-gray-800 group">
-                          <span>{todo.name}</span>
-                          <span className="text-gray-600">
-                            {"(" + formatDate(todo.createdAt) + ")"}
-                          </span>
-                          <div
-                            onClick={ () => onDeleteFocusTodo(todo) }
-                            className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold">
-                            <DeleteIcon color="#ef4444"/>
+                        <div>
+                          <div className="relative text-gray-800 group">
+                            <div>{todo.name}</div>
+                            <div
+                              onClick={ () => onDeleteFocusTodo(todo) }
+                              className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold">
+                              <DeleteIcon color="#ef4444"/>
+                            </div>
                           </div>
+                          <div><TimeAndDate todo = {todo}></TimeAndDate></div>
                         </div>
                       </div>
                     </div>
@@ -310,7 +339,7 @@ export default function Todo() {
                     <div className="relative text-gray-800 group">
                       <span>{todo.name}</span>
                       <span className="text-gray-600">
-                        {"(" + formatDate(todo.updatedAt) + ")"}
+                            {"(" + formatDate(todo.createdAt) + ")"}
                       </span>
                     </div>
                   </div>
