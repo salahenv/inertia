@@ -437,12 +437,12 @@ export default function Home() {
                   const timeSpendInMinutes = Math.floor((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
-                  if(timeSpendInMinutes > 80 &&  timeSpendInMinutes <= 120) bgClassName = 'bg-green-400';
-                  if(timeSpendInMinutes > 50 &&  timeSpendInMinutes <= 80) bgClassName = 'bg-green-300';
-                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes <= 50) bgClassName = 'bg-green-200';
-                  if(timeSpendInMinutes > 20 &&  timeSpendInMinutes <= 30) bgClassName = 'bg-green-100';
-                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes <= 20) bgClassName = 'bg-orange-100';
-                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes <= 10) bgClassName = 'bg-red-100';
+                  if(timeSpendInMinutes > 80 &&  timeSpendInMinutes <= 120) bgClassName = 'bg-green-500';
+                  if(timeSpendInMinutes > 50 &&  timeSpendInMinutes <= 80) bgClassName = 'bg-green-400';
+                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes <= 50) bgClassName = 'bg-green-300';
+                  if(timeSpendInMinutes > 20 &&  timeSpendInMinutes <= 30) bgClassName = 'bg-green-200';
+                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes <= 20) bgClassName = 'bg-orange-200';
+                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes <= 10) bgClassName = 'bg-red-200';
                   // if(timeSpendInMinutes <= 0) return;
 
                   return (
