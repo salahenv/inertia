@@ -124,9 +124,16 @@ const Timer = ({
   }
 
   const onYesClick = () => {
+    notifyCompletion();
+    setTime(0);
+    setProgress('0%');
     setEndTime(Date.now());
-    setShowConfirmation(false);
-    getFocus();
+    updateFocus({
+      completed: true
+    });
+    toggleProgressModal();
+    // toggleSuccessModal();
+    localStorage.removeItem('activeFocusId');
   }
 
   return (

@@ -31,7 +31,7 @@ const SuccessModal = ({ timeInMinutes, toggleSuccessModal }: any) => {
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-neutral-100 rounded-lg shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
+      <div className="bg-neutral-100 shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
         <div className="flex flex-col items-center">
           <div className="mb-4">
             <Congrats />

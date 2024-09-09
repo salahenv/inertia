@@ -202,7 +202,7 @@ export default function Todo() {
   };
 
   return (
-    <div className="bg-neutral-100 min-h-screen flex">
+    <div className="bg-neutral-100 min-h-screen flex flex-col md:flex-row">
       <div className="basis-1/2 bg-indigo-100 p-4">
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
@@ -220,13 +220,15 @@ export default function Todo() {
                   return (
                     <div key={index} className="mb-2 cursor-pointer">
                       <div className="flex items-center space-x-2">
-                        <input
-                          onClick={() => onUpdateTodo(todo)}
-                          checked={todo.completed}
-                          type="checkbox"
-                          id="checkbox"
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                        />
+                        <div className="flex items-center">
+                          <input
+                            onClick={() => onUpdateTodo(todo)}
+                            checked={todo.completed}
+                            type="checkbox"
+                            id="checkbox"
+                            className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                          />
+                        </div>
                         <div className="relative text-gray-800 group">
                           <span>{todo.name}</span>
                           <span className="text-gray-600">
@@ -289,13 +291,22 @@ export default function Todo() {
               return (
                 <div key={index} className="mb-2">
                   <div className="flex items-center space-x-2">
-                    <input
-                      onClick={() => {}}
-                      checked={todo.completed}
-                      type="checkbox"
-                      id="checkbox"
-                      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                    />
+                    <div className="flex items-center">
+                      <input
+                        onClick={() => {}}
+                        checked={todo.completed}
+                        type="checkbox"
+                        id="checkbox"
+                        className="
+                          h-5 w-5 
+                          text-green-600 
+                          border-gray-300 
+                          rounded 
+                          focus:ring-green-500 
+                          focus:ring-2
+                        "
+                      />
+                    </div>
                     <div className="relative text-gray-800 group">
                       <span>{todo.name}</span>
                       <span className="text-gray-600">

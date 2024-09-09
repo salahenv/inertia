@@ -320,7 +320,7 @@ export default function Home() {
       {
         showProgressModal ? 
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-10">
-            <div className="bg-neutral-100 rounded-lg shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
+            <div className="bg-neutral-100 shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
               <div className="mt-4">
                   <Timer 
                     timeInMinutes = {parseInt(time)}
@@ -340,7 +340,7 @@ export default function Home() {
       }
       { showCreateModal ?
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-neutral-100 rounded-lg shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
+            <div className="bg-neutral-100 shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
                 <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold">Create Focus</h2>
                     <button 
@@ -405,9 +405,10 @@ export default function Home() {
                   </div>
                   <div className="mt-6">
                     <button 
-                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+                      disabled={isSaveFocusLoading}
+                      className="disabled:opacity-75 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
                       onClick={ () => {onCreateFocus()}}
-                    >{"Create"}</button>
+                    >{isSaveFocusLoading ? <Spinner></Spinner> : "Create"}</button>
                 </div>
                 </div>
             </div>
