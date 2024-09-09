@@ -74,7 +74,7 @@ export default function Home() {
     today.setHours(0, 0, 0, 0);
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    const options = { day: 'numeric', month: 'short', year: '2-digit' };
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: '2-digit' };
     if (date.getDate() === today.getDate()) {
         return 'Today';
     }
