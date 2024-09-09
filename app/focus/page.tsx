@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
-import { DeleteIcon } from "../icons";
+import { DeleteIcon, NextIcon, PrevIcon } from "../icons";
 
 const formatDate = (date: any) => {
   date = new Date(date);
@@ -25,6 +25,8 @@ export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showSuccessModal, setSuccessModal] = useState(false);
+  const [dayOffset, setDayOffset] = useState(0);
+  const [selectedDay, setSelectedDay] = useState('Today');
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
   const router = useRouter();
@@ -38,8 +40,11 @@ export default function Home() {
 
   useEffect(() => {
     getFocus();
-    getTags()
-  }, []);
+  }, [dayOffset]);
+
+  useEffect(() => {
+    getTags();
+  }, [])
 
   const onSlideChange = (value: string) => {
     setTime(value);
@@ -62,11 +67,27 @@ export default function Home() {
   const toggleProgressModal = () => {
     setShowProgressModal(!showProgressModal);
   }
+
+  function formatDateString(isoDate: string) {
+    const date = new Date(isoDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const options = { day: 'numeric', month: 'short', year: '2-digit' };
+    if (date.getDate() === today.getDate()) {
+        return 'Today';
+    }
+    if (date.getDate() === yesterday.getDate()) {
+        return 'Yesterday';
+    }
+    return date.toLocaleDateString('en-IN', options).replace(',', '');
+  }
   
   const getFocus = async () => {
     try {
       setIsFocusLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}`,
         {
             headers: {
               'Accept': 'application/json',
@@ -84,14 +105,12 @@ export default function Home() {
         const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
         setFocused(totalfocusedValue);
         setFocus(resData.data.focus);
+        const formatedDate = formatDateString(resData.data.date);
+        setSelectedDay(formatedDate);
       }
       else {
-        router.push('/login')
-        // alert(JSON.stringify(resData));
       }
     } catch (error) {
-      alert(JSON.stringify(error));
-      router.push('/login');
     } finally {
       setIsFocusLoading(false);
     }
@@ -184,7 +203,7 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        if(completed) {
+        if(completed && dayOffset === 0) {
           resetFocusStates();
           getFocus();
         }
@@ -306,6 +325,16 @@ export default function Home() {
     )
   });
 
+  const onPrevClick = () => {
+    setDayOffset(dayOffset + 1);
+  }
+
+  const onNextClick = () => {
+    if(dayOffset > 0) {
+      setDayOffset(dayOffset - 1);
+    }
+  }
+
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
       {
@@ -416,6 +445,15 @@ export default function Home() {
       : null }
       <div className="flex flex-row justify-between items-center mb-4">
         <div className="font-medium">Focused <span className="text-green-900">{focused}</span>{" "+ "hours"}</div>
+        <div className="flex items-center">
+          <div onClick={() => onPrevClick()}>
+            <PrevIcon />
+          </div>
+          <div className="text-gray-800 font-bold text-xl ml-4 mr-4">{selectedDay}</div>
+          <div onClick={() => onNextClick()}>
+            <NextIcon color={dayOffset === 0 ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"}/>
+          </div>
+        </div>
         <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded" 
           onClick={() => toogleAddFocusModal()}>
