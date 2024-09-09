@@ -434,7 +434,7 @@ export default function Home() {
              {
                 focus && focus.length ? focus.map((f: any, index) => {
 
-                  const timeSpendInMinutes = Math.ceil((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
+                  const timeSpendInMinutes = Math.floor((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
                   if(timeSpendInMinutes > 80 &&  timeSpendInMinutes <= 120) bgClassName = 'bg-green-400';
