@@ -43,12 +43,6 @@ export default function Home() {
     setShowCreateModal(!showCreateModal);
   }
 
-  const onCreateFocus = () => {
-    const now = Date.now();
-    setStartTime(now);
-    createFocus();
-  }
-
   const toggleSuccessModal = () => {
     setSuccessModal(!showSuccessModal);
   }
@@ -151,7 +145,6 @@ export default function Home() {
   } 
 
   const resetFocusStates = () => {
-    setStartTime(0);
     setEndTime(0);
     setFocusName('');
     setSelectedTag('');
@@ -423,7 +416,7 @@ export default function Home() {
                     <button 
                       disabled={isSaveFocusLoading}
                       className="disabled:opacity-75 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
-                      onClick={ () => {onCreateFocus()}}
+                      onClick={ () => {createFocus()}}
                     >{isSaveFocusLoading ? <Spinner></Spinner> : "Create"}</button>
                 </div>
                 </div>
