@@ -343,6 +343,9 @@ export default function Todo() {
                                 <TimeAndDate
                                   date={todo.createdAt}
                                 ></TimeAndDate>
+                                <TimeAndDate
+                                  date={todo.updatedAt}
+                                ></TimeAndDate>
                               </div>
                             </div>
                           </div>
@@ -413,9 +416,14 @@ export default function Todo() {
                       </div>
                       <div>
                         <span
-                          className={`rounded p-1 text-xs text-gray-600 border border-solid border-red-100 bg-green-200`}
+                          className={`rounded p-1 text-xs text-gray-600 bg-green-200`}
                         >
                           Created: {formatDate(todo.createdAt)}
+                        </span>
+                        <span
+                          className={`rounded p-1 text-xs text-gray-600 bg-orange-200`}
+                        >
+                          Updated: {formatDate(todo.updatedAt)}
                         </span>
                       </div>
                     </div>
