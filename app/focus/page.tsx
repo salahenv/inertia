@@ -99,7 +99,7 @@ export default function Home() {
       );
       const resData = await res.json();
       if(resData.success) {
-        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.ceil(new Date(curr.endTime).getTime()/60000 - new Date(curr.startTime).getTime()/60000)}, 0);
+        const totalFocusTime = resData.data.focus.reduce((acc: any, curr: any) => { return acc + Math.floor(new Date(curr.endTime).getTime()/60000 - new Date(curr.startTime).getTime()/60000)}, 0);
         const minutes = Math.floor(totalFocusTime / 60);
         const remainingSeconds = totalFocusTime % 60;
         const totalfocusedValue = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
