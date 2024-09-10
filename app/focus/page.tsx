@@ -6,20 +6,10 @@ import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
 import { DeleteIcon, NextIcon, NoFocus, PrevIcon } from "../icons";
-
-const formatDate = (date: any) => {
-  date = new Date(date);
-  const formattedTime = date.toLocaleString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: false
-  });
-  return formattedTime;
-}
+import { formatDateString, formatDate } from "../dateUtils";
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
-  const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [time, setTime] = useState('10');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -29,7 +19,6 @@ export default function Home() {
   const [selectedDay, setSelectedDay] = useState('Today');
   const [focus, setFocus] = useState([]);
   const [focused, setFocused] = useState("00:00");
-  const router = useRouter();
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
   const [area, setAreas] = useState<{label: string; value: string, _id:string}[]>([]);
@@ -66,22 +55,6 @@ export default function Home() {
 
   const toggleProgressModal = () => {
     setShowProgressModal(!showProgressModal);
-  }
-
-  function formatDateString(isoDate: string) {
-    const date = new Date(isoDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: '2-digit' };
-    if (date.getDate() === today.getDate()) {
-        return 'Today';
-    }
-    if (date.getDate() === yesterday.getDate()) {
-        return 'Yesterday';
-    }
-    return date.toLocaleDateString('en-IN', options).replace(',', '');
   }
   
   const getFocus = async () => {
