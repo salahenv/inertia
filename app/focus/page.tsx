@@ -335,6 +335,20 @@ export default function Home() {
     }
   }
 
+  function PrevNextNavigator() {
+    return (
+      <div className="flex items-center">
+          <div onClick={() => onPrevClick()}>
+            <PrevIcon />
+          </div>
+          <div className="text-gray-800 font-bold text-xl ml-4 mr-4">{selectedDay}</div>
+          <div onClick={() => onNextClick()}>
+            <NextIcon color={dayOffset === 0 ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"}/>
+          </div>
+        </div>
+    );
+  }
+
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
       {
@@ -445,19 +459,13 @@ export default function Home() {
       : null }
       <div className="flex flex-row justify-between items-center mb-4">
         <div className="font-medium">Focused <span className="text-green-900">{focused}</span>{" "+ "hours"}</div>
-        <div className="flex items-center">
-          <div onClick={() => onPrevClick()}>
-            <PrevIcon />
-          </div>
-          <div className="text-gray-800 font-bold text-xl ml-4 mr-4">{selectedDay}</div>
-          <div onClick={() => onNextClick()}>
-            <NextIcon color={dayOffset === 0 ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"}/>
-          </div>
+        <div className="">
+          <PrevNextNavigator />
         </div>
         <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded" 
           onClick={() => toogleAddFocusModal()}>
-          + Focus
+          + Add Focus
         </button>
       </div>
       <div className="flex flex-col">
