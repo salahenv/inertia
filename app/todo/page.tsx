@@ -56,9 +56,9 @@ function TimeAndDate({ date }: any) {
   } else if (diff === 1) {
     bg = "bg-orange-200";
   } else if (diff === 2) {
-    bg = "bg-orange-100";
-  } else if (diff === 3) {
     bg = "bg-red-100";
+  } else if (diff === 3) {
+    bg = "bg-red-200";
   } else {
     bg = "bg-red-300";
   }
