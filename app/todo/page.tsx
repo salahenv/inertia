@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { SkeletonLoaderTodo } from "../components/Loader";
-import { CompletedIcon, DeleteIcon, IncompletedIcon } from "../icons";
+import { CompletedIcon, DeleteIcon, IncompletedIcon, NoFocus } from "../icons";
 
 const formatDate = (isoDate: Date) => {
   const date = new Date(isoDate);
@@ -245,7 +245,7 @@ export default function Todo() {
           ) : (
             <div>
               <div>
-                {todos.map((todo: any, index: number) => {
+                {todos && todos.length ? todos.map((todo: any, index: number) => {
                   return (
                     <div key={index} className="mb-2 cursor-pointer">
                       <div className="flex items-start space-x-2">
@@ -272,7 +272,7 @@ export default function Todo() {
                       </div>
                     </div>
                   );
-                })}
+                }): null}
               </div>
             </div>
           )}
@@ -316,6 +316,7 @@ export default function Todo() {
           {isCompletedTodoLoading ? (
             <SkeletonLoaderTodo />
           ) : (
+            todosCompleted && todosCompleted.length ?
             todosCompleted.map((todo, index) => {
               return (
                 <div key={index} className="mb-2">
@@ -345,7 +346,13 @@ export default function Todo() {
                   </div>
                 </div>
               );
-            })
+            }) : <div>
+                <div className="flex justify-center mt-8">
+                  <NoFocus />
+                </div>
+                <div className="text-xl text-center mt-2 text-red-500">No completed todo!</div>
+                <div className="text-lg text-center mt-1 text-gray-500">Create todo it will start reflecting</div>
+            </div>
           )}
         </div>
         <div className="flex justify-between mt-8">

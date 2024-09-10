@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
-import { DeleteIcon, NextIcon, PrevIcon } from "../icons";
+import { DeleteIcon, NextIcon, NoFocus, PrevIcon } from "../icons";
 
 const formatDate = (date: any) => {
   date = new Date(date);
@@ -499,8 +499,11 @@ export default function Home() {
                     </div>
                   )
                 }) : <div>
-                  <div className="text-2xl text-center mt-16 text-red-500">No Focus</div>
-                  <div className="text-lg text-center mt-2 text-gray-500">Create focus from top right button</div>
+                  <div className="flex justify-center mt-16">
+                    <NoFocus />
+                  </div>
+                  <div className="text-2xl text-center mt-2 text-red-500">No Focus Found!</div>
+                  <div className="text-lg text-center mt-1 text-gray-500">Create focus from top right button</div>
                 </div>
               }
           </>
