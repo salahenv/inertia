@@ -2,14 +2,34 @@
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { SkeletonLoaderTodo } from "../components/Loader";
-import { CompletedIcon, DeleteIcon, IncompletedIcon, NoFocus } from "../icons";
+import {
+  CompletedIcon,
+  DeleteIcon,
+  IncompletedIcon,
+  NextIcon,
+  NoFocus,
+  PrevIcon,
+} from "../icons";
 
 const formatDate = (isoDate: Date) => {
   const date = new Date(isoDate);
   const day = String(date.getDate()).padStart(2, "0");
 
   // Array to map month numbers to abbreviated names
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const month = monthNames[date.getMonth()]; // Get month abbreviation
 
   const year = date.getFullYear();
@@ -28,25 +48,47 @@ function differenceFromToday(iso: string): number {
   return diffInDays;
 }
 
-function TimeAndDate({todo}: any) {
-  const diff = differenceFromToday(todo.createdAt);
-  let bg = 'bg-green-100';
-  if(diff === 0) {
-    bg = 'bg-green-300';
+function TimeAndDate({ date }: any) {
+  const diff = differenceFromToday(date);
+  let bg = "bg-green-100";
+  if (diff === 0) {
+    bg = "bg-green-300";
   } else if (diff === 1) {
-    bg = 'bg-orange-200';
-  } else if(diff === 2) {
-    bg = 'bg-orange-100';
-  } else if(diff === 3) {
-    bg = 'bg-red-100';
+    bg = "bg-orange-200";
+  } else if (diff === 2) {
+    bg = "bg-orange-100";
+  } else if (diff === 3) {
+    bg = "bg-red-100";
   } else {
-    bg = 'bg-red-300';
+    bg = "bg-red-300";
   }
   return (
-    <span className={`rounded px-1 text-xs text-gray-600 border border-solid border-red-100 ${bg}`}>
-      {formatDate(todo.createdAt)}
+    <span
+      className={`rounded p-1 text-xs text-gray-600 border border-solid border-red-100 ${bg}`}
+    >
+      {formatDate(date)}
     </span>
-  )
+  );
+}
+
+function formatDateString(isoDate: string) {
+  const date = new Date(isoDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "2-digit",
+  };
+  if (date.getDate() === today.getDate()) {
+    return "Today";
+  }
+  if (date.getDate() === yesterday.getDate()) {
+    return "Yesterday";
+  }
+  return date.toLocaleDateString("en-IN", options).replace(",", "");
 }
 
 export default function Todo() {
@@ -73,8 +115,8 @@ export default function Todo() {
   const [showAddTodo, setShowAddTodo] = useState(false);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
+  const [dayOffset, setDayOffset] = useState(1);
+  const [selectedDay, setSelectedDay] = useState("Yesterday");
 
   useEffect(() => {
     getTodo();
@@ -82,11 +124,41 @@ export default function Todo() {
 
   useEffect(() => {
     getTodoCompleted();
-  }, [pageNumber]);
+  }, [dayOffset]);
 
   const toggleAddTodo = () => {
     setShowAddTodo(!showAddTodo);
   };
+
+  const onPrevClick = () => {
+    setDayOffset(dayOffset + 1);
+  };
+
+  const onNextClick = () => {
+    if (dayOffset > 0) {
+      setDayOffset(dayOffset - 1);
+    }
+  };
+
+  function PrevNextNavigator() {
+    return (
+      <div className="flex items-center">
+        <div onClick={() => onPrevClick()}>
+          <PrevIcon />
+        </div>
+        <div className="text-gray-800 font-bold text-xl ml-4 mr-4">
+          {selectedDay}
+        </div>
+        <div onClick={() => onNextClick()}>
+          <NextIcon
+            color={
+              dayOffset === 1 ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
+            }
+          />
+        </div>
+      </div>
+    );
+  }
 
   const getTodo = async () => {
     try {
@@ -102,8 +174,6 @@ export default function Todo() {
       const resData = await res.json();
       if (resData.success) {
         setTodos(resData.data.todo);
-        // setinCompletedTodos(resData.data.inCompletedTodos);
-        // setCompletedTodos(resData.data.completedTodos);
       } else {
       }
     } catch (error) {
@@ -117,7 +187,7 @@ export default function Todo() {
     setIsCompletedTodoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?page=${pageNumber}&limit=10`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?dayOffset=${dayOffset}`,
         {
           headers: {
             Accept: "application/json",
@@ -130,8 +200,8 @@ export default function Todo() {
       const resData = await res.json();
       if (resData.success) {
         setTodosCompleted(resData.data.todos);
-        setPageNumber(resData.data.currentPage);
-        setTotalPage(resData.data.totalPages);
+        const formatedDate = formatDateString(resData.data.date);
+        setSelectedDay(formatedDate);
       } else {
       }
     } catch (error) {
@@ -245,34 +315,41 @@ export default function Todo() {
           ) : (
             <div>
               <div>
-                {todos && todos.length ? todos.map((todo: any, index: number) => {
-                  return (
-                    <div key={index} className="mb-2 cursor-pointer">
-                      <div className="flex items-start space-x-2">
-                        <div className="flex">
-                          <input
-                            onClick={() => onUpdateTodo(todo)}
-                            checked={todo.completed}
-                            type="checkbox"
-                            id="checkbox"
-                            className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                          />
-                        </div>
-                        <div>
-                          <div className="relative text-gray-800 group">
-                            <div>{todo.name}</div>
-                            <div
-                              onClick={ () => onDeleteFocusTodo(todo) }
-                              className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold">
-                              <DeleteIcon color="#ef4444"/>
+                {todos && todos.length
+                  ? todos.map((todo: any, index: number) => {
+                      return (
+                        <div key={index} className="mb-2 cursor-pointer">
+                          <div className="flex items-start space-x-2">
+                            <div className="flex">
+                              <input
+                                onClick={() => onUpdateTodo(todo)}
+                                checked={todo.completed}
+                                type="checkbox"
+                                id="checkbox"
+                                className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                              />
+                            </div>
+                            <div>
+                              <div className="relative text-gray-800 group">
+                                <div>{todo.name}</div>
+                                <div
+                                  onClick={() => onDeleteFocusTodo(todo)}
+                                  className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold"
+                                >
+                                  <DeleteIcon color="#ef4444" />
+                                </div>
+                              </div>
+                              <div>
+                                <TimeAndDate
+                                  date={todo.createdAt}
+                                ></TimeAndDate>
+                              </div>
                             </div>
                           </div>
-                          <div><TimeAndDate todo = {todo}></TimeAndDate></div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                }): null}
+                      );
+                    })
+                  : null}
               </div>
             </div>
           )}
@@ -311,69 +388,54 @@ export default function Todo() {
             <CompletedIcon />
             <div className="ml-2">{"Completed Todo's"}</div>
           </div>
+          <PrevNextNavigator />
         </div>
         <div>
           {isCompletedTodoLoading ? (
             <SkeletonLoaderTodo />
-          ) : (
-            todosCompleted && todosCompleted.length ?
+          ) : todosCompleted && todosCompleted.length ? (
             todosCompleted.map((todo, index) => {
               return (
-                <div key={index} className="mb-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center">
+                <div key={index} className="mb-2 cursor-pointer">
+                  <div className="flex items-start space-x-2">
+                    <div className="flex">
                       <input
                         onClick={() => {}}
                         checked={todo.completed}
                         type="checkbox"
                         id="checkbox"
-                        className="
-                          h-5 w-5 
-                          text-green-600 
-                          border-gray-300 
-                          rounded 
-                          focus:ring-green-500 
-                          focus:ring-2
-                        "
+                        className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                       />
                     </div>
-                    <div className="relative text-gray-800 group">
-                      <span>{todo.name}</span>
-                      <span className="text-gray-600">
-                            {"(" + formatDate(todo.createdAt) + ")"}
-                      </span>
+                    <div>
+                      <div className="text-gray-800 group">
+                        {todo.name}
+                      </div>
+                      <div>
+                        <span
+                          className={`rounded p-1 text-xs text-gray-600 border border-solid border-red-100 bg-green-200`}
+                        >
+                          Created: {formatDate(todo.createdAt)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               );
-            }) : <div>
-                <div className="flex justify-center mt-8">
-                  <NoFocus />
-                </div>
-                <div className="text-xl text-center mt-2 text-red-500">No completed todo!</div>
-                <div className="text-lg text-center mt-1 text-gray-500">Create todo it will start reflecting</div>
+            })
+          ) : (
+            <div>
+              <div className="flex justify-center mt-8">
+                <NoFocus />
+              </div>
+              <div className="text-xl text-center mt-2 text-red-500">
+                No completed todo!
+              </div>
+              <div className="text-lg text-center mt-1 text-gray-500">
+                Create todo it will start reflecting
+              </div>
             </div>
           )}
-        </div>
-        <div className="flex justify-between mt-8">
-          <button
-            className="disabled:opacity-75 bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2"
-            disabled={pageNumber <= 1}
-            onClick={() => {
-              pageNumber >= 1 ? setPageNumber(pageNumber - 1) : null;
-            }}
-          >
-            Prev
-          </button>
-          <button
-            className="disabled:opacity-75 bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2"
-            disabled={pageNumber >= totalPage}
-            onClick={() => {
-              pageNumber <= totalPage ? setPageNumber(pageNumber + 1) : null;
-            }}
-          >
-            Next
-          </button>
         </div>
       </div>
     </div>
