@@ -343,9 +343,12 @@ export default function Todo() {
                                 <TimeAndDate
                                   date={todo.createdAt}
                                 ></TimeAndDate>
-                                <TimeAndDate
-                                  date={todo.updatedAt}
-                                ></TimeAndDate>
+                                {
+                                  todo.completed ?
+                                  <TimeAndDate
+                                    date={todo.updatedAt}
+                                  ></TimeAndDate> : null
+                                }
                               </div>
                             </div>
                           </div>
