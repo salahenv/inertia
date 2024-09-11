@@ -12,7 +12,7 @@ function formatDateString(isoDate: string) {
         return 'Yesterday';
     }
     return date.toLocaleDateString('en-IN', options).replace(',', '');
-  }
+}
 
   const formatDate = (date: any) => {
     date = new Date(date);
@@ -27,7 +27,16 @@ function formatDateString(isoDate: string) {
     return formattedTime;
   }
 
+  function differenceFromToday(iso: string): number {
+    const givenDate = new Date(iso);
+    const today = new Date();
+    const diffInMs = today.getTime() - givenDate.getTime();
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    return diffInDays;
+  }
+
   export {
     formatDateString,
-    formatDate
+    formatDate,
+    differenceFromToday
   }

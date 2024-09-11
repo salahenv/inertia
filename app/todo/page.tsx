@@ -10,43 +10,7 @@ import {
   NoFocus,
   PrevIcon,
 } from "../icons";
-
-const formatDate = (isoDate: Date) => {
-  const date = new Date(isoDate);
-  const day = String(date.getDate()).padStart(2, "0");
-
-  // Array to map month numbers to abbreviated names
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const month = monthNames[date.getMonth()]; // Get month abbreviation
-
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-
-  const formattedDate = `${hours}:${minutes} ${day} ${month} ${year}`;
-  return formattedDate;
-};
-
-function differenceFromToday(iso: string): number {
-  const givenDate = new Date(iso);
-  const today = new Date();
-  const diffInMs = today.getTime() - givenDate.getTime();
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-  return diffInDays;
-}
+import {formatDateString, formatDate, differenceFromToday} from '../dateUtils';
 
 function TimeAndDate({ date }: any) {
   const diff = differenceFromToday(date);
@@ -69,26 +33,6 @@ function TimeAndDate({ date }: any) {
       {formatDate(date)}
     </span>
   );
-}
-
-function formatDateString(isoDate: string) {
-  const date = new Date(isoDate);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "short",
-    year: "2-digit",
-  };
-  if (date.getDate() === today.getDate()) {
-    return "Today";
-  }
-  if (date.getDate() === yesterday.getDate()) {
-    return "Yesterday";
-  }
-  return date.toLocaleDateString("en-IN", options).replace(",", "");
 }
 
 export default function Todo() {
