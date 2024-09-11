@@ -75,11 +75,13 @@ export default function Todo() {
   };
 
   const onPrevClick = () => {
-    setDayOffset(dayOffset + 1);
+    if(!isCompletedTodoLoading) {
+      setDayOffset(dayOffset + 1);
+    } 
   };
 
   const onNextClick = () => {
-    if (dayOffset > 0) {
+    if (dayOffset > 1 && !isCompletedTodoLoading) {
       setDayOffset(dayOffset - 1);
     }
   };
@@ -88,7 +90,11 @@ export default function Todo() {
     return (
       <div className="flex items-center">
         <div onClick={() => onPrevClick()}>
-          <PrevIcon />
+          <PrevIcon 
+            color={
+              isCompletedTodoLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
+            }
+          />
         </div>
         <div className="text-gray-800 font-bold text-xl ml-4 mr-4">
           {selectedDay}
@@ -96,7 +102,7 @@ export default function Todo() {
         <div onClick={() => onNextClick()}>
           <NextIcon
             color={
-              dayOffset === 1 ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
+              (dayOffset === 1 || isCompletedTodoLoading) ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
             }
           />
         </div>

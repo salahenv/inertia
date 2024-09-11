@@ -110,6 +110,7 @@ export default function Home() {
   }
 
   const createFocus = async () => {
+    setIsSaveFocusLoading(true);
     const payload = {
       name: focusName, 
       startTime: Date.now(),
@@ -293,11 +294,13 @@ export default function Home() {
   });
 
   const onPrevClick = () => {
-    setDayOffset(dayOffset + 1);
+    if(!isFocusLoading) {
+      setDayOffset(dayOffset + 1);
+    } 
   }
 
   const onNextClick = () => {
-    if(dayOffset > 0) {
+    if(dayOffset > 0 && !isFocusLoading) {
       setDayOffset(dayOffset - 1);
     }
   }
@@ -306,11 +309,11 @@ export default function Home() {
     return (
       <div className="flex items-center">
           <div onClick={() => onPrevClick()}>
-            <PrevIcon />
+            <PrevIcon color={isFocusLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"}/>
           </div>
           <div className="text-gray-800 font-bold text-xl ml-4 mr-4">{selectedDay}</div>
           <div onClick={() => onNextClick()}>
-            <NextIcon color={dayOffset === 0 ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"}/>
+            <NextIcon color={(dayOffset === 0 || isFocusLoading) ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"}/>
           </div>
         </div>
     );
