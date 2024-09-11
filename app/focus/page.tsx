@@ -425,7 +425,7 @@ export default function Home() {
         </div>
       : null }
       <div className="flex flex-row justify-between items-center mb-4">
-        <div className="font-medium">Focused <span className="text-green-900">{focused}</span>{" "+ "hours"}</div>
+        <div className="font-medium text-lg">Focused <span className={`font-bold p-1 text-green-900`}>{focused}</span>{" "+ "hours"}</div>
         <div className="hidden md:block">
           <PrevNextNavigator />
         </div>
@@ -441,9 +441,8 @@ export default function Home() {
       </div>
       <div className="flex flex-col">
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
-          <div className="w-2/3 font-medium text-gray-500">Name</div>
-          {/* <div className="w-2/6 font-medium text-gray-500">Start</div> */}
-          <div className="w-1/3 font-medium text-gray-500">Time</div>
+          <div className="w-2/3 font-medium text-gray-900">Name</div>
+          <div className="w-1/3 font-medium text-gray-900">Attributes</div>
         </div>
         <>{
           isFocusLoading ? <SkeletonLoaderFocus classNames = ' mt-2'/> :
@@ -455,6 +454,7 @@ export default function Home() {
 
                   let bgClassName = '';
                   let bgTextClassName = '';
+                  let bgTagClassName = '';
                   if(timeSpendInMinutes > 80 &&  timeSpendInMinutes <= 120) {
                     bgClassName = 'bg-green-500';
                     bgTextClassName = 'bg-gradient-to-r from-green-500';
@@ -479,20 +479,19 @@ export default function Home() {
                     bgClassName = 'bg-red-200';
                     bgTextClassName = 'bg-gradient-to-r from-red-200';
                   };
-                  // if(timeSpendInMinutes <= 0) return;
+                  
+                  const ar = area.find(a => a.value ===f.tag);
 
                   return (
                     <div key={index} className={`flex flex-row border-gray-400 border-solid border-b justify-center text-sm cursor-pointer hover:border relative group`}>
-                      <div className={`p-2 block w-2/3 text-gray-800 sm:hidden ${bgTextClassName}`}> 
-                        <div className="flex items-center">{f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
-                      </div>
-                      <div className={`p-2 hidden w-2/3 text-gray-800 sm:block ${bgTextClassName}`}> 
-                        <div className="flex items-center">{f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
+                      <div className={`p-2 w-2/3 text-gray-800 ${bgTextClassName}`}> 
+                        <div className="flex items-center">{f.name}</div>
                       </div>
                       <div className="w-1/3 p-2 text-gray-800 flex gap-1 flex-wrap">
+                        <div className={`text-gray-800 rounded h-fit p-1 ${bgClassName}`}>{timeSpendInMinutes} {" mins"}</div>
                         <div className="bg-gray-200 p-1 h-fit rounded">{getTimeFromDate(f.startTime)}</div>
                         <div className="bg-gray-200 p-1 h-fit rounded">{getDateByFormat(f.startTime)}</div>
-                        <div className={`text-gray-800 rounded h-fit p-1 ${bgClassName}`}>{timeSpendInMinutes} {" mins"}</div>
+                        { ar && <div className="bg-cyan-200 p-1 h-fit rounded">{ar?.label}</div>}
                       </div>
                       <div className="absolute right-5 top-1 hidden group-hover:block cursor-pointer">
                         <div 
