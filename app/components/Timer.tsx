@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Spinner from './Spinner';
+import { SyncIcon } from '../icons';
 
 let map: any = {
   '10%': {
@@ -27,8 +28,8 @@ const Timer = ({
     toggleSuccessModal, 
     toggleProgressModal,
     setEndTime, 
-    updateFocus, 
-    getFocus
+    isFocusUpdating,
+    updateFocus
   } : any) => {
   const [time, setTime] = useState(timeInMinutes * 60); // Initial time in seconds
   const [progress, setProgress] = useState('100%');
@@ -173,13 +174,19 @@ const Timer = ({
             {parseInt(progress) > 5 && <span className="text-white font-bold">{Math.ceil(parseInt(progress))}%</span>}
           </div>
         </div>
-        <div className="flex justify-center mt-6">
-          <button 
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-1"
+        <div className="flex justify-center items-center mt-6">
+          <button
+            className="disabled:bg-blue-300 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-1"
             onClick={onPausePlay}
           >
-            {isActive ? 'Pause' : 'Resume'}
+            { isActive ?  'Pause' : 'Resume'}
           </button>
+          {
+            isFocusUpdating && 
+            <div className='ml-4 animate-spin-slow'>
+              <SyncIcon />
+            </div>
+          }
         </div>
       </div>
     }</div>

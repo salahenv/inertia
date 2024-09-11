@@ -27,6 +27,7 @@ export default function Home() {
   const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] = useState(false);
   const [areaName, setAreaName] = useState('');
   const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
+  const [isFocusUpdating, setIsFocusUpdating] = useState(false);
 
   useEffect(() => {
     getFocus();
@@ -155,6 +156,7 @@ export default function Home() {
   const onUpdateFocus = async (obj:any) => {
     const {completed} = obj;
     const activeFocusId = localStorage.getItem('activeFocusId');
+    setIsFocusUpdating(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocusId}`,
         {
@@ -181,6 +183,8 @@ export default function Home() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setTimeout(() => setIsFocusUpdating(false), 3000);
     }
   }
 
@@ -337,6 +341,7 @@ export default function Home() {
               <div className="mt-4">
                   <Timer 
                     timeInMinutes = {parseInt(time)}
+                    isFocusUpdating = {isFocusUpdating}
                     onUpdateFocus = {onUpdateFocus}
                     focusName = {focusName}
                     isSaveFocusLoading = {isSaveFocusLoading}
