@@ -6,7 +6,8 @@ import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
 import { DeleteIcon, NextIcon, NoFocus, PrevIcon } from "../icons";
-import { formatDateString, formatDate } from "../dateUtils";
+import { formatDateString, formatDate, getTimeFromDate,
+  getDateByFormat } from "../dateUtils";
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
@@ -425,7 +426,7 @@ export default function Home() {
       : null }
       <div className="flex flex-row justify-between items-center mb-4">
         <div className="font-medium">Focused <span className="text-green-900">{focused}</span>{" "+ "hours"}</div>
-        <div className="">
+        <div className="hidden md:block">
           <PrevNextNavigator />
         </div>
         <button 
@@ -434,11 +435,15 @@ export default function Home() {
           + Add Focus
         </button>
       </div>
+  
+      <div className="block flex justify-center mb-4 md:hidden">
+          <PrevNextNavigator />
+      </div>
       <div className="flex flex-col">
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
-          <div className="w-3/6 font-medium text-gray-500">Name</div>
-          <div className="w-1/6 font-medium text-gray-500">Start</div>
-          <div className="w-2/6 font-medium text-gray-500">Time</div>
+          <div className="w-2/3 font-medium text-gray-500">Name</div>
+          {/* <div className="w-2/6 font-medium text-gray-500">Start</div> */}
+          <div className="w-1/3 font-medium text-gray-500">Time</div>
         </div>
         <>{
           isFocusLoading ? <SkeletonLoaderFocus classNames = ' mt-2'/> :
@@ -449,20 +454,46 @@ export default function Home() {
                   const timeSpendInMinutes = Math.floor((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
-                  if(timeSpendInMinutes > 80 &&  timeSpendInMinutes <= 120) bgClassName = 'bg-green-500';
-                  if(timeSpendInMinutes > 50 &&  timeSpendInMinutes <= 80) bgClassName = 'bg-green-400';
-                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes <= 50) bgClassName = 'bg-green-300';
-                  if(timeSpendInMinutes > 20 &&  timeSpendInMinutes <= 30) bgClassName = 'bg-green-200';
-                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes <= 20) bgClassName = 'bg-orange-200';
-                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes <= 10) bgClassName = 'bg-red-200';
+                  let bgTextClassName = '';
+                  if(timeSpendInMinutes > 80 &&  timeSpendInMinutes <= 120) {
+                    bgClassName = 'bg-green-500';
+                    bgTextClassName = 'bg-gradient-to-r from-green-500';
+                  };
+                  if(timeSpendInMinutes > 50 &&  timeSpendInMinutes <= 80) {
+                    bgClassName = 'bg-green-400';
+                    bgTextClassName = 'bg-gradient-to-r from-green-400';
+                  };
+                  if(timeSpendInMinutes > 30 &&  timeSpendInMinutes <= 50) {
+                    bgClassName = 'bg-green-300';
+                    bgTextClassName = 'bg-gradient-to-r from-green-300';
+                  };
+                  if(timeSpendInMinutes > 20 &&  timeSpendInMinutes <= 30) {
+                    bgClassName = 'bg-green-200';
+                    bgTextClassName = 'bg-gradient-to-r from-green-200';
+                  };
+                  if(timeSpendInMinutes > 10 &&  timeSpendInMinutes <= 20) {
+                    bgClassName = 'bg-orange-200';
+                    bgTextClassName = 'bg-gradient-to-r from-orange-200';
+                  };
+                  if(timeSpendInMinutes > 0 &&  timeSpendInMinutes <= 10) {
+                    bgClassName = 'bg-red-200';
+                    bgTextClassName = 'bg-gradient-to-r from-red-200';
+                  };
                   // if(timeSpendInMinutes <= 0) return;
 
                   return (
-                    <div key={index} className={`flex flex-row p-2 border-gray-400 border-solid border-b justify-center text-sm cursor-pointer hover:border ${bgClassName} relative group`}>
-                      <div className="block w-3/6 text-gray-500 sm:hidden"> {f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
-                      <div className="hidden w-3/6 text-gray-500 sm:block"> {f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
-                      <div className="w-1/6 text-gray-500">{formatDate(f.startTime)}</div>
-                      <div className="w-2/6 text-gray-500">{timeSpendInMinutes} {" mins"}</div>
+                    <div key={index} className={`flex flex-row border-gray-400 border-solid border-b justify-center text-sm cursor-pointer hover:border relative group`}>
+                      <div className={`p-2 block w-2/3 text-gray-800 sm:hidden ${bgTextClassName}`}> 
+                        <div className="flex items-center">{f.name.length > 16 ? `${f.name.substring(0, 16)}...` : f.name}</div>
+                      </div>
+                      <div className={`p-2 hidden w-2/3 text-gray-800 sm:block ${bgTextClassName}`}> 
+                        <div className="flex items-center">{f.name.length > 40 ? `${f.name.substring(0, 40)}...` : f.name}</div>
+                      </div>
+                      <div className="w-1/3 p-2 text-gray-800 flex gap-1 flex-wrap">
+                        <div className="bg-gray-200 p-1 h-fit rounded">{getTimeFromDate(f.startTime)}</div>
+                        <div className="bg-gray-200 p-1 h-fit rounded">{getDateByFormat(f.startTime)}</div>
+                        <div className={`text-gray-800 rounded h-fit p-1 ${bgClassName}`}>{timeSpendInMinutes} {" mins"}</div>
+                      </div>
                       <div className="absolute right-5 top-1 hidden group-hover:block cursor-pointer">
                         <div 
                           onClick={() => handleDelete(f)}

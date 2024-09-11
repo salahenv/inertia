@@ -27,6 +27,27 @@ function formatDateString(isoDate: string) {
     return formattedTime;
   }
 
+  const getTimeFromDate = (date: any) => {
+    date = new Date(date);
+    const formattedTime = date.toLocaleString('en-IN', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false,
+    });
+    return formattedTime;
+  }
+  const getDateByFormat = (date: any, format = {
+    day: 'numeric',
+    month: 'short',
+    year: '2-digit',
+  }) => {
+    date = new Date(date);
+    const formattedTime = date.toLocaleString('en-IN', {
+     ...format
+    });
+    return formattedTime;
+  }
+
   function differenceFromToday(iso: string): number {
     const givenDate = new Date(iso);
     const today = new Date();
@@ -38,5 +59,7 @@ function formatDateString(isoDate: string) {
   export {
     formatDateString,
     formatDate,
-    differenceFromToday
+    differenceFromToday,
+    getTimeFromDate,
+    getDateByFormat,
   }
