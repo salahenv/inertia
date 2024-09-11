@@ -408,7 +408,7 @@ export default function Home() {
                         <button 
                           className="bg-green-500 text-white px-2 py-1 hover:bg-green-600 whitespace-nowrap"
                           onClick={ () => {onSaveFocusArea()}}
-                        >{ isSaveFocusAreaLoading ? <Spinner></Spinner> : "Save"}</button>
+                        >{ isSaveFocusAreaLoading ? <div className="flex justify-center"><Spinner /></div> : "Save"}</button>
                       </div>
                       : <button 
                           className="ml-4 bg-green-500 text-white px-2 py-1 rounded hover:bg-greeb-600 whitespace-nowrap"
@@ -421,7 +421,7 @@ export default function Home() {
                       disabled={isSaveFocusLoading}
                       className="disabled:opacity-75 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
                       onClick={ () => {createFocus()}}
-                    >{isSaveFocusLoading ? <Spinner></Spinner> : "Create"}</button>
+                    >{isSaveFocusLoading ? <div className="flex justify-center"><Spinner /></div> : "Create"}</button>
                 </div>
                 </div>
             </div>

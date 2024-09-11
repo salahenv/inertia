@@ -40,7 +40,7 @@ export default function Register() {
           <input required type='email' className="py-2 px-4 mb-2" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
           <input required type="password" className='py-2 px-4 mb-2' placeholder="password" value = {password} onChange={(e) => setPassword(e.target.value)}></input>
           <button disabled={!name || !email || !password} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick = {() => onRegister()}>
-          {isLoading ? <Spinner/> : "Register"}
+          {isLoading ? <div className="flex justify-center"><Spinner /></div> : "Register"}
           </button>
         </div> 
     

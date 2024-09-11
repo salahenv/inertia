@@ -323,7 +323,7 @@ export default function Todo() {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4"
                 onClick={() => createTodo()}
               >
-                {isSavingTodo ? <Spinner></Spinner> : "Save"}
+                {isSavingTodo ? <div className="flex justify-center"><Spinner /></div> : "Save"}
               </button>
             </div>
           ) : (

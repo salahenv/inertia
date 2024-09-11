@@ -48,7 +48,7 @@ export default function Login() {
           <input type='email'  required className="py-2 px-4 mb-2" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
           <input type='password' required className='py-2 px-4 mb-2' placeholder="password" value = {password} onChange={(e) => setPassword(e.target.value)}></input>
           <button disabled ={!email || !password} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick = {() => onLogin()}>
-            {isLoading ? <Spinner/> : "Login"}
+            {isLoading ? <div className="flex justify-center"><Spinner/></div> : "Login"}
           </button>
         </div> 
     
