@@ -582,6 +582,10 @@ export default function Home() {
                     bgClassName = 'bg-red-200';
                     bgTextClassName = 'bg-gradient-to-r from-red-200';
                   };
+                  if(timeSpendInMinutes <= 0) {
+                    bgClassName = 'bg-red-300';
+                    bgTextClassName = 'bg-gradient-to-r from-red-300';
+                  };
                   
                   const ar = area.find(a => a.value ===f.tag);
 
