@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
-import { DeleteIcon, NextIcon, NoFocus, PrevIcon } from "../icons";
+import { CalendarIcon, ClockIcon, DeleteIcon, NextIcon, NoFocus, PrevIcon } from "../icons";
 import { formatDateString, formatDate, getTimeFromDate,
   getDateByFormat } from "../dateUtils";
 
@@ -597,8 +597,16 @@ export default function Home() {
                       </div>
                       <div className="w-1/3 p-2 text-gray-800 flex gap-1 flex-wrap">
                         <div className={`text-gray-800 rounded h-fit p-1 ${bgClassName}`}>{timeSpendInMinutes} {" mins"}</div>
-                        <div className="bg-gray-200 p-1 h-fit rounded">{getTimeFromDate(f.startTime)}</div>
-                        <div className="bg-gray-200 p-1 h-fit rounded">{getDateByFormat(f.startTime)}</div>
+                        <div className="flex items-center bg-gray-200 p-1 h-fit rounded">
+                          <span><ClockIcon /></span>
+                          <span className="ml-1">{getTimeFromDate(f.startTime)}</span>
+                        </div>
+                        <div className="flex items-center bg-gray-200 p-1 h-fit rounded">
+                          <span>
+                            <CalendarIcon />
+                          </span>
+                          <span className="ml-1">{getDateByFormat(f.startTime)}</span>
+                        </div>
                         { ar && <div className="bg-cyan-200 p-1 h-fit rounded">{ar?.label}</div>}
                       </div>
                       <div className="absolute right-5 top-1 hidden group-hover:block cursor-pointer">
