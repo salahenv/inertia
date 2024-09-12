@@ -534,7 +534,6 @@ export default function Home() {
         <div className="hidden md:block">
           <PrevNextNavigator />
         </div>
-        <div><TimeSpentBar data={focus}/></div>
         <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded" 
           onClick={() => toogleAddFocusModal()}>
@@ -545,6 +544,7 @@ export default function Home() {
       <div className="block flex justify-center mb-4 md:hidden">
           <PrevNextNavigator />
       </div>
+      <div><TimeSpentBar data={focus}/></div>
       <div className="flex flex-col">
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
           <div className="w-2/3 font-medium text-gray-900">Name</div>
