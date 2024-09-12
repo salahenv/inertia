@@ -450,7 +450,7 @@ export default function Home() {
                       >
                     </input>
                     {
-                      showTodoDropDown ? <div className="h-48 overflow-y-scroll shadow-2xl rounded p-2 z-10 w-full absolute bg-gray-200 top-[42px] left-0">
+                      showTodoDropDown ? <div className="md:h-48 overflow-y-scroll shadow-2xl rounded p-2 z-10 w-full absolute bg-gray-200 top-[42px] left-0">
                         {
                           isTodoLoading ? <SkeletonLoaderFocus /> : 
                           <div>{
