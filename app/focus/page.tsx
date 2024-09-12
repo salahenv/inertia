@@ -531,7 +531,10 @@ export default function Home() {
             </div>
         </div>
       : null }
-      <div className="flex flex-row justify-between items-center mb-4">
+      <div className="block flex justify-center mb-4 md:hidden">
+        <PrevNextNavigator />
+      </div>
+      <div className="flex flex-row justify-between items-center mb-6">
         <div className="font-medium text-lg">Focused <span className={`font-bold p-1 text-green-900`}>{focused}</span>{" "+ "hours"}</div>
         <div className="hidden md:block">
           <PrevNextNavigator />
@@ -542,11 +545,7 @@ export default function Home() {
           + Add Focus
         </button>
       </div>
-  
-      <div className="block flex justify-center mb-4 md:hidden">
-          <PrevNextNavigator />
-      </div>
-      <div><TimeSpentBar data={focus}/></div>
+      <div className="mb-4 p-4 rounded bg-gray-200"><TimeSpentBar data={focus}/></div>
       <div className="flex flex-col">
         <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
           <div className="w-2/3 font-medium text-gray-900">Name</div>
