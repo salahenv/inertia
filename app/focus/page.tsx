@@ -606,7 +606,7 @@ export default function Home() {
             </div>
           </div>
         ) : null}
-        <div className="mb-4 p-4 rounded bg-gray-200">
+        <div className="mb-4">
           <TimeSpentBar data={focus} />
         </div>
         <div className="flex flex-col">

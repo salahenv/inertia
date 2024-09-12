@@ -20,7 +20,22 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   });
 
   // Calculate total time spent
+  let bgColorClass = "bg-gray-200";
+  let smiley = "";
   const totalTimeSpent = Object.values(timeSpentByTag).reduce((acc, time) => acc + time, 0);
+  if(totalTimeSpent < 120) {
+    bgColorClass = "bg-red-100";
+    smiley = "😞";
+  } else if(totalTimeSpent >=120 && totalTimeSpent < 180) {
+    bgColorClass = "bg-orange-100";
+    smiley = "🙂";
+  } else if(totalTimeSpent >=180 && totalTimeSpent < 240) {
+    bgColorClass = "bg-green-100";
+    smiley = "🤩";
+  } else if(totalTimeSpent >=240) {
+    bgColorClass = "bg-green-200";
+    smiley = "😍";
+  }
   const minutes = Math.floor(totalTimeSpent / 60);
   const remainingSeconds = Math.floor(totalTimeSpent % 60);
   const totalformattedTimeSpent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
@@ -89,9 +104,9 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   });
 
   return (
-    <div className="w-full">
-      <div className="font-medium text-lg mb-2">Focused <span className={`font-bold p-1 text-green-900`}>{totalformattedTimeSpent}</span>{" "+ "hours"}</div>
-      <div className="relative w-full bg-gray-200 rounded h-8">
+    <div className={`w-full p-4 rounded ${bgColorClass}`}>
+      <div className="font-medium text-lg mb-2">Focused <span className={`font-bold p-1 text-green-900`}>{totalformattedTimeSpent}</span>{" "+ "hours"} {" "+smiley}</div>
+      <div className="relative w-full rounded h-8">
         {segmentElements}
       </div>
       <div className="mt-4 flex gap-2 flex-wrap">
