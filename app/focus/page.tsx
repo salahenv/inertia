@@ -8,6 +8,7 @@ import Spinner from "../components/Spinner";
 import { CalendarIcon, ClockIcon, DeleteIcon, NextIcon, NoFocus, PrevIcon } from "../icons";
 import { formatDateString, formatDate, getTimeFromDate,
   getDateByFormat } from "../dateUtils";
+import TimeSpentBar from "../components/TimeSpentBar";
 
 export default function Home() {
   const [focusName, setFocusName] = useState('');
@@ -533,6 +534,7 @@ export default function Home() {
         <div className="hidden md:block">
           <PrevNextNavigator />
         </div>
+        <div><TimeSpentBar data={focus}/></div>
         <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded" 
           onClick={() => toogleAddFocusModal()}>
