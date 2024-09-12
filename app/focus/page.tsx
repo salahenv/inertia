@@ -28,6 +28,26 @@ export default function Home() {
   const [areaName, setAreaName] = useState('');
   const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
   const [isFocusUpdating, setIsFocusUpdating] = useState(false);
+  const [showTodoDropDown, setShowTodoDropDown] = useState(false);
+  const [isTodoLoading, setIsTodoLoading] = useState(false);
+  const [todos, setTodos] = useState<
+    {
+      name: string;
+      completed: boolean;
+      _id: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[]
+  >([]);
+  const [filteredTodos, setFilteredTodos] = useState<
+    {
+      name: string;
+      completed: boolean;
+      _id: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[]
+  >(todos);
 
   useEffect(() => {
     getFocus();
@@ -35,7 +55,35 @@ export default function Home() {
 
   useEffect(() => {
     getTags();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    showTodoDropDown ? getTodo() : null;
+  }, [showTodoDropDown]);
+
+  const getTodo = async () => {
+    try {
+      setIsTodoLoading(true);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todo`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+        credentials: "include",
+      });
+      const resData = await res.json();
+      if (resData.success) {
+        setTodos(resData.data.todo);
+        setFilteredTodos(resData.data.todo);
+      } else {
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
+    } finally {
+      setIsTodoLoading(false);
+    }
+  };
 
   const onSlideChange = (value: string) => {
     setTime(value);
@@ -323,6 +371,28 @@ export default function Home() {
     );
   }
 
+  const onInputFocus = (event: any) => {
+    event.type === 'focus' ? setShowTodoDropDown(true) : null;
+  }
+
+  const onInputChange = (value: string) => {
+    setFocusName(value);
+    if(value) {
+      const filteredTodos = todos.filter((todo) => {
+        if(todo.name.toLowerCase().includes(value.toLowerCase())) return todo;
+      });
+      setFilteredTodos(filteredTodos);
+      setShowTodoDropDown(!!filteredTodos.length);
+    } else {
+      setFilteredTodos(todos);
+    }
+  }
+
+  const onSelectTodo = (todoName: string) => {
+    setFocusName(todoName);
+    setShowTodoDropDown(false);
+  }
+
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
       {
@@ -367,14 +437,39 @@ export default function Home() {
                     >✖</button>
                 </div>
                 <div className="mt-4">
-                  <input 
-                    type='text'
-                    required
-                    className="py-2 px-4 mb-4 w-full" 
-                    placeholder="Enter focus name" 
-                    value={focusName} 
-                    onChange={(e) => setFocusName(e.target.value)}>
-                  </input>
+                  <div className="relative">
+                    <input 
+                      type='text'
+                      required
+                      className="py-2 px-4 mb-4 w-full" 
+                      placeholder="Enter focus name" 
+                      value={focusName} 
+                      onChange={(e) => onInputChange(e.target.value)}
+                      onFocus = {onInputFocus}
+                      onBlur={onInputFocus}
+                      >
+                    </input>
+                    {
+                      showTodoDropDown ? <div className="h-48 overflow-y-scroll shadow-2xl rounded p-2 z-10 w-full absolute bg-gray-200 top-[42px] left-0">
+                        {
+                          isTodoLoading ? <SkeletonLoaderFocus /> : 
+                          <div>{
+                            filteredTodos.filter((todo) => !todo.completed).map((todo, index) => {
+                              return (
+                                <div 
+                                  onClick={() => onSelectTodo(todo.name)}
+                                  key = {index}
+                                  className="cursor-pointer border-b border-solid border-gray-400 py-2"
+                                >
+                                  {todo.name} - <span className="text-gray-500 text-sm">{formatDate(todo?.createdAt)}</span>
+                                </div>
+                              )
+                            })
+                          }</div>
+                        }
+                      </div> : null
+                    }
+                  </div>
                   <div>
                     <div className="mb-2 text-neutral-900">Focusing for 
                       <span className="font-bold text-green-800">{" "}{time} minutes</span>
