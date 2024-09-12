@@ -553,7 +553,7 @@ export default function Home() {
              {
                 focus && focus.length ? focus.map((f: any, index) => {
 
-                  const timeSpendInMinutes = Math.floor((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
+                  let timeSpendInMinutes = Math.floor((new Date(f.endTime).getTime() - new Date(f.startTime).getTime()) / (1000 * 60));
 
                   let bgClassName = '';
                   let bgTextClassName = '';
@@ -583,6 +583,7 @@ export default function Home() {
                     bgTextClassName = 'bg-gradient-to-r from-red-200';
                   };
                   if(timeSpendInMinutes <= 0) {
+                    timeSpendInMinutes = 0;
                     bgClassName = 'bg-red-300';
                     bgTextClassName = 'bg-gradient-to-r from-red-300';
                   };
