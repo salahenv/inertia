@@ -11,6 +11,7 @@ import {
   PrevIcon,
 } from "../icons";
 import {formatDateString, formatDate, differenceFromToday} from '../dateUtils';
+import useAuth from '../hooks/auth';
 
 function TimeAndDate({ date }: any) {
   const diff = differenceFromToday(date);
@@ -36,6 +37,7 @@ function TimeAndDate({ date }: any) {
 }
 
 export default function Todo() {
+  useAuth();
   const [isTodoLoading, setIsTodoLoading] = useState(false);
   const [todos, setTodos] = useState<
     {

@@ -9,8 +9,10 @@ import { CalendarIcon, ClockIcon, DeleteIcon, NextIcon, NoFocus, PrevIcon } from
 import { formatDateString, formatDate, getTimeFromDate,
   getDateByFormat } from "../dateUtils";
 import TimeSpentBar from "../components/TimeSpentBar";
+import useAuth from '../hooks/auth';
 
 export default function Home() {
+  useAuth();
   const [focusName, setFocusName] = useState('');
   const [endTime, setEndTime] = useState(0);
   const [time, setTime] = useState('10');
