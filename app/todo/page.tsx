@@ -61,6 +61,7 @@ export default function Todo() {
   const [isSavingTodo, setIsSavingTodo] = useState(false);
   const [dayOffset, setDayOffset] = useState(1);
   const [selectedDay, setSelectedDay] = useState("Yesterday");
+  const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
 
   useEffect(() => {
     getTodo();
@@ -196,6 +197,7 @@ export default function Todo() {
 
   const onUpdateTodo = async (todo: any) => {
     try {
+      setIsUpdatingTodo(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/update/${todo._id}`,
         {
@@ -222,6 +224,8 @@ export default function Todo() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsUpdatingTodo(false);
     }
   };
 
@@ -270,13 +274,15 @@ export default function Todo() {
                       return (
                         <div key={index} className="mb-2 cursor-pointer">
                           <div className="flex items-start space-x-2">
+                            
                             <div className="flex">
                               <input
+                                disabled = {isUpdatingTodo}
                                 onClick={() => onUpdateTodo(todo)}
                                 checked={todo.completed}
                                 type="checkbox"
                                 id="checkbox"
-                                className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                className="disabled:border-gray-200 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                               />
                             </div>
                             <div>
