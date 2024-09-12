@@ -20,13 +20,8 @@ export default function Home() {
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
-      {/* <div className="block mt-8 sm:hidden">
-        <div className="text-center text-xl text-red-800 font-medium mb-1">Not supported!</div>
-        <div className="text-center text-lg text-gray-800 font-medium">Please open on desktop.</div>
-      </div> */}
-      {/* <div className="hidden sm:block"></div> */}
       <div className="">
-        <div className="flex flex-cols justify-between md:gap-4">
+        <div className="flex flex-col sm:flex-row sm:justify-start justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8">
           <Link href="/focus">
             <div className="bg-orange-100 p-8">
               <div className="flex text-blue-600 font-medium text-xl items-center">
