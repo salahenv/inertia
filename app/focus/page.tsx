@@ -453,8 +453,9 @@ export default function Home() {
                       showTodoDropDown ? <div className="md:h-48 overflow-y-scroll shadow-2xl rounded p-2 z-10 w-full absolute bg-gray-200 top-[42px] left-0">
                         {
                           isTodoLoading ? <SkeletonLoaderFocus /> : 
-                          <div>{
-                            filteredTodos.filter((todo) => !todo.completed).map((todo, index) => {
+                          <div>
+                            <div className="border-b font-medium border-solid border-gray-400 py-2">Active Todos</div>
+                            {filteredTodos.filter((todo) => !todo.completed).map((todo, index) => {
                               return (
                                 <div 
                                   onClick={() => onSelectTodo(todo.name)}
