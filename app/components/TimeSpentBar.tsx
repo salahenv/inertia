@@ -21,7 +21,9 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
 
   // Calculate total time spent
   const totalTimeSpent = Object.values(timeSpentByTag).reduce((acc, time) => acc + time, 0);
-
+  const minutes = Math.floor(totalTimeSpent / 60);
+  const remainingSeconds = Math.floor(totalTimeSpent % 60);
+  const totalformattedTimeSpent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   // Extended list of colors
   const colors = [
     'bg-green-400',
@@ -88,6 +90,7 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
 
   return (
     <div className="w-full">
+      <div className="font-medium text-lg mb-2">Focused <span className={`font-bold p-1 text-green-900`}>{totalformattedTimeSpent}</span>{" "+ "hours"}</div>
       <div className="relative w-full bg-gray-200 rounded h-8">
         {segmentElements}
       </div>
