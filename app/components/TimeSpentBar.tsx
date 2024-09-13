@@ -24,16 +24,16 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   let smiley = "";
   const totalTimeSpent = Object.values(timeSpentByTag).reduce((acc, time) => acc + time, 0);
   if(totalTimeSpent < 120) {
-    bgColorClass = "bg-red-100";
+    bgColorClass = "bg-gradient-to-r from-red-100";
     smiley = "😞";
   } else if(totalTimeSpent >=120 && totalTimeSpent < 180) {
-    bgColorClass = "bg-orange-100";
+    bgColorClass = "bg-gradient-to-r from-orange-100";
     smiley = "🙂";
   } else if(totalTimeSpent >=180 && totalTimeSpent < 240) {
-    bgColorClass = "bg-green-100";
+    bgColorClass = "bg-gradient-to-r from-green-100";
     smiley = "🤩";
   } else if(totalTimeSpent >=240) {
-    bgColorClass = "bg-green-200";
+    bgColorClass = "bg-gradient-to-r from-green-200";
     smiley = "😍";
   }
   const minutes = Math.floor(totalTimeSpent / 60);
