@@ -230,6 +230,7 @@ export default function Home() {
             endTime: Date.now(),
           }),
           credentials: "include",
+          keepalive: true
         }
       );
       const resData = await res.json();

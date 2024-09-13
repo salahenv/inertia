@@ -1,25 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Spinner from './Spinner';
 import { SyncIcon } from '../icons';
-
-let map: any = {
-  '10%': {
-    updated: false,
-  },
-  '35%': {
-    updated: false,
-  },
-  '70%': {
-    updated: false,
-  }
-}
-
-// Function to format time as MM:SS
-const formatTime = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-};
+import { formatTime } from '../dateUtils';
 
 const Timer = ({
     timeInMinutes, 
@@ -31,7 +13,7 @@ const Timer = ({
     isFocusUpdating,
     updateFocus
   } : any) => {
-  const [time, setTime] = useState(timeInMinutes * 60); // Initial time in seconds
+  const [time, setTime] = useState(timeInMinutes * 60);
   const [progress, setProgress] = useState('100%');
   const [isActive, setIsActive] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -47,8 +29,7 @@ const Timer = ({
       } else {
         startTimeRef.current = Date.now() - elapsedRef.current;
       }
-
-      milestonesRef.current = new Set(); // To track updated milestones (10%, 20%, etc.)
+      milestonesRef.current = new Set();
 
       const updateTimer = () => {
         const now = Date.now();
@@ -72,24 +53,20 @@ const Timer = ({
           const progressPercentage = Math.floor((elapsed / (timeInMinutes * 60)) * 100); // Calculate percentage
           const progressVal = `${100 - progressPercentage}%`;
           setProgress(progressVal);
-
-          // Save focus at every 10% interval
           const milestone = Math.floor(progressPercentage / 10) * 10;
           if (!milestonesRef.current.has(milestone) && milestone > 0 && milestone < 100) {
             milestonesRef.current.add(milestone);
             updateFocus({ progress: milestone });
           }
         }
-
-        animationFrameRef.current = requestAnimationFrame(updateTimer); // Continue the animation loop
+        animationFrameRef.current = requestAnimationFrame(updateTimer);
       };
 
       animationFrameRef.current = requestAnimationFrame(updateTimer);
     } else if (animationFrameRef.current) {
-      // Pause the timer and track elapsed time
       const now = Date.now();
-      elapsedRef.current += Math.floor((now - startTimeRef.current)); // Update elapsed time in seconds
-      cancelAnimationFrame(animationFrameRef.current); // Stop animation
+      elapsedRef.current += Math.floor((now - startTimeRef.current));
+      cancelAnimationFrame(animationFrameRef.current);
     }
 
     return () => {
