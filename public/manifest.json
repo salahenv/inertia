@@ -1,7 +1,7 @@
 {
     "name": "Inertia",
-    "short_name": "WebApp",
-    "description": "My Next.js installable web application.",
+    "short_name": "Inertia",
+    "description": "Keep eyes on your time",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
