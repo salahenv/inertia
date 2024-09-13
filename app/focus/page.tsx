@@ -421,7 +421,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="bg-neutral-100 p-4 flex flex-row justify-between items-center sticky z-10 sticky top-[49px]">
+      <div className="bg-white shadow-lg p-4 flex flex-row justify-between items-center sticky z-10 sticky top-[57px]">
           <div className="">
             <PrevNextNavigator />
           </div>
