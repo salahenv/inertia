@@ -3,38 +3,11 @@ import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { SkeletonLoaderTodo } from "../components/Loader";
 import {
-  CompletedIcon,
-  DeleteIcon,
   IncompletedIcon,
-  NextIcon,
-  NoFocus,
-  PrevIcon,
 } from "../icons";
-import {formatDateString, formatDate, differenceFromToday} from '../dateUtils';
 import useAuth from '../hooks/auth';
-
-function TimeAndDate({ date }: any) {
-  const diff = differenceFromToday(date);
-  let bg = "bg-green-100";
-  if (diff === 0) {
-    bg = "bg-green-300";
-  } else if (diff === 1) {
-    bg = "bg-orange-200";
-  } else if (diff === 2) {
-    bg = "bg-red-100";
-  } else if (diff === 3) {
-    bg = "bg-red-200";
-  } else {
-    bg = "bg-red-300";
-  }
-  return (
-    <span
-      className={`rounded p-1 text-xs text-gray-600 border border-solid border-red-100 ${bg}`}
-    >
-      {formatDate(date)}
-    </span>
-  );
-}
+import Link from "next/link";
+import TodoItem from "../components/todo/TodoItem";
 
 export default function Todo() {
   useAuth();
@@ -46,72 +19,20 @@ export default function Todo() {
       _id: string;
       createdAt: Date;
       updatedAt: Date;
-    }[]
-  >([]);
-  const [isCompletedTodoLoading, setIsCompletedTodoLoading] = useState(false);
-  const [todosCompleted, setTodosCompleted] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
+      archived: boolean;
     }[]
   >([]);
   const [showAddTodo, setShowAddTodo] = useState(false);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
-  const [dayOffset, setDayOffset] = useState(1);
-  const [selectedDay, setSelectedDay] = useState("Yesterday");
-  const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
 
   useEffect(() => {
     getTodo();
   }, []);
 
-  useEffect(() => {
-    getTodoCompleted();
-  }, [dayOffset]);
-
   const toggleAddTodo = () => {
     setShowAddTodo(!showAddTodo);
   };
-
-  const onPrevClick = () => {
-    if(!isCompletedTodoLoading) {
-      setDayOffset(dayOffset + 1);
-    } 
-  };
-
-  const onNextClick = () => {
-    if (dayOffset > 1 && !isCompletedTodoLoading) {
-      setDayOffset(dayOffset - 1);
-    }
-  };
-
-  function PrevNextNavigator() {
-    return (
-      <div className="flex items-center">
-        <div onClick={() => onPrevClick()}>
-          <PrevIcon 
-            color={
-              isCompletedTodoLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
-            }
-          />
-        </div>
-        <div className="text-gray-800 font-bold text-xl ml-4 mr-4">
-          {selectedDay}
-        </div>
-        <div onClick={() => onNextClick()}>
-          <NextIcon
-            color={
-              (dayOffset === 1 || isCompletedTodoLoading) ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
-            }
-          />
-        </div>
-      </div>
-    );
-  }
 
   const getTodo = async () => {
     try {
@@ -133,34 +54,6 @@ export default function Todo() {
       alert(JSON.stringify(error));
     } finally {
       setIsTodoLoading(false);
-    }
-  };
-
-  const getTodoCompleted = async () => {
-    setIsCompletedTodoLoading(true);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?dayOffset=${dayOffset}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      const resData = await res.json();
-      if (resData.success) {
-        setTodosCompleted(resData.data.todos);
-        const formatedDate = formatDateString(resData.data.date);
-        setSelectedDay(formatedDate);
-      } else {
-      }
-    } catch (error) {
-      alert(JSON.stringify(error));
-    } finally {
-      setIsCompletedTodoLoading(false);
     }
   };
 
@@ -197,72 +90,38 @@ export default function Todo() {
     }
   };
 
-  const onUpdateTodo = async (todo: any) => {
-    try {
-      setIsUpdatingTodo(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/update/${todo._id}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "PATCH",
-          body: JSON.stringify({
-            isCompleted: !todo.completed,
-          }),
-          credentials: "include",
-        }
-      );
-      const resData = await res.json();
-      if (resData.success) {
-        const uTodos = todos.map((t) => {
-          t.completed = t._id === todo._id ? resData.data.todo.completed : null;
-          return t;
-        });
-        setTodos(uTodos);
-      } else {
-        // alert("unable to complete");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsUpdatingTodo(false);
-    }
-  };
+  const removeCb = (todo: any) => {
+    const uTodos = todos.filter((t) => {
+      return t._id !== todo._id;
+    });
+    setTodos(uTodos);
+  }
 
-  const onDeleteFocusTodo = async (todo: any) => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/remove/${todo._id}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-      const resData = await res.json();
-      if (resData.success) {
-        setTodos([...todos.filter((to: any) => to._id !== todo._id)]);
-      } else {
-        alert("Unable to remove focus area");
+  const updateCb = (todo: any) => {
+    const uTodos = todos.map((t) => {
+      if(t._id === todo._id) {
+        t = todo;
       }
-    } catch (error) {
-      alert(JSON.stringify(error));
-    } finally {
-    }
-  };
+      return t;
+    });
+    setTodos(uTodos);
+  }
 
   return (
-    <div className="bg-neutral-100 min-h-screen flex flex-col md:flex-row">
-      <div className="basis-1/2 bg-indigo-100 p-4">
+    <div className="bg-neutral-100 mb-32">
+      <div className="p-4">
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
             <IncompletedIcon />
             <div className="ml-2">{"Todo's"}</div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link href="/todo/archived">
+              <div className="bg-blue-500 text-white font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">View Backlog</div>
+            </Link>
+            <Link href="/todo/completed">
+              <div className="text-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">View Completed</div>
+            </Link>
           </div>
         </div>
         <div>
@@ -274,42 +133,16 @@ export default function Todo() {
                 {todos && todos.length
                   ? todos.map((todo: any, index: number) => {
                       return (
-                        <div key={index} className="mb-2 cursor-pointer">
-                          <div className="flex items-start space-x-2">
-                            
-                            <div className="flex">
-                              <input
-                                disabled = {isUpdatingTodo}
-                                onClick={() => onUpdateTodo(todo)}
-                                checked={todo.completed}
-                                type="checkbox"
-                                id="checkbox"
-                                className="disabled:border-gray-200 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                              />
-                            </div>
-                            <div>
-                              <div className="relative text-gray-800 group">
-                                <div>{todo.name}</div>
-                                <div
-                                  onClick={() => onDeleteFocusTodo(todo)}
-                                  className="absolute right-[-24px] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 cursor-pointer font-medium text-2xl hover:font-bold"
-                                >
-                                  <DeleteIcon color="#ef4444" />
-                                </div>
-                              </div>
-                              <div>
-                                <TimeAndDate
-                                  date={todo.createdAt}
-                                ></TimeAndDate>
-                                {
-                                  todo.completed ?
-                                  <TimeAndDate
-                                    date={todo.updatedAt}
-                                  ></TimeAndDate> : null
-                                }
-                              </div>
-                            </div>
-                          </div>
+                        <div key={index} className="mb-2 border border-gray-300 p-2 rounded shadow bg-white">
+                          <TodoItem 
+                            todo = {todo}
+                            disabledInput = {false}
+                            showCreatedDate = {true}
+                            showDalete = {true}
+                            showArchive = {true}
+                            removeCb = {removeCb}
+                            updatedCb = {updateCb}
+                          />
                         </div>
                       );
                     })
@@ -318,91 +151,30 @@ export default function Todo() {
             </div>
           )}
           {showAddTodo ? (
-            <div className="mt-8">
+            <div className="fixed bottom-0 left-0 w-full">
               <input
                 type="text"
                 required
-                className="py-2 px-4 mb-4"
+                className="py-2 px-4 w-[90%]"
                 placeholder="Enter todo"
                 value={todoName}
                 onChange={(e) => setTodoName(e.target.value)}
               ></input>
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4"
+                className="w-[10%] bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4"
                 onClick={() => createTodo()}
               >
                 {isSavingTodo ? <div className="flex justify-center"><Spinner /></div> : "Save"}
               </button>
             </div>
           ) : (
-            <div className="mt-8">
+            <div className="fixed bottom-0 left-0 w-full">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-8 rounded"
+                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-8"
                 onClick={() => toggleAddTodo()}
               >
                 + Add todo
               </button>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="basis-1/2 bg-fuchsia-50 p-4">
-        <div className="flex flex-row justify-between items-center mb-4">
-          <div className="font-medium text-xl flex">
-            <CompletedIcon />
-            <div className="ml-2">{"Completed Todo's"}</div>
-          </div>
-          <PrevNextNavigator />
-        </div>
-        <div>
-          {isCompletedTodoLoading ? (
-            <SkeletonLoaderTodo />
-          ) : todosCompleted && todosCompleted.length ? (
-            todosCompleted.map((todo, index) => {
-              return (
-                <div key={index} className="mb-2 cursor-pointer">
-                  <div className="flex items-start space-x-2">
-                    <div className="flex">
-                      <input
-                        onClick={() => {}}
-                        checked={todo.completed}
-                        type="checkbox"
-                        id="checkbox"
-                        className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                      />
-                    </div>
-                    <div>
-                      <div className="text-gray-800 group">
-                        {todo.name}
-                      </div>
-                      <div>
-                        <span
-                          className={`rounded p-1 text-xs text-gray-600 bg-green-200`}
-                        >
-                          Created: {formatDate(todo.createdAt)}
-                        </span>
-                        <span
-                          className={`rounded p-1 text-xs text-gray-600 bg-orange-200`}
-                        >
-                          Updated: {formatDate(todo.updatedAt)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div>
-              <div className="flex justify-center mt-8">
-                <NoFocus />
-              </div>
-              <div className="text-xl text-center mt-2 text-red-500">
-                No completed todo!
-              </div>
-              <div className="text-lg text-center mt-1 text-gray-500">
-                Create todo it will start reflecting
-              </div>
             </div>
           )}
         </div>

@@ -12,6 +12,7 @@ import {
   NextIcon,
   NoFocus,
   PrevIcon,
+  WhatsappIcon,
 } from "../icons";
 import {
   formatDateString,
@@ -420,18 +421,32 @@ export default function Home() {
     setShowTodoDropDown(false);
   };
 
+  const onShare = () => {
+    navigator.share({
+      url: 'https://salahenv.com',
+      title: 'Inertia',
+      text: 'Keep eye on your time'
+    })
+  }
+
   return (
     <div>
       <div className="bg-white shadow-lg p-4 flex flex-row justify-between items-center sticky z-10 sticky top-[57px]">
           <div className="">
             <PrevNextNavigator />
           </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded"
-            onClick={() => toogleAddFocusModal()}
-          >
-            + Add Focus
-          </button>
+          <div className="flex items-center gap-4">
+            
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded"
+              onClick={() => toogleAddFocusModal()}
+            >
+              + Add Focus
+            </button>
+            <div onClick={() => onShare()}>
+              <WhatsappIcon size = {32}/>
+            </div>
+          </div>
       </div>
       <div className="bg-neutral-100 p-4 min-h-screen">
         {showSuccessModal ? (
