@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Timer from "../components/Timer";
-import { useRouter } from "next/navigation";
 import { SkeletonLoaderFocus } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
+import html2canvas from "html2canvas";
 import {
   CalendarIcon,
   ClockIcon,
@@ -421,13 +421,51 @@ export default function Home() {
     setShowTodoDropDown(false);
   };
 
-  const onShare = () => {
-    navigator.share({
-      url: 'https://salahenv.com',
-      title: 'Inertia',
-      text: 'Keep eye on your time'
-    })
-  }
+  const onShare = async () => {
+    // Capture the screenshot and then share it
+    const base64image = await screenShot(); // Wait for the screenshot to complete
+    const file = base64ToFile(base64image, 'screenshot.png', 'image/png'); // Convert to File object
+  
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file], // Share the screenshot file
+          url: 'https://salahenv.com',
+          title: 'Inertia',
+          text: 'Keep an eye on your time',
+        });
+        console.log('Shared successfully!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      console.log('Sharing not supported on this device.');
+    }
+  };
+  
+  // Function to capture the screenshot
+  const screenShot = () => {
+    const screenshotTarget = document.body; // Change this to capture specific parts of the page
+    return html2canvas(screenshotTarget).then((canvas) => {
+      return canvas.toDataURL("image/png"); // Return the base64 image data
+    });
+  };
+  
+  // Helper function to convert base64 to a File object
+  const base64ToFile = (base64String: any, fileName: any, mimeType: any) => {
+    const byteString = atob(base64String.split(',')[1]); // Decode base64
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const intArray = new Uint8Array(arrayBuffer);
+  
+    // Fill the array with byte values
+    for (let i = 0; i < byteString.length; i++) {
+      intArray[i] = byteString.charCodeAt(i);
+    }
+  
+    const blob = new Blob([intArray], { type: mimeType }); // Create Blob from the byte array
+    return new File([blob], fileName, { type: mimeType }); // Convert Blob to File
+  };
+  
 
   return (
     <div>
