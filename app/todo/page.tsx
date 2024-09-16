@@ -150,33 +150,42 @@ export default function Todo() {
               </div>
             </div>
           )}
-          {showAddTodo ? (
-            <div className="fixed bottom-0 left-0 w-full">
+          <div className="fixed bottom-0 left-0 w-full bg-white shadow">
+            {showAddTodo ? (
+              <div className="w-full flex items-center">
               <input
                 type="text"
                 required
-                className="py-2 px-4 w-[90%]"
+                className="flex-grow py-2 px-4 border border-gray-300 focus:ring-blue-500"
                 placeholder="Enter todo"
                 value={todoName}
                 onChange={(e) => setTodoName(e.target.value)}
-              ></input>
+              />
               <button
-                className="w-[10%] bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 transition-colors duration-300"
                 onClick={() => createTodo()}
               >
-                {isSavingTodo ? <div className="flex justify-center"><Spinner /></div> : "Save"}
+                {isSavingTodo ? (
+                  <div className="flex justify-center">
+                    <Spinner />
+                  </div>
+                ) : (
+                  "Save"
+                )}
               </button>
             </div>
-          ) : (
-            <div className="fixed bottom-0 left-0 w-full">
-              <button
-                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-8"
-                onClick={() => toggleAddTodo()}
-              >
-                + Add todo
-              </button>
-            </div>
-          )}
+            
+            ) : (
+              <div>
+                <button
+                  className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-8"
+                  onClick={() => toggleAddTodo()}
+                >
+                  + Add todo
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
