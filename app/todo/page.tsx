@@ -117,10 +117,10 @@ export default function Todo() {
           </div>
           <div className="flex items-center gap-2">
             <Link href="/todo/archived">
-              <div className="bg-blue-500 text-white font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">View Backlog</div>
+              <div className="bg-blue-500 text-white font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Backlog</div>
             </Link>
             <Link href="/todo/completed">
-              <div className="text-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">View Completed</div>
+              <div className="text-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">Completed</div>
             </Link>
           </div>
         </div>
