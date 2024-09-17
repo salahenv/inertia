@@ -91,7 +91,7 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
       <div
         key={tag}
         className={`absolute top-0 h-full ${color} flex items-center justify-center`}
-        style={{ width: `${width}%`, left: `${offset}%` }}
+        style={{ minWidth: '36px', width: `${width}%`, left: `${offset}%` }}
       >
         <span className="text-xs text-gray-700">{Math.round(width)}%</span>
       </div>
