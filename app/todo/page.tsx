@@ -178,7 +178,7 @@ export default function Todo() {
             ) : (
               <div>
                 <button
-                  className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-8"
+                  className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8"
                   onClick={() => toggleAddTodo()}
                 >
                   + Add todo
