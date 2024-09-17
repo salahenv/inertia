@@ -466,6 +466,53 @@ export default function Home() {
     return new File([blob], fileName, { type: mimeType }); // Convert Blob to File
   };
   
+  const capture = async () => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const video = document.createElement("video");
+  
+    try {
+      const captureStream = await navigator.mediaDevices.getDisplayMedia();
+      video.srcObject = captureStream;
+  
+      // Ensure the video is loaded before drawing to canvas
+      video.onloadedmetadata = async () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        context?.drawImage(video, 0, 0, window.innerWidth, window.innerHeight);
+        
+        const frame = canvas.toDataURL("image/png");
+        captureStream.getTracks().forEach(track => track.stop());
+  
+        // Convert data URL to blob
+        const response = await fetch(frame);
+        const blob = await response.blob();
+  
+        // Create a file object for sharing
+        const file = new File([blob], "screenshot.png", { type: "image/png" });
+  
+        // Check if navigator.share is available
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: "Screen Capture",
+              text: "Here is a screen capture.",
+            });
+            console.log("Image shared successfully!");
+          } catch (error) {
+            console.error("Error sharing: ", error);
+          }
+        } else {
+          console.error("Sharing not supported on this browser.");
+        }
+      };
+    } catch (err) {
+      console.error("Error: " + err);
+    }
+  };
+  
+  
 
   return (
     <div>
@@ -481,7 +528,7 @@ export default function Home() {
             >
               + Add Focus
             </button>
-            <div onClick={() => onShare()}>
+            <div onClick={() => capture()}>
               <WhatsappIcon size = {32}/>
             </div>
           </div>
