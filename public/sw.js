@@ -35,7 +35,8 @@ self.addEventListener('sync', function(event) {
 });
 
 async function updateFocusInBackground() {
-  const activeFocusId = await getFromLocalStorage('activeFocusId'); // Handle data access from IndexedDB or postMessage
+  const activeFocusId = self.activeFocusId; 
+  console.log("activeFocusId", activeFocusId);
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocusId}`, {
       headers: {
