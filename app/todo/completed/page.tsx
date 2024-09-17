@@ -111,7 +111,7 @@ export default function Todo() {
           ) : todosCompleted && todosCompleted.length ? (
             todosCompleted.map((todo, index) => {
               return (
-                <div key={index} className="mb-2 border border-gray-300 p-2 rounded shadow bg-white">
+                <div key={index} className="mb-2 border border-gray-300 p-4 rounded shadow bg-white">
                   <TodoItem 
                     todo = {todo}
                     disabledInput = {true}

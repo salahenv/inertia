@@ -128,7 +128,7 @@ export default function ArchivedTodo() {
               return (
                 <div
                   key={index}
-                  className="mb-2 border border-gray-300 p-2 rounded shadow bg-white"
+                  className="mb-2 border border-gray-300 p-4 rounded shadow bg-white"
                 >
                   <TodoItem 
                     todo = {todo}

@@ -133,7 +133,7 @@ export default function Todo() {
                 {todos && todos.length
                   ? todos.map((todo: any, index: number) => {
                       return (
-                        <div key={index} className="mb-2 border border-gray-300 p-2 rounded shadow bg-white">
+                        <div key={index} className="mb-2 border border-gray-300 p-4 rounded shadow bg-white">
                           <TodoItem 
                             todo = {todo}
                             disabledInput = {false}
