@@ -90,7 +90,7 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
     const segment = (
       <div
         key={tag}
-        className={`absolute top-0 h-full ${color} rounded flex items-center justify-center`}
+        className={`absolute top-0 h-full ${color} flex items-center justify-center`}
         style={{ width: `${width}%`, left: `${offset}%` }}
       >
         <span className="text-xs text-gray-700">{Math.round(width)}%</span>
