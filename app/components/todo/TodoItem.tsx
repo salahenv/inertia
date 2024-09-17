@@ -138,7 +138,7 @@ export default function TodoItem(props: any) {
             <button
                 disabled={isUpdatingTodo}
                 onClick={() => onUpdateTodo(todo, { archived: false })}
-                className="disabled:border-gray-200 disabled:text-gray-200 text-orange-500 border border-blue-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
+                className="disabled:border-gray-200 disabled:text-gray-200 text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >
                 Un-Archive
             </button> : null
