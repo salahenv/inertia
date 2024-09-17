@@ -20,3 +20,41 @@ self.addEventListener('notificationclick', function (event) {
   event.notification.close()
   event.waitUntil(clients.openWindow('<https://your-website.com>'))
 })
+
+self.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'STORE_ACTIVE_FOCUS_ID') {
+    self.activeFocusId = event.data.activeFocusId;
+    console.log('Active focus ID received in Service Worker:', self.activeFocusId);
+  }
+});
+
+self.addEventListener('sync', function(event) {
+  if (event.tag === 'sync-focus-update') {
+    event.waitUntil(updateFocusInBackground());
+  }
+});
+
+async function updateFocusInBackground() {
+  const activeFocusId = await getFromLocalStorage('activeFocusId'); // Handle data access from IndexedDB or postMessage
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/focus/update/${activeFocusId}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+      body: JSON.stringify({
+        endTime: Date.now(),
+      }),
+      credentials: "include",
+      keepalive: true,
+    });
+
+    const resData = await res.json();
+    if (resData.success) {
+      console.log('Focus updated successfully in background');
+    }
+  } catch (error) {
+    console.error('Background sync failed:', error);
+  }
+}

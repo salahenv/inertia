@@ -213,10 +213,7 @@ export default function Home() {
     setFocusName("");
     setSelectedTag("");
   };
-
-  const onUpdateFocus = async (obj: any) => {
-    const { completed } = obj;
-    const activeFocusId = localStorage.getItem("activeFocusId");
+  const updateFocus = async (activeFocusId: string | null, completed: boolean) => {
     setIsFocusUpdating(true);
     try {
       const res = await fetch(
@@ -231,7 +228,7 @@ export default function Home() {
             endTime: Date.now(),
           }),
           credentials: "include",
-          keepalive: true
+          keepalive: true,
         }
       );
       const resData = await res.json();
@@ -240,13 +237,28 @@ export default function Home() {
           resetFocusStates();
           getFocus();
         }
-      } else {
-        // alert("unable to complete");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setTimeout(() => setIsFocusUpdating(false), 3000);
+    }
+  };
+
+  const onUpdateFocus = async (obj: any) => {
+    const { completed } = obj;
+    const activeFocusId = localStorage.getItem("activeFocusId");
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      navigator.serviceWorker.ready.then((swRegistration: any) => {
+        return swRegistration.sync.register('sync-focus-update').then(() => {
+          console.log('Background sync registered');
+        }).catch((err: any) => {
+          console.error('Sync registration failed:', err);
+        });
+      });
+    } else {
+      // Fallback: if background sync is not supported, perform a regular fetch request
+      await updateFocus(activeFocusId, completed);
     }
   };
 
