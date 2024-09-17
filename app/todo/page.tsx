@@ -141,7 +141,7 @@ export default function Todo() {
                             showDalete = {true}
                             showArchive = {true}
                             removeCb = {removeCb}
-                            updatedCb = {updateCb}
+                            updateCb = {updateCb}
                           />
                         </div>
                       );

@@ -51,10 +51,10 @@ export default function TodoItem(props: any) {
       const resData = await res.json();
       if (resData.success) {
         if(typeof (payload.completed) === 'boolean') {
-            updateCb(resData.data.todo);
+          updateCb(resData.data.todo);
         }
         if(typeof (payload.archived) === 'boolean') {
-            removeCb(resData.data.todo);
+          removeCb(resData.data.todo);
         }
       } else {
       }
