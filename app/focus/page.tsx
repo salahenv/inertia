@@ -443,15 +443,16 @@ export default function Home() {
     }
   };
   
-  // Function to capture the screenshot
+ 
   const screenShot = () => {
-    const screenshotTarget = document.body; // Change this to capture specific parts of the page
-    return html2canvas(screenshotTarget).then((canvas) => {
-      return canvas.toDataURL("image/png"); // Return the base64 image data
-    });
+    const screenshotTarget = document.getElementById('timespentbar');
+    if(screenshotTarget) {
+      return html2canvas(screenshotTarget).then((canvas) => {
+        return canvas.toDataURL("image/png"); // Return the base64 image data
+      });
+    }
   };
   
-  // Helper function to convert base64 to a File object
   const base64ToFile = (base64String: any, fileName: any, mimeType: any) => {
     const byteString = atob(base64String.split(',')[1]); // Decode base64
     const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -465,54 +466,6 @@ export default function Home() {
     const blob = new Blob([intArray], { type: mimeType }); // Create Blob from the byte array
     return new File([blob], fileName, { type: mimeType }); // Convert Blob to File
   };
-  
-  const capture = async () => {
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const video = document.createElement("video");
-  
-    try {
-      const captureStream = await navigator.mediaDevices.getDisplayMedia();
-      video.srcObject = captureStream;
-  
-      // Ensure the video is loaded before drawing to canvas
-      video.onloadedmetadata = async () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        context?.drawImage(video, 0, 0, window.innerWidth, window.innerHeight);
-        
-        const frame = canvas.toDataURL("image/png");
-        captureStream.getTracks().forEach(track => track.stop());
-  
-        // Convert data URL to blob
-        const response = await fetch(frame);
-        const blob = await response.blob();
-  
-        // Create a file object for sharing
-        const file = new File([blob], "screenshot.png", { type: "image/png" });
-  
-        // Check if navigator.share is available
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              files: [file],
-              title: "Screen Capture",
-              text: "Here is a screen capture.",
-            });
-            console.log("Image shared successfully!");
-          } catch (error) {
-            console.error("Error sharing: ", error);
-          }
-        } else {
-          console.error("Sharing not supported on this browser.");
-        }
-      };
-    } catch (err) {
-      console.error("Error: " + err);
-    }
-  };
-  
-  
 
   return (
     <div>
@@ -528,7 +481,7 @@ export default function Home() {
             >
               + Add Focus
             </button>
-            <div onClick={() => capture()}>
+            <div onClick={() => onShare()}>
               <WhatsappIcon size = {32}/>
             </div>
           </div>
@@ -707,7 +660,7 @@ export default function Home() {
             </div>
           </div>
         ) : null}
-        <div className="mb-4">
+        <div id='timespentbar' className="mb-4">
           <TimeSpentBar data={focus} />
         </div>
         <div className="flex flex-col">
