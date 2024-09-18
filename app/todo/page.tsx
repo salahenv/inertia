@@ -115,7 +115,7 @@ export default function Todo() {
             <IncompletedIcon />
             <div className="ml-2">{"Todo's"}</div>
           </div>
-          <div className="overflow-x-scroll flex items-center gap-2">
+          <div className="ml-4 overflow-x-scroll flex items-center gap-2">
             <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">{"Today Todo's"}</div>
             <Link href="/todo/routine">
               <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">{"Routine Todo's"}</div>
