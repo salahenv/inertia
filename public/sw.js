@@ -10,22 +10,26 @@ self.addEventListener('message', async (event) => {
   console.log("update call inside sw");
   if (event.data && event.data.type === 'focusUpdate') {
     const payload = event.data.payload;
-    const res = await fetch(
-      `https://api.salahenv.com/focus/update/${payload.focusId}`,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "PATCH",
-        body: JSON.stringify({
-          endTime: Date.now(),
-        }),
-        credentials: "include",
-        keepalive: true
-      }
-    );
-    const resData = await res.json();
-    console.log(resData);
+    try {
+      const res = await fetch(
+        `https://api.salahenv.com/focus/update/${payload.focusId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "PATCH",
+          body: JSON.stringify({
+            endTime: Date.now(),
+          }),
+          credentials: "include"
+        }
+      );
+      const resData = await res.json();
+      console.log(resData);
+    } catch (error) {
+      console.log("some error", error);
+    }
+  
   }
 });
