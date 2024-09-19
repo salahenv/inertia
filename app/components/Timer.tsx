@@ -47,7 +47,10 @@ const Timer = ({
           });
           navigator?.serviceWorker?.controller?.postMessage({
             type: 'focusUpdate',
-            payload: { focusId: activeFocusId, completed: false }
+            payload: { 
+              focusId: activeFocusId, 
+              completed: false 
+            }
           });
           toggleProgressModal();
           toggleSuccessModal();
@@ -65,7 +68,10 @@ const Timer = ({
             if(navigator?.serviceWorker) {
               navigator?.serviceWorker?.controller?.postMessage({
                 type: 'focusUpdate',
-                payload: { focusId: activeFocusId, completed: false }
+                payload: { 
+                  focusId: activeFocusId, 
+                  completed: false 
+                }
               });
             } else {
               console.log("update message not send");
