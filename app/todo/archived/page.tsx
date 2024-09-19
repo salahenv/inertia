@@ -5,6 +5,7 @@ import { CompletedIcon, NoFocus } from "../../icons";
 import useAuth from "../../hooks/auth";
 import TodoItem from "@/app/components/todo/TodoItem";
 import Link from "next/link";
+import { debounce } from "@/app/utils";
 
 export default function ArchivedTodo() {
   useAuth();
@@ -37,13 +38,6 @@ export default function ArchivedTodo() {
       }
     };
 
-    const debounce = (func: any, wait = 100) => {
-      let timeout: any;
-      return (...args: any) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
-    };
 
     const debouncedHandleScroll = debounce(handleScroll, 200);
 
