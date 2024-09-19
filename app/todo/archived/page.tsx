@@ -109,9 +109,8 @@ export default function ArchivedTodo() {
           </div>
         </div>
         <div>
-          {todos && todos.length ? (
+          {!isTodoLoading && todos && todos.length ? (
             <div>{
-
               todos.map((todo, index) => (
                 <div
                   key={index}
