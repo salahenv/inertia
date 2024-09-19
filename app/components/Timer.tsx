@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Spinner from './Spinner';
-import { SyncIcon } from '../icons';
+import { CompletedIcon, SyncIcon } from '../icons';
 import { formatTime } from '../dateUtils';
 
 const Timer = ({
@@ -64,7 +64,7 @@ const Timer = ({
           const milestone = Math.floor(progressPercentage / 10) * 10;
           if (!milestonesRef.current.has(milestone) && milestone > 0 && milestone < 100) {
             milestonesRef.current.add(milestone);
-            updateFocus();
+            updateFocus({completed: false});
             if(navigator?.serviceWorker) {
               navigator?.serviceWorker?.controller?.postMessage({
                 type: 'focusUpdate',
