@@ -18,8 +18,8 @@ export default function ArchivedTodo() {
       updatedAt: Date;
     }[]
   >([]);
-  const [page, setPage] = useState(1); // State for current page
-  const [hasMore, setHasMore] = useState(true); // State to check if more todos are available
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     getTodo(page);
@@ -37,8 +37,18 @@ export default function ArchivedTodo() {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const debounce = (func: any, wait = 100) => {
+      let timeout: any;
+      return (...args: any) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    };
+
+    const debouncedHandleScroll = debounce(handleScroll, 200);
+
+    window.addEventListener("scroll", debouncedHandleScroll);
+    return () => window.removeEventListener("scroll", debouncedHandleScroll);
   }, [hasMore, isTodoLoading]);
 
   const getTodo = async (page: number) => {
@@ -57,13 +67,15 @@ export default function ArchivedTodo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setTodos((prevTodos) => [...prevTodos, ...resData.data.todos]); // Append new todos
+        setTodos((prevTodos) => [...prevTodos, ...resData.data.todos]);
         if (resData.data.todos.length === 0) {
           setHasMore(false); // No more todos to load
         }
+      } else {
+        throw new Error("Failed to fetch todos.");
       }
     } catch (error) {
-      alert(JSON.stringify(error));
+      console.error("Error fetching archived todos:", error);
     } finally {
       setIsTodoLoading(false);
     }
@@ -109,47 +121,55 @@ export default function ArchivedTodo() {
           </div>
         </div>
         <div>
-          {!isTodoLoading && todos && todos.length ? (
-            <div>{
-              todos.map((todo, index) => (
-                <div
-                  key={index}
-                  className="mb-2 border border-gray-300 p-4 rounded shadow bg-white"
-                >
-                  <TodoItem
-                    todo={todo}
-                    disabledInput={true}
-                    showUnArchive={true}
-                    showDalete={true}
-                    showCreatedDate={true}
-                    updateCb={updateCb}
-                    removeCb={removeCb}
-                  />
-                </div>
-              ))
-              }
-              { isTodoLoading && <div className="mt-4 text-gray-800 text-center">
-                  <SkeletonLoaderTodo />
-                </div>}
-              { !hasMore && <div className="mt-4 text-gray-800 text-center text-medium">That all. You dont have more</div>}
-              </div>
-            
-          ) : (
-            <div>
-              <div className="flex justify-center mt-8">
-                <NoFocus />
-              </div>
-              <div className="text-xl text-center mt-2 text-red-500">
-                No archived todo!
-              </div>
+  {isTodoLoading && !todos.length ? (
+    <div className="mt-4 text-gray-800 text-center">
+      <SkeletonLoaderTodo />
+    </div>
+  ) : (
+    <>
+      {todos.length > 0 ? (
+        <div>
+          {todos.map((todo) => (
+            <div
+              key={todo._id}
+              className="mb-2 border border-gray-300 p-4 rounded shadow bg-white"
+            >
+              <TodoItem
+                todo={todo}
+                disabledInput={true}
+                showUnArchive={true}
+                showDalete={true}
+                showCreatedDate={true}
+                updateCb={updateCb}
+                removeCb={removeCb}
+              />
+            </div>
+          ))}
+          {isTodoLoading && (
+            <div className="mt-4 text-gray-800 text-center">
+              <SkeletonLoaderTodo />
+            </div>
+          )}
+          {!hasMore && (
+            <div className="mt-4 text-gray-800 text-center text-medium">
+              That’s all. You don’t have more archived todos.
             </div>
           )}
         </div>
-        {isTodoLoading && (
-          <div className="flex justify-center mt-4">
-            <SkeletonLoaderTodo />
+      ) : (
+        <div>
+          <div className="flex justify-center mt-8">
+            <NoFocus />
           </div>
-        )}
+          <div className="text-xl text-center mt-2 text-red-500">
+            No archived todos!
+          </div>
+        </div>
+      )}
+    </>
+  )}
+</div>
+
       </div>
     </div>
   );
