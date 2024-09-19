@@ -500,7 +500,6 @@ export default function Home() {
                 <Timer
                   timeInMinutes={parseInt(time)}
                   isFocusUpdating={isFocusUpdating}
-                  onUpdateFocus={onUpdateFocus}
                   focusName={focusName}
                   isSaveFocusLoading={isSaveFocusLoading}
                   toggleSuccessModal={toggleSuccessModal}

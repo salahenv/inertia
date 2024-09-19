@@ -35,6 +35,7 @@ const Timer = ({
         const now = Date.now();
         const elapsed = Math.floor((now - startTimeRef.current) / 1000);
         const newTime = timeInMinutes * 60 - elapsed;
+        const activeFocusId = localStorage.getItem("activeFocusId");
 
         if (newTime <= 0) {
           notifyCompletion();
@@ -43,6 +44,10 @@ const Timer = ({
           setEndTime(now);
           updateFocus({
             completed: true
+          });
+          navigator?.serviceWorker?.controller?.postMessage({
+            type: 'focusUpdate',
+            payload: { focusId: activeFocusId, completed: false }
           });
           toggleProgressModal();
           toggleSuccessModal();
@@ -56,7 +61,16 @@ const Timer = ({
           const milestone = Math.floor(progressPercentage / 10) * 10;
           if (!milestonesRef.current.has(milestone) && milestone > 0 && milestone < 100) {
             milestonesRef.current.add(milestone);
-            updateFocus({ progress: milestone });
+            updateFocus();
+            if(navigator?.serviceWorker) {
+              navigator?.serviceWorker?.controller?.postMessage({
+                type: 'focusUpdate',
+                payload: { focusId: activeFocusId, completed: false }
+              });
+            } else {
+              console.log("update message not send");
+            }
+            
           }
         }
         animationFrameRef.current = requestAnimationFrame(updateTimer);
