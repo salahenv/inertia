@@ -7,7 +7,6 @@ import Spinner from "../components/Spinner";
 export default function Login() {
   const[email, setEmail] = useState('');
   const[password, setPassword] = useState('');
-  const[errorMessage, setErrorMessage] = useState('');
   const[isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -31,7 +30,6 @@ export default function Login() {
       }
       else {
         router.push('/login');
-        // alert(resData.message);
       }
         
     } catch (error) {
@@ -45,8 +43,8 @@ export default function Login() {
     <div className="bg-neutral-100 p-4 min-h-screen">
         <div className="flex flex-col mb-16">
           <div className="mb-4 text-gray-800">Login to continue</div>
-          <input type='email'  required className="py-2 px-4 mb-2" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
-          <input type='password' required className='py-2 px-4 mb-2' placeholder="password" value = {password} onChange={(e) => setPassword(e.target.value)}></input>
+          <input type='email'  required className="py-2 px-4 mb-2 text-gray-800" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+          <input type='password' required className='py-2 px-4 mb-2 text-gray-800' placeholder="password" value = {password} onChange={(e) => setPassword(e.target.value)}></input>
           <button disabled ={!email || !password} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick = {() => onLogin()}>
             {isLoading ? <div className="flex justify-center"><Spinner/></div> : "Login"}
           </button>

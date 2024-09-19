@@ -113,7 +113,7 @@ export default function Todo() {
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
             <IncompletedIcon />
-            <div className="ml-2">{"Todo's"}</div>
+            <div className="ml-2 text-gray-800">{"Todo's"}</div>
           </div>
           <div className="ml-4 overflow-x-scroll flex items-center gap-2">
             <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">{"Today Todo's"}</div>
@@ -161,7 +161,7 @@ export default function Todo() {
               <input
                 type="text"
                 required
-                className="flex-grow py-4 px-4 border border-gray-300 focus:ring-blue-500"
+                className="flex-grow py-4 text-gray-800 px-4 border border-gray-300 focus:ring-blue-500"
                 placeholder="Enter todo"
                 value={todoName}
                 onChange={(e) => setTodoName(e.target.value)}

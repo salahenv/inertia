@@ -104,7 +104,7 @@ export default function TodoItem(props: any) {
         />
       </div>
       <div className="flex flex-col">
-        <div className="mb-2">{todo.name}</div>
+        <div className="mb-2 text-gray-800">{todo.name}</div>
         <div className="flex gap-4 items-center">
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={todo.updatedAt}></TimeAndDate> : null}

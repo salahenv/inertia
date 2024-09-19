@@ -62,7 +62,7 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
     const segment = (
       <div
         key={tag}
-        className={`absolute top-0 h-full ${color} flex items-center justify-center`}
+        className={`absolute top-0 h-full  ${color} flex items-center justify-center`}
         style={{ width: `${width}%`, left: `${offset}%` }}
       >
         {width > 5 && ( // Only show percentage if the segment is wide enough
@@ -79,13 +79,13 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
 
   return (
     <div className={`w-full p-4 rounded ${bgColorClass}`}>
-      <div className="font-medium text-lg mb-2">Focused <span className={`font-bold p-1 text-green-900`}>{totalformattedTimeSpent}</span>{" " + "hours"} {" " + smiley}</div>
+      <div className="font-medium text-lg mb-2 text-gray-800">Focused <span className={`font-bold p-1 text-green-900`}>{totalformattedTimeSpent}</span>{" " + "hours"} {" " + smiley}</div>
       <div className="relative w-full rounded h-8 overflow-hidden"> {/* Added overflow-hidden */}
         {segmentElements}
       </div>
       <div className="mt-4 flex gap-2 flex-wrap">
         {sortedTags.map(tag => (
-          <div key={tag} className="flex items-center">
+          <div key={tag} className="flex items-center text-gray-800">
             <div className={`w-4 h-4 rounded mr-2 ${tagColors[tag]}`} />
             <span>{tag.replace("_", " ").toLocaleLowerCase()}</span>
           </div>

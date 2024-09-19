@@ -114,7 +114,7 @@ export default function Todo() {
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
             <CompletedIcon />
-            <div className="ml-2">{"Completed Todo's"}</div>
+            <div className="ml-2 text-gray-800">{"Completed Todo's"}</div>
           </div>
           <PrevNextNavigator />
         </div>

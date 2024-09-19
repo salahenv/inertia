@@ -517,7 +517,7 @@ export default function Home() {
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-neutral-100 shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Create Focus</h2>
+                <h2 className="text-xl text-gray-800 font-semibold">Create Focus</h2>
                 <button
                   className="text-gray-500 hover:text-gray-700"
                   onClick={() => {
@@ -532,7 +532,7 @@ export default function Home() {
                   <input
                     type="text"
                     required
-                    className="py-2 px-4 mb-4 w-full"
+                    className="py-2 px-4 mb-4 w-full text-gray-800"
                     placeholder="Enter focus name"
                     value={focusName}
                     onChange={(e) => onInputChange(e.target.value)}
@@ -545,7 +545,7 @@ export default function Home() {
                         <SkeletonLoaderFocus />
                       ) : (
                         <div>
-                          <div className="border-b font-medium border-solid border-gray-400 py-2">
+                          <div className="border-b font-medium border-solid border-gray-400 text-gray-800 py-2">
                             Active Todos
                           </div>
                           {filteredTodos
@@ -555,7 +555,7 @@ export default function Home() {
                                 <div
                                   onClick={() => onSelectTodo(todo.name)}
                                   key={index}
-                                  className="cursor-pointer border-b border-solid border-gray-400 py-2"
+                                  className="cursor-pointer border-b border-solid border-gray-400 py-2 text-gray-800"
                                 >
                                   {todo.name} -{" "}
                                   <span className="text-gray-500 text-sm">
