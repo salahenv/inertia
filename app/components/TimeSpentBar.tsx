@@ -50,7 +50,6 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   ).padStart(2, "0")}`;
 
   const colors = [
-    "bg-green-700",
     "bg-blue-400",
     "bg-yellow-400",
     "bg-purple-400",
@@ -59,7 +58,6 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
     "bg-indigo-400",
     "bg-cyan-400",
     "bg-yellow-500",
-    "bg-green-800",
     "bg-blue-500",
     "bg-purple-500",
     "bg-teal-500",
@@ -67,7 +65,6 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
     "bg-indigo-500",
     "bg-cyan-500",
     "bg-yellow-600",
-    "bg-green-900",
     "bg-blue-600",
     "bg-purple-600",
     "bg-teal-600",
