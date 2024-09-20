@@ -22,7 +22,7 @@ export default function Todo() {
       archived: boolean;
     }[]
   >([]);
-  const [showAddTodo, setShowAddTodo] = useState(false);
+  const [showAddTodo, setShowAddTodo] = useState(true);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
 
@@ -156,40 +156,29 @@ export default function Todo() {
             </div>
           )}
           <div className="fixed bottom-0 left-0 w-full bg-white shadow">
-            {showAddTodo ? (
+      
               <div className="w-full flex items-center">
               <input
                 type="text"
                 required
-                className="flex-grow py-4 text-gray-800 px-4 border border-gray-300 focus:ring-blue-500"
+                className="flex-grow py-4 text-lg text-gray-800 px-4 border border-gray-300 focus:ring-blue-500"
                 placeholder="Enter todo"
                 value={todoName}
                 onChange={(e) => setTodoName(e.target.value)}
               />
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-4 px-4 transition-colors duration-300"
+                className="bg-blue-500 min-h-[62px] min-w-20 hover:bg-blue-700 text-white font-medium py-4 px-4 transition-colors duration-300"
                 onClick={() => createTodo()}
               >
-                {isSavingTodo ? (
-                  <div className="flex justify-center">
-                    <Spinner />
-                  </div>
-                ) : (
-                  "Save"
-                )}
+                 <div className=" flex justify-center">
+                    {
+                      isSavingTodo ? <Spinner /> : <div>Save</div>
+                    }
+                 </div>
               </button>
             </div>
             
-            ) : (
-              <div>
-                <button
-                  className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8"
-                  onClick={() => toggleAddTodo()}
-                >
-                  + Add todo
-                </button>
-              </div>
-            )}
+         
           </div>
         </div>
       </div>

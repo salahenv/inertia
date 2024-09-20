@@ -667,7 +667,7 @@ export default function Home() {
         ) : null}
         <div className="mb-4">
           {isFocusLoading ? 
-            <div className="bg-gray-200 p-4 rounded">
+            <div className="bg-gradient-to-r from-gray-200 p-4 rounded">
               <SkeletonLoaderTimeSpent /> 
             </div> : 
             <TimeSpentBar data={focus} />
