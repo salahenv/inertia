@@ -20,21 +20,27 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   let bgColorClass = "bg-gray-200";
   let smiley = "";
   const totalTimeSpent = Object.values(timeSpentByTag).reduce((acc, time) => acc + time, 0);
-  if (totalTimeSpent < 120) {
+  if(totalTimeSpent <= 0) {
+
+  }
+  else if (totalTimeSpent < 120) {
     bgColorClass = "bg-gradient-to-r from-red-100";
     smiley = "😞";
   } else if (totalTimeSpent >= 120 && totalTimeSpent < 180) {
-    bgColorClass = "bg-gradient-to-r from-orange-100";
+    bgColorClass = "bg-gradient-to-r from-orange-200";
     smiley = "🙂";
   } else if (totalTimeSpent >= 180 && totalTimeSpent < 240) {
-    bgColorClass = "bg-gradient-to-r from-green-100";
+    bgColorClass = "bg-gradient-to-r from-orange-100";
     smiley = "🤩";
-  } else if (totalTimeSpent >= 240) {
+  } else if (totalTimeSpent >= 240 && totalTimeSpent < 300) {
     bgColorClass = "bg-gradient-to-r from-green-200";
     smiley = "😍";
-  } else if (totalTimeSpent >= 300) {
+  } else if (totalTimeSpent >= 300 && totalTimeSpent < 420) {
     bgColorClass = "bg-gradient-to-r from-green-300";
     smiley = "💐";
+  } else if (totalTimeSpent >= 420) {
+    bgColorClass = "bg-gradient-to-r from-green-400";
+    smiley = "💐💐";
   }
   const minutes = Math.floor(totalTimeSpent / 60);
   const remainingSeconds = Math.floor(totalTimeSpent % 60);
