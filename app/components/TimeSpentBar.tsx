@@ -108,7 +108,6 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
 
   return (
     <div className={`w-full p-4 rounded ${bgColorClass}`}>
-      {data && data.length ? (
         <div>
           <div className="font-medium text-lg mb-2 text-gray-800">
             Focused{" "}
@@ -117,22 +116,29 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
             </span>
             {" " + "hours"} {" " + smiley}
           </div>
-          <div className="relative w-full rounded h-8 overflow-hidden border border-solid border-gray-300">
-            {" "}
-            {segmentElements}
-          </div>
+          {
+            segmentElements && segmentElements.length ?
+            <div className="relative w-full rounded h-8 overflow-hidden border border-solid border-gray-300">
+              {" "}
+              {segmentElements}
+            </div> : <div className="w-full rounded h-8 border border-solid border-gray-300 bg-gray-300 text-center"></div>
+          }
           <div className="mt-4 flex gap-2 flex-wrap">
-            {sortedTags.map((tag) => (
+            {sortedTags && sortedTags.length ? sortedTags.map((tag) => (
               <div key={tag} className="flex items-center text-gray-800">
                 <div
                   className={`w-4 h-4 rounded mr-2 border border-solid border-gray-300 ${tagColors[tag]}`}
                 />
                 <span>{tag.replace("_", " ").toLocaleLowerCase()}</span>
               </div>
-            ))}
+            )) : <div className="flex flex-wrap">
+              <div className="w-4 h-4 rounded mr-2 border border-solid border-gray-300 bg-gray-300"></div>
+              <div className="w-4 h-4 rounded mr-2 border border-solid border-gray-300 bg-gray-300"></div>
+              <div className="w-4 h-4 rounded mr-2 border border-solid border-gray-300 bg-gray-300"></div>
+              <div className="w-4 h-4 rounded mr-2 border border-solid border-gray-300 bg-gray-300"></div>
+            </div>}
           </div>
         </div>
-      ) : null}
     </div>
   );
 };

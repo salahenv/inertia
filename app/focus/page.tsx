@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Timer from "../components/Timer";
-import { SkeletonLoaderFocus } from "../components/Loader";
+import { SkeletonLoaderFocus, SkeletonLoaderTimeSpent } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
 import Spinner from "../components/Spinner";
 import html2canvas from "html2canvas";
@@ -665,8 +665,13 @@ export default function Home() {
             </div>
           </div>
         ) : null}
-        <div id='timespentbar' className="mb-4">
-          <TimeSpentBar data={focus} />
+        <div className="mb-4">
+          {isFocusLoading ? 
+            <div className="bg-gray-200 p-4 rounded">
+              <SkeletonLoaderTimeSpent /> 
+            </div> : 
+            <TimeSpentBar data={focus} />
+          }
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">
