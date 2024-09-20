@@ -117,7 +117,7 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
             </span>
             {" " + "hours"} {" " + smiley}
           </div>
-          <div className="relative w-full rounded h-8 overflow-hidden border border-solid border-gray-500">
+          <div className="relative w-full rounded h-8 overflow-hidden border border-solid border-gray-300">
             {" "}
             {segmentElements}
           </div>
@@ -125,7 +125,7 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
             {sortedTags.map((tag) => (
               <div key={tag} className="flex items-center text-gray-800">
                 <div
-                  className={`w-4 h-4 rounded mr-2 border border-solid border-gray-500 ${tagColors[tag]}`}
+                  className={`w-4 h-4 rounded mr-2 border border-solid border-gray-300 ${tagColors[tag]}`}
                 />
                 <span>{tag.replace("_", " ").toLocaleLowerCase()}</span>
               </div>
