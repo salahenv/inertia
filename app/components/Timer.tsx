@@ -42,17 +42,19 @@ const Timer = ({
           setTime(0);
           setProgress('0%');
           setEndTime(now);
-          // updateFocus({
-          //   completed: true
-          // });
-          navigator?.serviceWorker?.controller?.postMessage({
-            type: 'setSyncData',
-            payload: { 
-              focusId: activeFocusId, 
-              completed: false 
-            }
+          updateFocus({
+            completed: true
           });
-          syncFocusUpdate();
+
+          // navigator?.serviceWorker?.controller?.postMessage({
+          //   type: 'setSyncData',
+          //   payload: { 
+          //     focusId: activeFocusId, 
+          //     completed: false 
+          //   }
+          // });
+          // syncFocusUpdate();
+
           toggleProgressModal();
           toggleSuccessModal();
           localStorage.removeItem('activeFocusId');
@@ -65,20 +67,21 @@ const Timer = ({
           const milestone = Math.floor(progressPercentage / 10) * 10;
           if (!milestonesRef.current.has(milestone) && milestone > 0 && milestone < 100) {
             milestonesRef.current.add(milestone);
-            // updateFocus({completed: false});
-            if(navigator?.serviceWorker) {
-              navigator?.serviceWorker?.controller?.postMessage({
-                type: 'setSyncData',
-                payload: { 
-                  focusId: activeFocusId, 
-                  completed: false 
-                }
-              });
+            updateFocus({completed: false});
 
-              syncFocusUpdate();
-            } else {
-              console.log("update message not send");
-            }
+            // if(navigator?.serviceWorker) {
+            //   navigator?.serviceWorker?.controller?.postMessage({
+            //     type: 'setSyncData',
+            //     payload: { 
+            //       focusId: activeFocusId, 
+            //       completed: false 
+            //     }
+            //   });
+
+            //   syncFocusUpdate();
+            // } else {
+            //   console.log("update message not send");
+            // }
             
           }
         }
