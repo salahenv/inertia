@@ -98,53 +98,25 @@ const Timer = ({
   }, [isActive, timeInMinutes]);
 
 
-
-
   const syncFocusUpdate = () => {
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then((registration: any) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-          if ('sync' in registration) {
-            registration.sync.register('focusSync').then(() => {
-              console.log('Background sync registered');
-            }).catch((error: any) => {
-              console.log('Background sync registration failed:', error);
-            });
-          } else {
-            console.log('Background Sync is not supported in this browser.');
-          }
-        }).catch((error) => {
-          console.log('Service Worker registration failed:', error);
-        });
+      navigator.serviceWorker.ready.then((registration: any) => {
+        console.log('Service Worker ready for sync registration');
+        if ('sync' in registration) {
+          registration.sync.register('focusSync').then(() => {
+            console.log('Background sync registered');
+          }).catch((error: any) => {
+            console.log('Background sync registration failed:', error);
+          });
+        } else {
+          console.log('Background Sync is not supported in this browser.');
+        }
+      }).catch((error) => {
+        console.log('Service Worker registration failed:', error);
       });
     }
-  }
-
-
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then((registration: any) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-          if ('sync' in registration) {
-            registration.sync.register('focusSync').then(() => {
-              console.log('Background sync registered');
-            }).catch((error: any) => {
-              console.log('Background sync registration failed:', error);
-            });
-          } else {
-            console.log('Background Sync is not supported in this browser.');
-          }
-        }).catch((error) => {
-          console.log('Service Worker registration failed:', error);
-        });
-      });
-    }
-  }, []);
-
-
-
+  };
+  
   const notifyCompletion = () => {
     if (Notification.permission === 'granted') {
       setTimeout(() => {
