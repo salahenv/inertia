@@ -89,13 +89,13 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   return (
     <div className={`w-full p-4 rounded ${bgColorClass}`}>
       <div className="font-medium text-lg mb-2 text-gray-800">Focused <span className={`font-bold p-1 text-green-900`}>{totalformattedTimeSpent}</span>{" " + "hours"} {" " + smiley}</div>
-      <div className="relative w-full rounded h-8 overflow-hidden border border-solid border-gray-400"> {/* Added overflow-hidden */}
+      <div className="relative w-full rounded h-8 overflow-hidden border border-solid border-gray-800"> {/* Added overflow-hidden */}
         {segmentElements}
       </div>
       <div className="mt-4 flex gap-2 flex-wrap">
         {sortedTags.map(tag => (
           <div key={tag} className="flex items-center text-gray-800">
-            <div className={`w-4 h-4 rounded mr-2 ${tagColors[tag]}`} />
+            <div className={`w-4 h-4 rounded mr-2 border border-solid border-gray-800 ${tagColors[tag]}`} />
             <span>{tag.replace("_", " ").toLocaleLowerCase()}</span>
           </div>
         ))}
