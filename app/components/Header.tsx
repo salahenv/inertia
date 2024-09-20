@@ -33,10 +33,10 @@ const Header = ({
       </Link>
       {
         btnText ? 
-        <div className='flex items-center cursor-pointer'>
-          <div onClick={onButtonClick} className='mr-2 font-medium text-lg text-blue-600'>{btnText}</div>
+        <button onClick={onButtonClick} className='flex items-center cursor-pointer'>
+          <span className='mr-2 font-medium text-lg text-blue-600'>{btnText}</span>
           <NextIcon size = {"16px"} />
-        </div> : null 
+        </button> : null 
       } 
     </div>
   );
