@@ -36,12 +36,13 @@ const Timer = ({
         const elapsed = Math.floor((now - startTimeRef.current) / 1000);
         const newTime = timeInMinutes * 60 - elapsed;
         const activeFocusId = localStorage.getItem("activeFocusId");
+        setEndTime(now);
 
         if (newTime <= 0) {
           notifyCompletion();
           setTime(0);
           setProgress('0%');
-          setEndTime(now);
+        
           updateFocus({
             completed: true
           });
@@ -94,7 +95,6 @@ const Timer = ({
       elapsedRef.current += Math.floor((now - startTimeRef.current));
       cancelAnimationFrame(animationFrameRef.current);
     }
-
     return () => {
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
@@ -154,7 +154,6 @@ const Timer = ({
       completed: true
     });
     toggleProgressModal();
-    // toggleSuccessModal();
     localStorage.removeItem('activeFocusId');
   }
 

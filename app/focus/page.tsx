@@ -228,7 +228,7 @@ export default function Home() {
           },
           method: "PATCH",
           body: JSON.stringify({
-            endTime: Date.now(),
+            endTime: endTime,
           }),
           credentials: "include",
           keepalive: true
