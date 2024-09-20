@@ -32,6 +32,9 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   } else if (totalTimeSpent >= 240) {
     bgColorClass = "bg-gradient-to-r from-green-200";
     smiley = "😍";
+  } else if (totalTimeSpent >= 300) {
+    bgColorClass = "bg-gradient-to-r from-green-300";
+    smiley = "💐";
   }
   const minutes = Math.floor(totalTimeSpent / 60);
   const remainingSeconds = Math.floor(totalTimeSpent % 60);
