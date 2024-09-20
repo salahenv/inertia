@@ -26,6 +26,7 @@ import useAuth from "../hooks/auth";
 export default function Home() {
   useAuth();
   const [focusName, setFocusName] = useState("");
+  const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [time, setTime] = useState("10");
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -173,10 +174,12 @@ export default function Home() {
 
   const createFocus = async () => {
     setIsSaveFocusLoading(true);
+    const startTime = Date.now();
+    setStartTime(startTime);
     const payload = {
       name: focusName,
-      startTime: Date.now(),
-      endTime,
+      startTime: startTime,
+      endTime: startTime + 1*60*1000,
       tag: selectedTag,
     };
     try {
@@ -217,6 +220,8 @@ export default function Home() {
   const onUpdateFocus = async (obj: any) => {
     const { completed } = obj;
     const activeFocusId = localStorage.getItem("activeFocusId");
+    const endTime = Date.now();
+    const maxTime = startTime + parseInt(time) * 60 * 1000;
     setIsFocusUpdating(true);
     try {
       const res = await fetch(
@@ -227,8 +232,9 @@ export default function Home() {
             "Content-Type": "application/json",
           },
           method: "PATCH",
+          // Temp fix
           body: JSON.stringify({
-            endTime: endTime,
+            endTime: endTime > maxTime ?  maxTime : endTime 
           }),
           credentials: "include",
           keepalive: true
