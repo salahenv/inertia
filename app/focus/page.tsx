@@ -670,7 +670,9 @@ export default function Home() {
             <div className="bg-gradient-to-r from-gray-200 p-4 rounded">
               <SkeletonLoaderTimeSpent /> 
             </div> : 
-            <TimeSpentBar data={focus} />
+            <div id="timespentbar">
+              <TimeSpentBar data={focus} />
+            </div>
           }
         </div>
         <div className="flex flex-col">
