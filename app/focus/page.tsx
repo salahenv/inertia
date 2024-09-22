@@ -85,11 +85,12 @@ export default function Home() {
       updatedAt: Date;
     }[]
   >(todos);
-  const [durationFilter, setDurationFilter] = useState("daily");
+  const [range, setRange] = useState("daily");
 
   useEffect(() => {
     getFocus();
-  }, [dayOffset, durationFilter]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayOffset, range]);
 
   useEffect(() => {
     getTags();
@@ -142,12 +143,7 @@ export default function Home() {
   const getFocus = async () => {
     try {
       setIsFocusLoading(true);
-      let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}`;
-      if(durationFilter === 'weekly') {
-        url = url + `&weekly=true`
-      } else if (durationFilter === 'monthly') {
-        url = url + `&monthly=true`
-      }
+      let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}&range=${range}`;
       const res = await fetch(
        url,
         {
@@ -407,7 +403,7 @@ export default function Home() {
 
   const onDurationClick = (value: string) => {
     setDayOffset(0);
-    setDurationFilter(value)
+    setRange(value)
   }
 
   function PrevNextNavigator() {
@@ -415,11 +411,11 @@ export default function Home() {
       <div className="flex items-center">
         <div className="hidden md:block">
           <div className="flex">{
-            durationFilters.map((data, index) => {
+            durationFilters.map((duration, index) => {
               return (
                 <div
-                  onClick={ data.value !== durationFilter ? () => onDurationClick(data.value) : ()=>{}} 
-                  className={`mr-2 px-2 rounded border border-gray-300 text-gray-800 ${data.value === durationFilter ? ' bg-blue-500 text-white': ''}`} key = {index}>{data.label}
+                  onClick={ duration.value !== range ? () => onDurationClick(duration.value) : ()=>{}} 
+                  className={`mr-2 px-2 rounded border border-gray-300 text-gray-800 ${duration.value === range ? ' bg-blue-500 text-white': ''}`} key = {index}>{duration.label}
                 </div>
               )
             })
