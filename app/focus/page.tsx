@@ -405,6 +405,11 @@ export default function Home() {
     }
   };
 
+  const onDurationClick = (value: string) => {
+    setDayOffset(0);
+    setDurationFilter(value)
+  }
+
   function PrevNextNavigator() {
     return (
       <div className="flex items-center">
@@ -413,7 +418,7 @@ export default function Home() {
             durationFilters.map((data, index) => {
               return (
                 <div
-                  onClick={() => setDurationFilter(data.value)} 
+                  onClick={ data.value !== durationFilter ? () => onDurationClick(data.value) : ()=>{}} 
                   className={`mr-2 px-2 rounded border border-gray-300 text-gray-800 ${data.value === durationFilter ? ' bg-blue-500 text-white': ''}`} key = {index}>{data.label}
                 </div>
               )
