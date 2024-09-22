@@ -23,6 +23,25 @@ import {
 import TimeSpentBar from "../components/TimeSpentBar";
 import useAuth from "../hooks/auth";
 
+const durationFilters = [
+  {
+    label: 'Daily',
+    value: 'daily',
+  },
+  {
+    label: 'Weekly',
+    value: 'weekly',
+  },
+  {
+    label: 'Monthly',
+    value: 'monthly',
+  },
+  // {
+  //   label: 'Yearly',
+  //   value: 'yearly',
+  // }
+]
+
 export default function Home() {
   useAuth();
   const [focusName, setFocusName] = useState("");
@@ -66,10 +85,11 @@ export default function Home() {
       updatedAt: Date;
     }[]
   >(todos);
+  const [durationFilter, setDurationFilter] = useState("daily");
 
   useEffect(() => {
     getFocus();
-  }, [dayOffset]);
+  }, [dayOffset, durationFilter]);
 
   useEffect(() => {
     getTags();
@@ -122,8 +142,14 @@ export default function Home() {
   const getFocus = async () => {
     try {
       setIsFocusLoading(true);
+      let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}`;
+      if(durationFilter === 'weekly') {
+        url = url + `&weekly=true`
+      } else if (durationFilter === 'monthly') {
+        url = url + `&monthly=true`
+      }
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}`,
+       url,
         {
           headers: {
             Accept: "application/json",
@@ -136,7 +162,7 @@ export default function Home() {
       const resData = await res.json();
       if (resData.success) {
         setFocus(resData.data.focus);
-        const formatedDate = formatDateString(resData.data.date);
+        const formatedDate = formatDateString(resData.data.date.start);
         setSelectedDay(formatedDate);
       } else {
       }
@@ -382,6 +408,19 @@ export default function Home() {
   function PrevNextNavigator() {
     return (
       <div className="flex items-center">
+        <div className="hidden md:block">
+          <div className="flex">{
+            durationFilters.map((data, index) => {
+              return (
+                <div
+                  onClick={() => setDurationFilter(data.value)} 
+                  className={`mr-2 px-2 rounded border border-gray-300 text-gray-800 ${data.value === durationFilter ? ' bg-blue-500 text-white': ''}`} key = {index}>{data.label}
+                </div>
+              )
+            })
+          }</div>
+        </div>
+        
         <div onClick={() => onPrevClick()}>
           <PrevIcon
             color={
