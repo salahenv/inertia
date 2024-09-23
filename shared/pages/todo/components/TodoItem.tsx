@@ -3,10 +3,10 @@ import { useState } from "react";
 
 import {
   DeleteIcon,
-} from "../../icons";
+} from "../../../icons";
 import {
   formatDate,
-} from "../../dateUtils";
+} from "../../../dateUtils";
 
 function TimeAndDate({ date }: any) {
   return (

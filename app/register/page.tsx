@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
-import Spinner from "../components/Spinner";
+import Spinner from "@/shared/components/Spinner";
 
 
 export default function Register() {

@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "@/shared/components/Header";
@@ -6,19 +5,20 @@ import Header from "@/shared/components/Header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Inertia Todo",
+  title: "Inertia Focus",
   description: "Productivity App",
 };
 
-export default function TodoLayout({
+export default function LoginLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
+
       <body className={inter.className}>
-        <Header btnText = 'Focus'/>
+        <Header />
         {children}
       </body>
     </html>
