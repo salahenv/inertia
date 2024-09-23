@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Timer from "../components/Timer";
 import { SkeletonLoaderFocus, SkeletonLoaderTimeSpent } from "../components/Loader";
 import SuccessModal from "../components/SuccessModal";
@@ -22,25 +22,8 @@ import {
 } from "../dateUtils";
 import TimeSpentBar from "../components/TimeSpentBar";
 import useAuth from "../hooks/auth";
-
-const durationFilters = [
-  {
-    label: 'Daily',
-    value: 'daily',
-  },
-  {
-    label: 'Weekly',
-    value: 'weekly',
-  },
-  {
-    label: 'Monthly',
-    value: 'monthly',
-  },
-  // {
-  //   label: 'Yearly',
-  //   value: 'yearly',
-  // }
-]
+import { AppDataProvider, useAppData } from "../hooks/AppDataProvider";
+import PrevNextNav from "../components/PrevNextNav";
 
 export default function Home() {
   useAuth();
@@ -52,7 +35,8 @@ export default function Home() {
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showSuccessModal, setSuccessModal] = useState(false);
   const [dayOffset, setDayOffset] = useState(0);
-  const [selectedDay, setSelectedDay] = useState("Today");
+  const [selectedStartDay, setSelectedStartDay] = useState("-");
+  const [selectedEndDay, setSelectedEndDay] = useState("-");
   const [focus, setFocus] = useState([]);
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
@@ -158,8 +142,10 @@ export default function Home() {
       const resData = await res.json();
       if (resData.success) {
         setFocus(resData.data.focus);
-        const formatedDate = formatDateString(resData.data.date.start);
-        setSelectedDay(formatedDate);
+        const formatedStartDate = formatDateString(resData.data.date.start);
+        const formatedEndDate = formatDateString(resData.data.date.end);
+        setSelectedStartDay(formatedStartDate);
+        setSelectedEndDay(formatedEndDate);
       } else {
       }
     } catch (error) {
@@ -401,50 +387,6 @@ export default function Home() {
     }
   };
 
-  const onDurationClick = (value: string) => {
-    setDayOffset(0);
-    setRange(value)
-  }
-
-  function PrevNextNavigator() {
-    return (
-      <div className="flex items-center">
-        <div className="hidden md:block">
-          <div className="flex">{
-            durationFilters.map((duration, index) => {
-              return (
-                <div
-                  onClick={ duration.value !== range ? () => onDurationClick(duration.value) : ()=>{}} 
-                  className={`mr-2 px-2 rounded border border-gray-300 text-gray-800 ${duration.value === range ? ' bg-blue-500 text-white': ''}`} key = {index}>{duration.label}
-                </div>
-              )
-            })
-          }</div>
-        </div>
-        
-        <div onClick={() => onPrevClick()}>
-          <PrevIcon
-            color={
-              isFocusLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
-            }
-          />
-        </div>
-        <div className="text-gray-800 font-bold text-xl ml-4 mr-4">
-          {selectedDay}
-        </div>
-        <div onClick={() => onNextClick()}>
-          <NextIcon
-            color={
-              dayOffset === 0 || isFocusLoading
-                ? "rgba(37, 99, 235, .5)"
-                : "rgba(37, 99, 235, 1)"
-            }
-          />
-        </div>
-      </div>
-    );
-  }
-
   const onInputFocus = (event: any) => {
     event.type === "focus" ? setShowTodoDropDown(true) : null;
   };
@@ -514,10 +456,21 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <AppDataProvider>
+      <div>
       <div className="bg-white shadow-lg p-4 flex flex-row justify-between items-center sticky z-10 sticky top-[57px]">
           <div className="">
-            <PrevNextNavigator />
+            <PrevNextNav 
+               selectedStartDay = {selectedStartDay}
+               selectedEndDay = {selectedEndDay}
+               dayOffset = {dayOffset}
+               setDayOffset = {setDayOffset}
+               range = {range}
+               setRange = {setRange}
+               onPrevClick = {onPrevClick}
+               onNextClick = {onNextClick}
+               isFocusLoading = {isFocusLoading}
+            />
           </div>
           <div className="flex items-center gap-4">
             
@@ -836,5 +789,7 @@ export default function Home() {
         </div>
       </div>
     </div>
+    </AppDataProvider>
+    
   );
 }
