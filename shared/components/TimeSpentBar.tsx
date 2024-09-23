@@ -1,6 +1,11 @@
 import React from "react";
+import { useFocusStore } from "../pages/focus/useFocus";
 
-const TimeSpentBar = ({ data }: { data: any[] }) => {
+const TimeSpentBar = () => {
+  const focusStore = useFocusStore();
+  const {
+    focuses = []
+  } = focusStore || {};
   const calculateTimeDifference = (start: string, end: string) => {
     const startTime = new Date(start).getTime();
     const endTime = new Date(end).getTime();
@@ -8,12 +13,12 @@ const TimeSpentBar = ({ data }: { data: any[] }) => {
   };
 
   const timeSpentByTag: { [key: string]: number } = {};
-  data.forEach((item) => {
-    const timeSpent = calculateTimeDifference(item.startTime, item.endTime);
-    if (timeSpentByTag[item.tag]) {
-      timeSpentByTag[item.tag] += timeSpent;
+  focuses.forEach((focus: any) => {
+    const timeSpent = calculateTimeDifference(focus.startTime, focus.endTime);
+    if (timeSpentByTag[focus.tag]) {
+      timeSpentByTag[focus.tag] += timeSpent;
     } else {
-      timeSpentByTag[item.tag] = timeSpent;
+      timeSpentByTag[focus.tag] = timeSpent;
     }
   });
 

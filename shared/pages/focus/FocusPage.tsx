@@ -22,9 +22,12 @@ import TimeSpentBar from "../../components/TimeSpentBar";
 import useAuth from "../../hooks/auth";
 import { AppDataProvider, useAppData } from "../../hooks/AppDataProvider";
 import PrevNextNav from "../../components/PrevNextNav";
+import { useFocusDispatch, useFocusStore } from "./useFocus";
 
 export default function FocusPage() {
   useAuth();
+  const dispatch = useFocusDispatch();
+  const focusStore = useFocusStore();
   const [focusName, setFocusName] = useState("");
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -35,7 +38,6 @@ export default function FocusPage() {
   const [dayOffset, setDayOffset] = useState(0);
   const [selectedStartDay, setSelectedStartDay] = useState("-");
   const [selectedEndDay, setSelectedEndDay] = useState("-");
-  const [focus, setFocus] = useState([]);
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
   const [area, setAreas] = useState<
@@ -139,7 +141,10 @@ export default function FocusPage() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setFocus(resData.data.focus);
+        dispatch({
+          type: 'ADD_FOCUS_LIST',
+          payload: resData?.data?.focus
+        });
         const formatedStartDate = formatDateString(resData.data.date.start);
         const formatedEndDate = formatDateString(resData.data.date.end);
         setSelectedStartDay(formatedStartDate);
@@ -343,7 +348,11 @@ export default function FocusPage() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setFocus([...focus.filter((ar: any) => ar._id !== a._id)]);
+        const updatedFocuses = [...focuses.filter((ar: any) => ar._id !== a._id)]
+        dispatch({
+          type: 'ADD_FOCUS_LIST',
+          payload: updatedFocuses
+        })
       } else {
         alert("Unable to remove focus");
       }
@@ -452,6 +461,10 @@ export default function FocusPage() {
     const blob = new Blob([intArray], { type: mimeType }); // Create Blob from the byte array
     return new File([blob], fileName, { type: mimeType }); // Convert Blob to File
   };
+
+  const {
+    focuses = []
+  }  = focusStore || {};
 
   return (
     // <AppDataProvider>
@@ -662,7 +675,7 @@ export default function FocusPage() {
               <SkeletonLoaderTimeSpent /> 
             </div> : 
             <div id="timespentbar">
-              <TimeSpentBar data={focus} />
+              <TimeSpentBar />
             </div>
           }
         </div>
@@ -676,8 +689,8 @@ export default function FocusPage() {
               <SkeletonLoaderFocus classNames=" mt-2" />
             ) : (
               <>
-                {focus && focus.length ? (
-                  focus.map((f: any, index) => {
+                {focuses && focuses.length ? (
+                  focuses.map((f: any, index: any) => {
                     let timeSpendInMinutes = Math.floor(
                       (new Date(f.endTime).getTime() -
                         new Date(f.startTime).getTime()) /

@@ -5,14 +5,14 @@ const focusReducer = (state: any, action: any) => {
     case 'ADD_FOCUS_LIST': {
       return {
         ...state,
-        focus: action.payload
+        focuses: action.payload
       };
     }
   }
 };
 
 const [FocusStoreProvider, useFocusStore, useFocusDispatch] = makeStore(focusReducer, {
-    focusList: [],
+    focuses: [],
 });
 
 export { FocusStoreProvider, useFocusStore, useFocusDispatch };
