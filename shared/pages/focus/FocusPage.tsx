@@ -20,7 +20,6 @@ import {
 } from "../../dateUtils";
 import TimeSpentBar from "../../components/TimeSpentBar";
 import useAuth from "../../hooks/auth";
-import { AppDataProvider, useAppData } from "../../hooks/AppDataProvider";
 import PrevNextNav from "../../components/PrevNextNav";
 import { useFocusDispatch, useFocusStore } from "./useFocus";
 
@@ -28,6 +27,7 @@ export default function FocusPage() {
   useAuth();
   const dispatch = useFocusDispatch();
   const focusStore = useFocusStore();
+  
   const [focusName, setFocusName] = useState("");
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -40,9 +40,6 @@ export default function FocusPage() {
   const [selectedEndDay, setSelectedEndDay] = useState("-");
   const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
-  const [area, setAreas] = useState<
-    { label: string; value: string; _id: string }[]
-  >([]);
   const [selectedTag, setSelectedTag] = useState("");
   const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] =
     useState(false);
@@ -51,25 +48,14 @@ export default function FocusPage() {
   const [isFocusUpdating, setIsFocusUpdating] = useState(false);
   const [showTodoDropDown, setShowTodoDropDown] = useState(false);
   const [isTodoLoading, setIsTodoLoading] = useState(false);
-  const [todos, setTodos] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[]
-  >([]);
-  const [filteredTodos, setFilteredTodos] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[]
-  >(todos);
   const [range, setRange] = useState("daily");
+
+  const {
+    focuses = [],
+    areas = [],
+    todos = [],
+    filteredTodos = [],
+  }  = focusStore || {};
 
   useEffect(() => {
     getFocus();
@@ -97,8 +83,14 @@ export default function FocusPage() {
       });
       const resData = await res.json();
       if (resData.success) {
-        setTodos(resData.data.todo);
-        setFilteredTodos(resData.data.todo);
+        dispatch({
+          type: 'ADD_TODO_LIST',
+          payload: resData?.data?.todo
+        });
+        dispatch({
+          type: 'ADD_FILTERED_TODO_LIST',
+          payload: resData?.data?.todo
+        });
       } else {
       }
     } catch (error) {
@@ -173,12 +165,22 @@ export default function FocusPage() {
       const resData = await res.json();
       if (resData.success) {
         const area = resData.data.area || [];
-        setAreas(area);
+        dispatch({
+          type: 'ADD_AREA_LIST',
+          payload: area
+        })
       } else {
-        setAreas([]);
+        dispatch({
+          type: 'ADD_AREA_LIST',
+          payload: []
+        })
+     
       }
     } catch (error) {
-      setAreas([]);
+      dispatch({
+        type: 'ADD_AREA_LIST',
+        payload: []
+      })
     } finally {
     }
   };
@@ -291,7 +293,10 @@ export default function FocusPage() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setAreas([...area, resData.data.area]);
+        dispatch({
+          type: 'ADD_AREA_LIST',
+          payload: [...areas, resData.data.area]
+        })
       } else {
         alert("Unable to create focus area");
       }
@@ -323,7 +328,10 @@ export default function FocusPage() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setAreas([...area.filter((ar) => ar._id !== a._id)]);
+        dispatch({
+          type: 'ADD_AREA_LIST',
+          payload: [...areas.filter((ar: any) => ar._id !== a._id)]
+        })
       } else {
         alert("Unable to remove focus area");
       }
@@ -362,7 +370,7 @@ export default function FocusPage() {
     }
   };
 
-  const areaElement = area.map((ar, index) => {
+  const areaElement = areas.map((ar: any, index: any) => {
     return (
       <button
         key={index}
@@ -401,13 +409,19 @@ export default function FocusPage() {
   const onInputChange = (value: string) => {
     setFocusName(value);
     if (value) {
-      const filteredTodos = todos.filter((todo) => {
+      const filteredTodos = todos.filter((todo: any) => {
         if (todo.name.toLowerCase().includes(value.toLowerCase())) return todo;
       });
-      setFilteredTodos(filteredTodos);
+      dispatch({
+        type: 'ADD_FILTERED_TODO_LIST',
+        payload: filteredTodos
+      });
       setShowTodoDropDown(!!filteredTodos.length);
     } else {
-      setFilteredTodos(todos);
+      dispatch({
+        type: 'ADD_FILTERED_TODO_LIST',
+        payload: todos
+      });
     }
   };
 
@@ -461,10 +475,6 @@ export default function FocusPage() {
     const blob = new Blob([intArray], { type: mimeType }); // Create Blob from the byte array
     return new File([blob], fileName, { type: mimeType }); // Convert Blob to File
   };
-
-  const {
-    focuses = []
-  }  = focusStore || {};
 
   return (
     // <AppDataProvider>
@@ -558,8 +568,8 @@ export default function FocusPage() {
                             Active Todos
                           </div>
                           {filteredTodos
-                            .filter((todo) => !todo.completed)
-                            .map((todo, index) => {
+                            .filter((todo: any) => !todo.completed)
+                            .map((todo: any, index: any) => {
                               return (
                                 <div
                                   onClick={() => onSelectTodo(todo.name)}
@@ -730,7 +740,7 @@ export default function FocusPage() {
                       bgTextClassName = "bg-gradient-to-r from-red-300";
                     }
 
-                    const ar = area.find((a) => a.value === f.tag);
+                    const ar = areas.find((a: any) => a.value === f.tag);
 
                     return (
                       <div
