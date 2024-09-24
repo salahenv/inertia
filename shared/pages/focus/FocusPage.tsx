@@ -1,7 +1,10 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
 import Timer from "../../components/Timer";
-import { SkeletonLoaderFocus, SkeletonLoaderTimeSpent } from "../../components/Loader";
+import {
+  SkeletonLoaderFocus,
+  SkeletonLoaderTimeSpent,
+} from "../../components/Loader";
 import SuccessModal from "../../components/SuccessModal";
 import Spinner from "../../components/Spinner";
 import html2canvas from "html2canvas";
@@ -22,6 +25,7 @@ import TimeSpentBar from "../../components/TimeSpentBar";
 import useAuth from "../../hooks/auth";
 import PrevNextNav from "../../components/PrevNextNav";
 import { useFocusDispatch, useFocusStore } from "./useFocus";
+import FocusHeader from "./components/FocusHeader";
 
 export default function FocusPage() {
   useAuth();
@@ -43,7 +47,6 @@ export default function FocusPage() {
   const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
   const [isFocusUpdating, setIsFocusUpdating] = useState(false);
   const [showTodoDropDown, setShowTodoDropDown] = useState(false);
-  
 
   const {
     focuses = [],
@@ -53,12 +56,12 @@ export default function FocusPage() {
     isFocusLoading = false,
     isTodoLoading = false,
     dayOffset = 0,
-    range = 'daily'
-  }  = focusStore || {};
+    range = "daily",
+  } = focusStore || {};
 
   useEffect(() => {
     getFocus();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayOffset, range]);
 
   useEffect(() => {
@@ -72,8 +75,8 @@ export default function FocusPage() {
   const getTodo = async () => {
     try {
       dispatch({
-        type: 'SET_IS_TODO_LOADING',
-        payload: true
+        type: "SET_IS_TODO_LOADING",
+        payload: true,
       });
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todo`, {
         headers: {
@@ -86,12 +89,12 @@ export default function FocusPage() {
       const resData = await res.json();
       if (resData.success) {
         dispatch({
-          type: 'ADD_TODO_LIST',
-          payload: resData?.data?.todo
+          type: "ADD_TODO_LIST",
+          payload: resData?.data?.todo,
         });
         dispatch({
-          type: 'ADD_FILTERED_TODO_LIST',
-          payload: resData?.data?.todo
+          type: "ADD_FILTERED_TODO_LIST",
+          payload: resData?.data?.todo,
         });
       } else {
       }
@@ -99,8 +102,8 @@ export default function FocusPage() {
       alert(JSON.stringify(error));
     } finally {
       dispatch({
-        type: 'SET_IS_TODO_LOADING',
-        payload: false
+        type: "SET_IS_TODO_LOADING",
+        payload: false,
       });
     }
   };
@@ -124,44 +127,41 @@ export default function FocusPage() {
   const getFocus = async () => {
     try {
       dispatch({
-        type: 'SET_IS_FOCUS_LOADING',
-        payload: true
+        type: "SET_IS_FOCUS_LOADING",
+        payload: true,
       });
       let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}&range=${range}`;
-      const res = await fetch(
-       url,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-          credentials: "include",
-        }
-      );
+      const res = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+        credentials: "include",
+      });
       const resData = await res.json();
       if (resData.success) {
         dispatch({
-          type: 'ADD_FOCUS_LIST',
-          payload: resData?.data?.focus
+          type: "ADD_FOCUS_LIST",
+          payload: resData?.data?.focus,
         });
         const formatedStartDate = formatDateString(resData.data.date.start);
         const formatedEndDate = formatDateString(resData.data.date.end);
         dispatch({
-          type: 'SET_SELECTED_START_DATE',
+          type: "SET_SELECTED_START_DATE",
           payload: formatedStartDate,
         });
         dispatch({
-          type: 'SET_SELECTED_END_DATE',
-          payload: formatedEndDate
+          type: "SET_SELECTED_END_DATE",
+          payload: formatedEndDate,
         });
       } else {
       }
     } catch (error) {
     } finally {
       dispatch({
-        type: 'SET_IS_FOCUS_LOADING',
-        payload: false
+        type: "SET_IS_FOCUS_LOADING",
+        payload: false,
       });
     }
   };
@@ -183,21 +183,20 @@ export default function FocusPage() {
       if (resData.success) {
         const area = resData.data.area || [];
         dispatch({
-          type: 'ADD_AREA_LIST',
-          payload: area
-        })
+          type: "ADD_AREA_LIST",
+          payload: area,
+        });
       } else {
         dispatch({
-          type: 'ADD_AREA_LIST',
-          payload: []
-        })
-     
+          type: "ADD_AREA_LIST",
+          payload: [],
+        });
       }
     } catch (error) {
       dispatch({
-        type: 'ADD_AREA_LIST',
-        payload: []
-      })
+        type: "ADD_AREA_LIST",
+        payload: [],
+      });
     } finally {
     }
   };
@@ -209,7 +208,7 @@ export default function FocusPage() {
     const payload = {
       name: focusName,
       startTime: startTime,
-      endTime: startTime + 1*60*1000,
+      endTime: startTime + 1 * 60 * 1000,
       tag: selectedTag,
     };
     try {
@@ -264,10 +263,10 @@ export default function FocusPage() {
           method: "PATCH",
           // Temp fix
           body: JSON.stringify({
-            endTime: endTime > maxTime ?  maxTime : endTime 
+            endTime: endTime > maxTime ? maxTime : endTime,
           }),
           credentials: "include",
-          keepalive: true
+          keepalive: true,
         }
       );
       const resData = await res.json();
@@ -311,9 +310,9 @@ export default function FocusPage() {
       const resData = await res.json();
       if (resData.success) {
         dispatch({
-          type: 'ADD_AREA_LIST',
-          payload: [...areas, resData.data.area]
-        })
+          type: "ADD_AREA_LIST",
+          payload: [...areas, resData.data.area],
+        });
       } else {
         alert("Unable to create focus area");
       }
@@ -346,9 +345,9 @@ export default function FocusPage() {
       const resData = await res.json();
       if (resData.success) {
         dispatch({
-          type: 'ADD_AREA_LIST',
-          payload: [...areas.filter((ar: any) => ar._id !== a._id)]
-        })
+          type: "ADD_AREA_LIST",
+          payload: [...areas.filter((ar: any) => ar._id !== a._id)],
+        });
       } else {
         alert("Unable to remove focus area");
       }
@@ -373,11 +372,13 @@ export default function FocusPage() {
       );
       const resData = await res.json();
       if (resData.success) {
-        const updatedFocuses = [...focuses.filter((ar: any) => ar._id !== a._id)]
+        const updatedFocuses = [
+          ...focuses.filter((ar: any) => ar._id !== a._id),
+        ];
         dispatch({
-          type: 'ADD_FOCUS_LIST',
-          payload: updatedFocuses
-        })
+          type: "ADD_FOCUS_LIST",
+          payload: updatedFocuses,
+        });
       } else {
         alert("Unable to remove focus");
       }
@@ -418,14 +419,14 @@ export default function FocusPage() {
         if (todo.name.toLowerCase().includes(value.toLowerCase())) return todo;
       });
       dispatch({
-        type: 'ADD_FILTERED_TODO_LIST',
-        payload: filteredTodos
+        type: "ADD_FILTERED_TODO_LIST",
+        payload: filteredTodos,
       });
       setShowTodoDropDown(!!filteredTodos.length);
     } else {
       dispatch({
-        type: 'ADD_FILTERED_TODO_LIST',
-        payload: todos
+        type: "ADD_FILTERED_TODO_LIST",
+        payload: todos,
       });
     }
   };
@@ -438,68 +439,54 @@ export default function FocusPage() {
   const onShare = async () => {
     // Capture the screenshot and then share it
     const base64image = await screenShot(); // Wait for the screenshot to complete
-    const file = base64ToFile(base64image, 'screenshot.png', 'image/png'); // Convert to File object
-  
+    const file = base64ToFile(base64image, "screenshot.png", "image/png"); // Convert to File object
+
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file], // Share the screenshot file
-          url: 'https://salahenv.com',
-          title: 'Inertia',
-          text: 'Keep an eye on your time',
+          url: "https://salahenv.com",
+          title: "Inertia",
+          text: "Keep an eye on your time",
         });
-        console.log('Shared successfully!');
+        console.log("Shared successfully!");
       } catch (error) {
-        console.error('Error sharing:', error);
+        console.error("Error sharing:", error);
       }
     } else {
-      console.log('Sharing not supported on this device.');
+      console.log("Sharing not supported on this device.");
     }
   };
-  
- 
+
   const screenShot = () => {
-    const screenshotTarget = document.getElementById('timespentbar');
-    if(screenshotTarget) {
+    const screenshotTarget = document.getElementById("timespentbar");
+    if (screenshotTarget) {
       return html2canvas(screenshotTarget).then((canvas) => {
         return canvas.toDataURL("image/png"); // Return the base64 image data
       });
     }
   };
-  
+
   const base64ToFile = (base64String: any, fileName: any, mimeType: any) => {
-    const byteString = atob(base64String.split(',')[1]); // Decode base64
+    const byteString = atob(base64String.split(",")[1]); // Decode base64
     const arrayBuffer = new ArrayBuffer(byteString.length);
     const intArray = new Uint8Array(arrayBuffer);
-  
+
     // Fill the array with byte values
     for (let i = 0; i < byteString.length; i++) {
       intArray[i] = byteString.charCodeAt(i);
     }
-  
+
     const blob = new Blob([intArray], { type: mimeType }); // Create Blob from the byte array
     return new File([blob], fileName, { type: mimeType }); // Convert Blob to File
   };
 
   return (
-      <div>
-      <div className="bg-white shadow-lg p-4 flex flex-row justify-between items-center sticky z-10 sticky top-[57px]">
-          <div className="">
-            <PrevNextNav />
-          </div>
-          <div className="flex items-center gap-4">
-            
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded"
-              onClick={() => toogleAddFocusModal()}
-            >
-              + Add Focus
-            </button>
-            <div onClick={() => onShare()}>
-              <WhatsappIcon size = {32}/>
-            </div>
-          </div>
-      </div>
+    <div>
+      <FocusHeader
+        toogleAddFocusModal={toogleAddFocusModal}
+        onShare={onShare}
+      />
       <div className="bg-neutral-100 p-4 min-h-screen">
         {showSuccessModal ? (
           <SuccessModal
@@ -530,7 +517,9 @@ export default function FocusPage() {
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-neutral-100 shadow-lg w-full h-full p-6 md:max-w-lg md:h-auto md:rounded-lg relative">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl text-gray-800 font-semibold">Create Focus</h2>
+                <h2 className="text-xl text-gray-800 font-semibold">
+                  Create Focus
+                </h2>
                 <button
                   className="text-gray-500 hover:text-gray-700"
                   onClick={() => {
@@ -674,14 +663,15 @@ export default function FocusPage() {
           </div>
         ) : null}
         <div className="mb-4">
-          {isFocusLoading ? 
+          {isFocusLoading ? (
             <div className="bg-gradient-to-r from-gray-200 p-4 rounded">
-              <SkeletonLoaderTimeSpent /> 
-            </div> : 
+              <SkeletonLoaderTimeSpent />
+            </div>
+          ) : (
             <div id="timespentbar">
               <TimeSpentBar />
             </div>
-          }
+          )}
         </div>
         <div className="flex flex-col">
           <div className="flex flex-row p-2 border-gray-500 border-solid border-b justify-center bg-gradient-to-r from-gray-500/50">

@@ -1,6 +1,6 @@
-import { NextIcon, PrevIcon } from '../icons';
+import { NextIcon, PrevIcon } from "../icons";
 import { useFocusDispatch, useFocusStore } from "../pages/focus/useFocus";
-import { useAppData } from '../hooks/AppDataProvider';
+import { useAppData } from "../hooks/AppDataProvider";
 
 const durationFilters = [
   {
@@ -26,8 +26,8 @@ function PrevNextNav(props: any) {
   const onPrevClick = () => {
     if (!isFocusLoading) {
       dispatch({
-        type: 'SET_DAYS_OFFSET',
-        payload: dayOffset + 1
+        type: "SET_DAYS_OFFSET",
+        payload: dayOffset + 1,
       });
     }
   };
@@ -35,83 +35,77 @@ function PrevNextNav(props: any) {
   const onNextClick = () => {
     if (dayOffset > 0 && !isFocusLoading) {
       dispatch({
-        type: 'SET_DAYS_OFFSET',
-        payload: dayOffset - 1
+        type: "SET_DAYS_OFFSET",
+        payload: dayOffset - 1,
       });
     }
   };
 
-
-  const {
-    range,
-    dayOffset,
-    selectedStartDay,
-    selectedEndDay,
-    isFocusLoading,
-  } = focusStore;
+  const { range, dayOffset, selectedStartDay, selectedEndDay, isFocusLoading } =
+    focusStore;
 
   const onDurationClick = (value: string) => {
     dispatch({
-      type: 'SET_RANGE',
-      payload: value
+      type: "SET_RANGE",
+      payload: value,
     });
     dispatch({
-      type: 'SET_DAYS_OFFSET',
-      payload: 0
+      type: "SET_DAYS_OFFSET",
+      payload: 0,
     });
   };
 
   return (
-    <div className="flex items-center">
-      <div className="hidden md:block">
-        <div className="flex">
-          {durationFilters.map((duration, index) => {
-            return (
-              <div
-                onClick={
-                  duration.value !== range
-                    ? () => onDurationClick(duration.value)
-                    : () => {}
-                }
-                className={`mr-2 px-2 rounded border border-gray-300 text-gray-800 ${
-                  duration.value === range ? " bg-blue-500 text-white" : ""
-                }`}
-                key={index}
-              >
-                {duration.label}
-              </div>
-            );
-          })}
-        </div>
+    <div className="flex items-center w-full justify-between md:justify-normal">
+      <div className="flex">
+        {durationFilters.map((duration, index) => {
+          return (
+            <div
+              onClick={
+                duration.value !== range
+                  ? () => onDurationClick(duration.value)
+                  : () => {}
+              }
+              className={`mr-2 px-2 text-sm md:text-base rounded border border-gray-300 text-gray-800 ${
+                duration.value === range ? " bg-blue-500 text-white" : ""
+              }`}
+              key={index}
+            >
+              {duration.label}
+            </div>
+          );
+        })}
       </div>
-
-      <div onClick={() => onPrevClick()}>
-        <PrevIcon
-          color={
-            isFocusLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
-          }
-        />
-      </div>
-      {deviceType === "mobile" || range === 'daily' ? (
-        <div className="text-gray-800 font-bold text-xl ml-2 mr-2">
-          {selectedStartDay}
+      <div className="flex items-center">
+        <div onClick={() => onPrevClick()}>
+          <PrevIcon
+            size={deviceType === "mobile" ? "16px" : "24px"}
+            color={
+              isFocusLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
+            }
+          />
         </div>
-      ) : null}
-      {deviceType === "desktop" && range !== 'daily' ? (
-        <div className="text-gray-800 font-medium text-xl ml-2 mr-2">
-          {selectedStartDay}
-          <span className="text-lg text-gray-600">{" to "}</span>
-          {selectedEndDay}
+        {deviceType === "mobile" || range === "daily" ? (
+          <div className="text-gray-800 font-bold text-lg md:text-xl ml-2 mr-2">
+            {selectedStartDay}
+          </div>
+        ) : (
+          <div className="text-gray-800 font-medium text-lg md:text-xl ml-2 mr-2">
+            {selectedStartDay}
+            <span className="text-lg text-gray-600">{" to "}</span>
+            {selectedEndDay}
+          </div>
+        )}
+        <div onClick={() => onNextClick()}>
+          <NextIcon
+            size={deviceType === "mobile" ? "16px" : "24px"}
+            color={
+              dayOffset === 0 || isFocusLoading
+                ? "rgba(37, 99, 235, .5)"
+                : "rgba(37, 99, 235, 1)"
+            }
+          />
         </div>
-      ) : null}
-      <div onClick={() => onNextClick()}>
-        <NextIcon
-          color={
-            dayOffset === 0 || isFocusLoading
-              ? "rgba(37, 99, 235, .5)"
-              : "rgba(37, 99, 235, 1)"
-          }
-        />
       </div>
     </div>
   );
