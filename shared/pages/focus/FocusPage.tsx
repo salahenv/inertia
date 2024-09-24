@@ -27,7 +27,7 @@ export default function FocusPage() {
   useAuth();
   const dispatch = useFocusDispatch();
   const focusStore = useFocusStore();
-  
+
   const [focusName, setFocusName] = useState("");
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -35,10 +35,6 @@ export default function FocusPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showSuccessModal, setSuccessModal] = useState(false);
-  const [dayOffset, setDayOffset] = useState(0);
-  const [selectedStartDay, setSelectedStartDay] = useState("-");
-  const [selectedEndDay, setSelectedEndDay] = useState("-");
-  const [isFocusLoading, setIsFocusLoading] = useState(true);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState("");
   const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] =
@@ -47,14 +43,17 @@ export default function FocusPage() {
   const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
   const [isFocusUpdating, setIsFocusUpdating] = useState(false);
   const [showTodoDropDown, setShowTodoDropDown] = useState(false);
-  const [isTodoLoading, setIsTodoLoading] = useState(false);
-  const [range, setRange] = useState("daily");
+  
 
   const {
     focuses = [],
     areas = [],
     todos = [],
     filteredTodos = [],
+    isFocusLoading = false,
+    isTodoLoading = false,
+    dayOffset = 0,
+    range = 'daily'
   }  = focusStore || {};
 
   useEffect(() => {
@@ -72,7 +71,10 @@ export default function FocusPage() {
 
   const getTodo = async () => {
     try {
-      setIsTodoLoading(true);
+      dispatch({
+        type: 'SET_IS_TODO_LOADING',
+        payload: true
+      });
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/todo`, {
         headers: {
           Accept: "application/json",
@@ -96,7 +98,10 @@ export default function FocusPage() {
     } catch (error) {
       alert(JSON.stringify(error));
     } finally {
-      setIsTodoLoading(false);
+      dispatch({
+        type: 'SET_IS_TODO_LOADING',
+        payload: false
+      });
     }
   };
 
@@ -118,7 +123,10 @@ export default function FocusPage() {
 
   const getFocus = async () => {
     try {
-      setIsFocusLoading(true);
+      dispatch({
+        type: 'SET_IS_FOCUS_LOADING',
+        payload: true
+      });
       let url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/focus?dayOffset=${dayOffset}&range=${range}`;
       const res = await fetch(
        url,
@@ -139,13 +147,22 @@ export default function FocusPage() {
         });
         const formatedStartDate = formatDateString(resData.data.date.start);
         const formatedEndDate = formatDateString(resData.data.date.end);
-        setSelectedStartDay(formatedStartDate);
-        setSelectedEndDay(formatedEndDate);
+        dispatch({
+          type: 'SET_SELECTED_START_DATE',
+          payload: formatedStartDate,
+        });
+        dispatch({
+          type: 'SET_SELECTED_END_DATE',
+          payload: formatedEndDate
+        });
       } else {
       }
     } catch (error) {
     } finally {
-      setIsFocusLoading(false);
+      dispatch({
+        type: 'SET_IS_FOCUS_LOADING',
+        payload: false
+      });
     }
   };
 
@@ -390,18 +407,6 @@ export default function FocusPage() {
     );
   });
 
-  const onPrevClick = () => {
-    if (!isFocusLoading) {
-      setDayOffset(dayOffset + 1);
-    }
-  };
-
-  const onNextClick = () => {
-    if (dayOffset > 0 && !isFocusLoading) {
-      setDayOffset(dayOffset - 1);
-    }
-  };
-
   const onInputFocus = (event: any) => {
     event.type === "focus" ? setShowTodoDropDown(true) : null;
   };
@@ -477,21 +482,10 @@ export default function FocusPage() {
   };
 
   return (
-    // <AppDataProvider>
       <div>
       <div className="bg-white shadow-lg p-4 flex flex-row justify-between items-center sticky z-10 sticky top-[57px]">
           <div className="">
-            <PrevNextNav 
-               selectedStartDay = {selectedStartDay}
-               selectedEndDay = {selectedEndDay}
-               dayOffset = {dayOffset}
-               setDayOffset = {setDayOffset}
-               range = {range}
-               setRange = {setRange}
-               onPrevClick = {onPrevClick}
-               onNextClick = {onNextClick}
-               isFocusLoading = {isFocusLoading}
-            />
+            <PrevNextNav />
           </div>
           <div className="flex items-center gap-4">
             
@@ -810,6 +804,5 @@ export default function FocusPage() {
         </div>
       </div>
     </div>
-    // </AppDataProvider>
   );
 }

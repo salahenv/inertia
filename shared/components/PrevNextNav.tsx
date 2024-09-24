@@ -1,5 +1,6 @@
-import { NextIcon, PrevIcon } from "../icons";
-import { useAppData } from "../hooks/AppDataProvider";
+import { NextIcon, PrevIcon } from '../icons';
+import { useFocusDispatch, useFocusStore } from "../pages/focus/useFocus";
+import { useAppData } from '../hooks/AppDataProvider';
 
 const durationFilters = [
   {
@@ -17,24 +18,47 @@ const durationFilters = [
 ];
 
 function PrevNextNav(props: any) {
-  const {
-    selectedStartDay,
-    selectedEndDay,
-    dayOffset,
-    setDayOffset,
-    range,
-    setRange,
-    onPrevClick,
-    onNextClick,
-    isFocusLoading,
-  } = props;
-
   const appData = useAppData();
+  const dispatch = useFocusDispatch();
+  const focusStore = useFocusStore();
   const { deviceType = "desktop" } = appData;
 
+  const onPrevClick = () => {
+    if (!isFocusLoading) {
+      dispatch({
+        type: 'SET_DAYS_OFFSET',
+        payload: dayOffset + 1
+      });
+    }
+  };
+
+  const onNextClick = () => {
+    if (dayOffset > 0 && !isFocusLoading) {
+      dispatch({
+        type: 'SET_DAYS_OFFSET',
+        payload: dayOffset - 1
+      });
+    }
+  };
+
+
+  const {
+    range,
+    dayOffset,
+    selectedStartDay,
+    selectedEndDay,
+    isFocusLoading,
+  } = focusStore;
+
   const onDurationClick = (value: string) => {
-    setDayOffset(0);
-    setRange(value);
+    dispatch({
+      type: 'SET_RANGE',
+      payload: value
+    });
+    dispatch({
+      type: 'SET_DAYS_OFFSET',
+      payload: 0
+    });
   };
 
   return (
