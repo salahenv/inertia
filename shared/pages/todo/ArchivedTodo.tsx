@@ -94,11 +94,6 @@ export default function ArchivedTodo() {
               {"Today Todo's"}
             </div>
           </Link>
-          {/* <Link href="/todo/routine">
-            <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">
-              {"Routine Todo's"}
-            </div>
-          </Link> */}
           <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">
             Archived
           </div>
@@ -107,6 +102,9 @@ export default function ArchivedTodo() {
               Completed
             </div>
           </Link>
+          <Link href="/todo/routine">
+              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">{"Routine"}</div>
+            </Link>
         </div>
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">

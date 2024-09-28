@@ -27,6 +27,8 @@ export default function TodoItem(props: any) {
         showCreatedDate = false,
         showUpdatedDate = false,
         disabledInput = false,
+        showRepeatMode = false,
+        showRepeatOnEvery = false,
         removeCb,
         updateCb
     } = props;
@@ -142,6 +144,16 @@ export default function TodoItem(props: any) {
             >
                 Un-Archive
             </button> : null
+          }
+          {
+            showRepeatMode ? 
+            <div>{todo.repeatMode}</div>
+             : null
+          }
+          {
+            showRepeatOnEvery && todo.repeatOnEvery ? 
+            <div>Every: {todo.repeatOnEvery}</div>
+             : null
           }
         </div>
       </div>

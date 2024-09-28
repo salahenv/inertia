@@ -2,77 +2,28 @@
 import { useEffect, useState } from "react";
 import { SkeletonLoaderTodo } from "../../components/Loader";
 import {
-  CompletedIcon,
-  NextIcon,
   NoFocus,
-  PrevIcon,
 } from "../../../shared/icons";
-import {formatDateString} from '../../../shared/dateUtils';
 import useAuth from '../../../shared/hooks/auth';
 import TodoItem from "./components/TodoItem";
 import Link from "next/link";
 
-export default function CompletedTodo() {
+export default function RoutineTodo() {
   useAuth();
   const [isCompletedTodoLoading, setIsCompletedTodoLoading] = useState(false);
   const [todosCompleted, setTodosCompleted] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      archived: boolean;
-    }[]
+    any[]
   >([]);
-  const [dayOffset, setDayOffset] = useState(1);
-  const [selectedDay, setSelectedDay] = useState("Yesterday");
 
   useEffect(() => {
-    getTodoCompleted();
-  }, [dayOffset]);
+    getRoutineTodo();
+  }, []);
 
-  const onPrevClick = () => {
-    if(!isCompletedTodoLoading) {
-      setDayOffset(dayOffset + 1);
-    } 
-  };
-
-  const onNextClick = () => {
-    if (dayOffset > 1 && !isCompletedTodoLoading) {
-      setDayOffset(dayOffset - 1);
-    }
-  };
-
-  function PrevNextNavigator() {
-    return (
-      <div className="flex items-center">
-        <div onClick={() => onPrevClick()}>
-          <PrevIcon 
-            color={
-              isCompletedTodoLoading ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
-            }
-          />
-        </div>
-        <div className="text-gray-800 font-bold text-xl ml-4 mr-4">
-          {selectedDay}
-        </div>
-        <div onClick={() => onNextClick()}>
-          <NextIcon
-            color={
-              (dayOffset === 1 || isCompletedTodoLoading) ? "rgba(37, 99, 235, .5)" : "rgba(37, 99, 235, 1)"
-            }
-          />
-        </div>
-      </div>
-    );
-  }
-
-  const getTodoCompleted = async () => {
+  const getRoutineTodo = async () => {
     setIsCompletedTodoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/completed?dayOffset=${dayOffset}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/routine-todos`,
         {
           headers: {
             Accept: "application/json",
@@ -85,8 +36,6 @@ export default function CompletedTodo() {
       const resData = await res.json();
       if (resData.success) {
         setTodosCompleted(resData.data.todos);
-        const formatedDate = formatDateString(resData.data.date);
-        setSelectedDay(formatedDate);
       } else {
       }
     } catch (error) {
@@ -106,17 +55,12 @@ export default function CompletedTodo() {
             <Link href="/todo/archived">
               <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Archived</div>
             </Link>
-            <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">Completed</div>
-             <Link href="/todo/routine">
-              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">{"Routine"}</div>
+            <Link href="/todo/completed">
+                <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">
+                Completed
+                </div>
             </Link>
-        </div>
-        <div className="flex flex-row justify-between items-center mb-4">
-          <div className="font-medium text-xl flex">
-            <CompletedIcon />
-            <div className="ml-2 text-gray-800">{"Completed Todo's"}</div>
-          </div>
-          <PrevNextNavigator />
+            <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">Routine</div>
         </div>
         <div>
           {isCompletedTodoLoading ? (
@@ -128,7 +72,8 @@ export default function CompletedTodo() {
                   <TodoItem 
                     todo = {todo}
                     disabledInput = {true}
-                    showUpdatedDate = {true}
+                    showRepeatMode = {true}
+                    showRepeatOnEvery = {true}
                   />
                 </div>
               );
