@@ -92,7 +92,7 @@ export default function RoutineTodo() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [routineName, setRoutineName] = useState('');
   const [selectedRepeatMode, setSelectedRepeatMode] = useState(repeatModes[1]);
-  const [selectedRepeatOn, setSelectedRepeatOn] = useState(null);
+  const [selectedRepeatOn, setSelectedRepeatOn] = useState<any>(null);
   const [isSavingRoutine, setIsSavingRoutine] = useState(false); 
 
 
@@ -131,7 +131,7 @@ export default function RoutineTodo() {
     const payload = {
       name: routineName,
       repeatMode: selectedRepeatMode.value,
-      repeatOnEvery: selectedRepeatOn.value,
+      repeatOnEvery: selectedRepeatMode.value !== 'daily' ? selectedRepeatOn.value : '',
     };
     try {
       const res = await fetch(
