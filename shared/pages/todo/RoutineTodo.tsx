@@ -131,7 +131,7 @@ export default function RoutineTodo() {
     const payload = {
       name: routineName,
       repeatMode: selectedRepeatMode.value,
-      repeatOnEvery: selectedRepeatMode.value !== 'daily' ? selectedRepeatOn.value : '',
+      repeatOnEvery: selectedRepeatMode.value !== 'daily' ? selectedRepeatOn?.value : '',
     };
     try {
       const res = await fetch(
@@ -231,7 +231,7 @@ export default function RoutineTodo() {
                                         <button
                                             key={index}
                                             className={`relative text-blue-600 whitespace-nowrap m-2 px-2 py-1 rounded border border-solid border-blue-600 ${
-                                            selectedRepeatOn.value === weekDay.value ? "bg-blue-600 text-white" : ""
+                                            selectedRepeatOn?.value === weekDay.value ? "bg-blue-600 text-white" : ""
                                             } group`}
                                             onClick={() => setSelectedRepeatOn(weekDay)}
                                         >
@@ -252,7 +252,7 @@ export default function RoutineTodo() {
                                         <button
                                             key={index}
                                             className={`relative text-blue-600 whitespace-nowrap m-2 px-2 py-1 rounded border border-solid border-blue-600 ${
-                                            selectedRepeatOn.value === monthDay.value ? "bg-blue-600 text-white" : ""
+                                            selectedRepeatOn?.value === monthDay.value ? "bg-blue-600 text-white" : ""
                                             } group`}
                                             onClick={() => setSelectedRepeatOn(monthDay)}
                                         >
