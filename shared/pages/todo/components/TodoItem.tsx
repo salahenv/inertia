@@ -21,6 +21,7 @@ function TimeAndDate({ date }: any) {
 export default function TodoItem(props: any) {
   const { 
         todo, 
+        showCheckbox = true,
         showDalete = false, 
         showArchive = false, 
         showUnArchive = false,
@@ -95,16 +96,18 @@ export default function TodoItem(props: any) {
 
   return (
     <div className="flex items-start space-x-2">
-      <div className="flex">
-        <input
-          disabled={disabledInput || isUpdatingTodo}
-          onClick={() => onUpdateTodo(todo, { completed: !todo.completed })}
-          checked={todo.completed}
-          type="checkbox"
-          id="checkbox"
-          className="disabled:border-gray-200 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-        />
-      </div>
+      { showCheckbox ?
+        <div className="flex">
+          <input
+            disabled={disabledInput || isUpdatingTodo}
+            onClick={() => onUpdateTodo(todo, { completed: !todo.completed })}
+            checked={todo.completed}
+            type="checkbox"
+            id="checkbox"
+            className="disabled:border-gray-200 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+          />
+        </div> : null
+      }
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{todo.name}</div>
         <div className="flex gap-4 items-center">
@@ -147,12 +150,12 @@ export default function TodoItem(props: any) {
           }
           {
             showRepeatMode ? 
-            <div>{todo.repeatMode}</div>
+            <div className="bg-blue-300 rounded px-2 text-gray-800">{todo.repeatMode}</div>
              : null
           }
           {
             showRepeatOnEvery && todo.repeatOnEvery ? 
-            <div>Every: {todo.repeatOnEvery}</div>
+            <div className="bg-indigo-300 rounded px-2 text-gray-800">Every {todo.repeatOnEvery}</div>
              : null
           }
         </div>
