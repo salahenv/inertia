@@ -86,7 +86,7 @@ export default function ArchivedTodo() {
   };
 
   return (
-    <div className="bg-neutral-100 p-4">
+    <div className="bg-neutral-100 p-4 min-h-screen">
       <div className="">
         <div className="overflow-x-scroll flex items-center md:justify-end gap-2 mb-8">
           <Link href="/todo">

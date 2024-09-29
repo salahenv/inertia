@@ -98,7 +98,7 @@ export default function CompletedTodo() {
 
   return (
   
-      <div className="bg-neutral-100 p-4">
+      <div className="bg-neutral-100 p-4 min-h-screen">
         <div className="overflow-x-scroll flex items-center md:justify-end gap-2 mb-8">
             <Link href="/todo">
             <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">{"Today Todo's"}</div>

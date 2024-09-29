@@ -108,7 +108,7 @@ export default function TodoPage() {
   }
 
   return (
-    <div className="bg-neutral-100 mb-32">
+    <div className="bg-neutral-100 mb-32 min-h-screen">
       <div className="p-4">
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
