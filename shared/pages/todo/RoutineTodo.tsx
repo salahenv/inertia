@@ -92,7 +92,7 @@ export default function RoutineTodo() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [routineName, setRoutineName] = useState('');
   const [selectedRepeatMode, setSelectedRepeatMode] = useState(repeatModes[1]);
-  const [selectedRepeatOn, setSelectedRepeatOn] = useState(weekDays[0]);
+  const [selectedRepeatOn, setSelectedRepeatOn] = useState(null);
   const [isSavingRoutine, setIsSavingRoutine] = useState(false); 
 
 
