@@ -114,6 +114,11 @@ export default function TodoItem(props: any) {
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={todo.updatedAt}></TimeAndDate> : null}
           {
+            todo?.routine ? 
+            <div className="bg-green-300 rounded px-2 text-gray-800">Routine</div>
+            : null
+          }
+          {
             showDalete ? 
           
           <div

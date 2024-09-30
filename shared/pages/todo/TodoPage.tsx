@@ -20,6 +20,7 @@ export default function TodoPage() {
       createdAt: Date;
       updatedAt: Date;
       archived: boolean;
+      routine: boolean;
     }[]
   >([]);
   const [showAddTodo, setShowAddTodo] = useState(true);
