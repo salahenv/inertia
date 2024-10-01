@@ -67,8 +67,12 @@ export default function RoutineItem(props: any) {
              : null
           }
           {
-            showRepeatOnEvery && todo.repeatOnEvery ? 
-            <div className="bg-indigo-300 rounded px-2 text-gray-800">Every {todo.repeatOnEvery}</div>
+            showRepeatOnEvery && todo.repeatOnEvery && todo.repeatOnEvery.length && todo.repeatMode !== 'daily' ? 
+            <div className="bg-green-300 rounded px-2 text-gray-800">{
+              todo.repeatOnEvery.map((val: string) => {
+                return (<span className="mx-1">{val}</span>)
+              })
+            }</div>
              : null
           }
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
