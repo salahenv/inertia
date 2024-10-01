@@ -92,7 +92,7 @@ export default function RoutineTodo() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [routineName, setRoutineName] = useState('');
   const [selectedRepeatMode, setSelectedRepeatMode] = useState(repeatModes[1]);
-  const [selectedRepeatOn, setSelectedRepeatOn] = useState<any>(null);
+  const [selectedRepeatOn, setSelectedRepeatOn] = useState<string[]>([]);
   const [isSavingRoutine, setIsSavingRoutine] = useState(false); 
 
 
@@ -131,7 +131,7 @@ export default function RoutineTodo() {
     const payload = {
       name: routineName,
       repeatMode: selectedRepeatMode.value,
-      repeatOnEvery: selectedRepeatMode.value !== 'daily' ? selectedRepeatOn?.value : '',
+      repeatOnEvery: selectedRepeatMode.value !== 'daily' ? selectedRepeatOn : '',
     };
     try {
       const res = await fetch(
@@ -169,6 +169,16 @@ export default function RoutineTodo() {
       return t._id !== routine._id;
     });
     setRoutines(uRoutines);
+  }
+
+  const onSelectedRepeat = (selectedValue: string) => {
+    if(selectedRepeatOn.includes(selectedValue)) {
+      const updated = selectedRepeatOn.filter((val) => selectedValue !== val);
+      setSelectedRepeatOn(updated);
+    } else {
+      const updated = [...selectedRepeatOn, selectedValue];
+      setSelectedRepeatOn(updated);
+    }
   }
 
   return (
@@ -231,9 +241,9 @@ export default function RoutineTodo() {
                                         <button
                                             key={index}
                                             className={`relative text-blue-600 whitespace-nowrap m-2 px-2 py-1 rounded border border-solid border-blue-600 ${
-                                            selectedRepeatOn?.value === weekDay.value ? "bg-blue-600 text-white" : ""
+                                            selectedRepeatOn.includes(weekDay.value) ? "bg-blue-600 text-white" : ""
                                             } group`}
-                                            onClick={() => setSelectedRepeatOn(weekDay)}
+                                            onClick={() => onSelectedRepeat(weekDay.value)}
                                         >
                                             {weekDay.label[0]}
                                         </button>
@@ -252,9 +262,9 @@ export default function RoutineTodo() {
                                         <button
                                             key={index}
                                             className={`relative text-blue-600 whitespace-nowrap m-2 px-2 py-1 rounded border border-solid border-blue-600 ${
-                                            selectedRepeatOn?.value === monthDay.value ? "bg-blue-600 text-white" : ""
+                                            selectedRepeatOn.includes(monthDay.value) ? "bg-blue-600 text-white" : ""
                                             } group`}
-                                            onClick={() => setSelectedRepeatOn(monthDay)}
+                                            onClick={() => onSelectedRepeat(monthDay.value)}
                                         >
                                             {monthDay.label}
                                         </button>
