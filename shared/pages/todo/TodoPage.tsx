@@ -112,16 +112,8 @@ export default function TodoPage() {
     <div className="bg-neutral-100 mb-32 min-h-screen">
       <div className="p-4">
         <div className="flex flex-row justify-between items-center mb-4">
-          <div className="font-medium text-xl flex">
-            <IncompletedIcon />
-            <div className="ml-2 text-gray-800">{"Todo's"}</div>
-          </div>
-          <div className="ml-4 overflow-x-scroll flex items-center gap-2">
-            <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">{"Today Todo's"}</div>
-            {/* <Link href="/todo/routine">
-              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">{"Routine Todo's"}</div>
-            </Link>
-  */}
+          <div className="overflow-x-scroll flex items-center gap-2">
+            <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Todo</div>
             <Link href="/todo/archived">
               <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Archived</div>
             </Link>
@@ -129,7 +121,7 @@ export default function TodoPage() {
               <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">Completed</div>
             </Link>
             <Link href="/todo/routine">
-              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">{"Routine"}</div>
+              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">Routine</div>
             </Link>
           </div>
         </div>

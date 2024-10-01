@@ -99,17 +99,19 @@ export default function CompletedTodo() {
   return (
   
       <div className="bg-neutral-100 p-4 min-h-screen">
-        <div className="overflow-x-scroll flex items-center md:justify-end gap-2 mb-8">
+        <div className="flex flex-row justify-between items-center mb-4">
+          <div className="overflow-x-scroll flex items-center gap-2">
+            <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Completed</div>
             <Link href="/todo">
-            <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">{"Today Todo's"}</div>
+              <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Todo</div>
             </Link>
             <Link href="/todo/archived">
-              <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border rounded px-2 py-1 border-blue-500">Archived</div>
+              <div className="whitespace-nowrap text-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">Archived</div>
             </Link>
-            <div className="whitespace-nowrap text-white bg-blue-500 font-medium cursor-pointer border border-blue-500 px-2 py-1 rounded">Completed</div>
-             <Link href="/todo/routine">
-              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">{"Routine"}</div>
+            <Link href="/todo/routine">
+              <div className="whitespace-nowrap font-medium text-blue-500 cursor-pointer border rounded px-2 py-1 border-blue-500">Routine</div>
             </Link>
+          </div>
         </div>
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
