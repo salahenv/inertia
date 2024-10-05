@@ -110,7 +110,7 @@ export default function TodoItem(props: any) {
       }
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{todo.name}</div>
-        <div className="flex gap-4 items-center overflow-x-scroll">
+        <div className="flex gap-4 items-center flex-wrap">
           {
             todo?.routine ? 
               <div className="bg-green-300 rounded px-2 text-gray-800">Routine</div>
