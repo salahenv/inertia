@@ -32,7 +32,9 @@ export default function RoutineItem(props: any) {
     repeatOnEvery,
     createdAt,
     updatedAt,
-    isActive
+    isActive,
+    missedCounter,
+    completedCounter,
   } = todo;
   const [isRemovingTodo, setIsRemovingTodo] = useState(false);
   const [isUpdatingRoutne, setIsUpdatingRoutine] = useState(false);
@@ -100,15 +102,17 @@ export default function RoutineItem(props: any) {
     <div className="flex items-start space-x-2">
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{name}</div>
-        <div className="flex gap-4 items-center flex-wrap">
+        <div className="flex gap-4 items-center flex-wrap mb-2">
+          <div className="font-medium text-xs bg-green-200 text-gray-600 rounded px-2 py-1">Completed {completedCounter} times</div>
+          <div className="font-medium text-xs bg-red-200 text-gray-600 rounded px-2 py-1">Missed {missedCounter} times</div>
           {
             showRepeatMode ? 
-            <div className="bg-blue-300 rounded px-2 text-gray-800">{repeatMode}</div>
+            <div className="bg-blue-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">{repeatMode}</div>
              : null
           }
           {
             showRepeatOnEvery && repeatOnEvery && repeatOnEvery.length && repeatMode !== 'daily' ? 
-            <div className="bg-green-300 rounded px-2 text-gray-800">{
+            <div className="bg-green-300 font-medium text-xs rounded px-2 py-1 text-gray-800">{
               repeatOnEvery.map((val: string, index: number) => {
                 return (<span key = {index} className="mx-1">{val}</span>)
               })
