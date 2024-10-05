@@ -5,7 +5,6 @@ import {
   NoFocus,
 } from "../../../shared/icons";
 import useAuth from '../../../shared/hooks/auth';
-import TodoItem from "./components/TodoItem";
 import Link from "next/link";
 import Spinner from "@/shared/components/Spinner";
 import RoutineItem from "./components/RoutineItem";
@@ -104,7 +103,7 @@ export default function RoutineTodo() {
     setIsCompletedTodoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/routine-todos`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/routine`,
         {
           headers: {
             Accept: "application/json",
@@ -132,10 +131,11 @@ export default function RoutineTodo() {
       name: routineName,
       repeatMode: selectedRepeatMode.value,
       repeatOnEvery: selectedRepeatMode.value !== 'daily' ? selectedRepeatOn : '',
+      isActive: true
     };
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/create-routine-todo`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/routine/create`,
         {
           headers: {
             Accept: "application/json",
@@ -169,6 +169,16 @@ export default function RoutineTodo() {
       return t._id !== routine._id;
     });
     setRoutines(uRoutines);
+  }
+
+  const updateCb = (routine: any) => {
+    const uTodos = routines.map((r) => {
+      if(r._id === routine._id) {
+        r = routine;
+      }
+      return r;
+    });
+    setRoutines(uTodos);
   }
 
   const onSelectedRepeat = (selectedValue: string) => {
@@ -335,8 +345,10 @@ export default function RoutineTodo() {
                     showRepeatOnEvery = {true}
                     showCheckbox = {false}
                     showDalete = {true}
+                    updateCb = {updateCb}
                     removeCb = {removeCb}
-                    showCreatedDate = {false}
+                    showCreatedDate = {true}
+                    showActiveToggle = {true}
                   />
                 </div>
               );

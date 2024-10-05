@@ -96,21 +96,9 @@ export default function TodoItem(props: any) {
 
   return (
     <div className="flex items-start space-x-2">
-      { showCheckbox ?
-        <div className="flex">
-          <input
-            disabled={disabledInput || isUpdatingTodo}
-            onClick={() => onUpdateTodo(todo, { completed: !todo.completed })}
-            checked={todo.completed}
-            type="checkbox"
-            id="checkbox"
-            className="disabled:border-gray-200 h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-          />
-        </div> : null
-      }
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{todo.name}</div>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center overflow-x-scroll">
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={todo.updatedAt}></TimeAndDate> : null}
           {
