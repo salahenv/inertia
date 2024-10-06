@@ -1,9 +1,5 @@
 "use client";
 import { useState } from "react";
-
-import {
-  DeleteIcon,
-} from "../../../icons";
 import {
   formatDate,
 } from "../../../dateUtils";
@@ -28,8 +24,6 @@ export default function TodoItem(props: any) {
         showCreatedDate = false,
         showUpdatedDate = false,
         disabledInput = false,
-        showRepeatMode = false,
-        showRepeatOnEvery = false,
         removeCb,
         updateCb
     } = props;
@@ -110,7 +104,7 @@ export default function TodoItem(props: any) {
       }
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{todo.name}</div>
-        <div className="flex gap-4 items-center flex-wrap">
+        <div className="flex gap-1 items-center flex-wrap mb-2">
           {
             todo?.routine ? 
               <div className="bg-green-300 rounded px-2 text-gray-800">Routine</div>
@@ -118,6 +112,8 @@ export default function TodoItem(props: any) {
           }
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={todo.updatedAt}></TimeAndDate> : null}
+        </div>
+        <div className="flex gap-4 items-center flex-wrap">
           {
             showDalete ? 
           
@@ -152,16 +148,6 @@ export default function TodoItem(props: any) {
             >
                 Un-Archive
             </button> : null
-          }
-          {
-            showRepeatMode ? 
-            <div className="bg-blue-300 rounded px-2 text-gray-800">{todo.repeatMode}</div>
-             : null
-          }
-          {
-            showRepeatOnEvery && todo.repeatOnEvery ? 
-            <div className="bg-indigo-300 rounded px-2 text-gray-800">Every {todo.repeatOnEvery}</div>
-             : null
           }
         </div>
       </div>

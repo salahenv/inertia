@@ -102,7 +102,7 @@ export default function RoutineItem(props: any) {
     <div className="flex items-start space-x-2">
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{name}</div>
-        <div className="flex gap-4 items-center flex-wrap mb-2">
+        <div className="flex gap-1 items-center flex-wrap mb-2">
           {
             totolCounter ? 
               <div className="font-medium text-xs bg-red-200 text-gray-600 rounded px-2 py-1">Missed {missedCounter}/{totolCounter}</div> : null
@@ -124,7 +124,7 @@ export default function RoutineItem(props: any) {
           { showCreatedDate ? <TimeAndDate date={createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={updatedAt}></TimeAndDate> : null}
         </div>
-        <div className="flex gap-4 items-center flex-wrap">
+        <div className="flex gap-1 items-center flex-wrap">
           {
             showDalete ? 
           
