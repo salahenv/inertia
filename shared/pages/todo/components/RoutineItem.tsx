@@ -34,7 +34,7 @@ export default function RoutineItem(props: any) {
     updatedAt,
     isActive,
     missedCounter,
-    completedCounter,
+    totolCounter,
   } = todo;
   const [isRemovingTodo, setIsRemovingTodo] = useState(false);
   const [isUpdatingRoutne, setIsUpdatingRoutine] = useState(false);
@@ -103,8 +103,10 @@ export default function RoutineItem(props: any) {
       <div className="flex flex-col">
         <div className="mb-2 text-gray-800">{name}</div>
         <div className="flex gap-4 items-center flex-wrap mb-2">
-          <div className="font-medium text-xs bg-green-200 text-gray-600 rounded px-2 py-1">Completed {completedCounter} times</div>
-          <div className="font-medium text-xs bg-red-200 text-gray-600 rounded px-2 py-1">Missed {missedCounter} times</div>
+          {
+            totolCounter ? 
+              <div className="font-medium text-xs bg-red-200 text-gray-600 rounded px-2 py-1">Missed {missedCounter}/{totolCounter}</div> : null
+          }
           {
             showRepeatMode ? 
             <div className="bg-blue-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">{repeatMode}</div>
@@ -121,6 +123,36 @@ export default function RoutineItem(props: any) {
           }
           { showCreatedDate ? <TimeAndDate date={createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={updatedAt}></TimeAndDate> : null}
+          {
+            showDalete ? 
+          
+          <div
+            className="cursor-pointer"
+          >
+            <button
+                disabled = {isRemovingTodo}
+                onClick={() => onDeleteRoutine(todo)}
+                className="disabled:border-gray-200 disabled:text-gray-200 text-red-500 border border-red-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
+            >Delete
+            </button>
+          </div> : null
+          }
+          {
+            showActiveToggle ? 
+          
+          <div
+            className="cursor-pointer"
+          >
+            <button
+                disabled = {isUpdatingRoutne}
+                onClick={() => onUpdateRoutine(todo, { isActive: !isActive })}
+                className="disabled:border-gray-200 disabled:text-gray-200 text-blue-500 border border-blue-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
+            >{(!todo.hasOwnProperty('isActive') || isActive)  ? 'De-Activate': 'Activate'}
+            </button>
+          </div> : null
+          }
+        </div>
+        <div className="flex gap-4 items-center flex-wrap">
           {
             showDalete ? 
           
