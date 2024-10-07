@@ -105,7 +105,10 @@ export default function RoutineItem(props: any) {
         <div className="flex gap-1 items-center flex-wrap mb-2">
           {
             totolCounter ? 
-              <div className="font-medium text-xs bg-red-200 text-gray-600 rounded px-2 py-1">Missed {missedCounter}/{totolCounter}</div> : null
+              <div 
+                className="font-medium text-xs bg-pink-200 text-gray-600 rounded px-2 py-1">
+                  Missed {Math.round((missedCounter / totolCounter) * 100)} % times
+              </div> : null
           }
           {
             showRepeatMode ? 
