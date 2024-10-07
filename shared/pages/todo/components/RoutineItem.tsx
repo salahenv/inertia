@@ -109,14 +109,14 @@ export default function RoutineItem(props: any) {
           }
           {
             showRepeatMode ? 
-            <div className="bg-blue-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">{repeatMode}</div>
+            <div className="bg-blue-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">{repeatMode.toUpperCase()}</div>
              : null
           }
           {
             showRepeatOnEvery && repeatOnEvery && repeatOnEvery.length && repeatMode !== 'daily' ? 
             <div className="bg-green-300 font-medium text-xs rounded px-2 py-1 text-gray-800">{
               repeatOnEvery.map((val: string, index: number) => {
-                return (<span key = {index} className="mx-1">{val}</span>)
+                return (<span key = {index} className="mx-1">{val.toUpperCase()}</span>)
               })
             }</div>
              : null

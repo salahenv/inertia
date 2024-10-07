@@ -107,13 +107,13 @@ export default function TodoItem(props: any) {
         <div className="flex gap-1 items-center flex-wrap mb-2">
           {
             todo?.routine ? 
-              <div className="bg-green-300 rounded px-2 text-gray-800">Routine</div>
+              <div className="bg-green-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">Routine</div>
             : null
           }
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={todo.updatedAt}></TimeAndDate> : null}
         </div>
-        <div className="flex gap-4 items-center flex-wrap">
+        <div className="flex gap-1 items-center flex-wrap">
           {
             showDalete ? 
           
