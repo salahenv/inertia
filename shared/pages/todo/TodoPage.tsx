@@ -8,6 +8,7 @@ import {
 import useAuth from '../../../shared/hooks/auth';
 import Link from "next/link";
 import TodoItem from "./components/TodoItem";
+import DetailsModal from "./components/DetailsModal";
 
 export default function TodoPage() {
   useAuth();
@@ -26,6 +27,8 @@ export default function TodoPage() {
   const [showAddTodo, setShowAddTodo] = useState(true);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [todo, setTodo] = useState(null);
 
   useEffect(() => {
     getTodo();
@@ -108,8 +111,25 @@ export default function TodoPage() {
     setTodos(uTodos);
   }
 
+  const onDetailsClick = (todo: any) => {
+    setShowDetailsModal(true);
+    setTodo(todo);
+  }
+
+  const onCloseDetailsModal = () => {
+    setShowDetailsModal(false);
+    setTodo(null);
+  }
+
   return (
     <div className="bg-neutral-100 mb-32 min-h-screen">
+      { 
+        showDetailsModal ? 
+          <DetailsModal
+            closeCb = {onCloseDetailsModal}
+            todo = {todo}
+          /> : null
+      }
       <div className="p-4">
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="overflow-x-scroll flex items-center gap-2">
@@ -134,7 +154,11 @@ export default function TodoPage() {
                 {todos && todos.length
                   ? todos.map((todo: any, index: number) => {
                       return (
-                        <div key={index} className="mb-2 border border-gray-300 p-4 rounded shadow bg-white">
+                        <div 
+                          key={index} 
+                          className="mb-2 border border-gray-300 p-4 rounded shadow bg-white cursor-pointer"
+                          onClick = {() => onDetailsClick(todo)}
+                        >
                           <TodoItem 
                             todo = {todo}
                             disabledInput = {false}
