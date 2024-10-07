@@ -31,7 +31,8 @@ export default function TodoItem(props: any) {
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
   const [isRemovingTodo, setIsRemovingTodo] = useState(false);
 
-  const onUpdateTodo = async (todo: any, payload: any) => {
+  const onUpdateTodo = async (event: any, todo: any, payload: any) => {
+    event.stopPropagation();
     setIsUpdatingTodo(true);
     try {
       const res = await fetch(
@@ -62,7 +63,8 @@ export default function TodoItem(props: any) {
     }
   };
 
-  const onDeleteFocusTodo = async (todo: any) => {
+  const onDeleteFocusTodo = async (event: any, todo: any) => {
+    event.stopPropagation();
     setIsRemovingTodo(true);
     try {
       const res = await fetch(
@@ -94,7 +96,7 @@ export default function TodoItem(props: any) {
         <div className="flex">
           <input
             disabled={disabledInput || isUpdatingTodo}
-            onClick={() => onUpdateTodo(todo, { completed: !todo.completed })}
+            onClick={(e) => onUpdateTodo(e, todo, { completed: !todo.completed })}
             checked={todo.completed}
             type="checkbox"
             id="checkbox"
@@ -119,11 +121,11 @@ export default function TodoItem(props: any) {
           
           <div
             className="cursor-pointer"
-            onClick={() => onDeleteFocusTodo(todo)}
+            onClick={(e) => onDeleteFocusTodo(e, todo)}
           >
             <button
                 disabled = {isRemovingTodo}
-                onClick={() => onUpdateTodo(todo, { archived: true })}
+                onClick={(e) => onUpdateTodo(e, todo, { archived: true })}
                 className="disabled:border-gray-200 disabled:text-gray-200 text-red-500 border border-red-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >Delete
             </button>
@@ -133,7 +135,7 @@ export default function TodoItem(props: any) {
             showArchive ? 
             <button
                 disabled={isUpdatingTodo}
-                onClick={() => onUpdateTodo(todo, { archived: true })}
+                onClick={(e) => onUpdateTodo(e, todo, { archived: true })}
                 className="disabled:border-gray-200 disabled:text-gray-200  text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >Archive
             </button>
@@ -143,7 +145,7 @@ export default function TodoItem(props: any) {
             showUnArchive ? 
             <button
                 disabled={isUpdatingTodo}
-                onClick={() => onUpdateTodo(todo, { archived: false })}
+                onClick={(e) => onUpdateTodo(e, todo, { archived: false })}
                 className="disabled:border-gray-200 disabled:text-gray-200 text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >
                 Un-Archive
