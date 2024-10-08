@@ -121,8 +121,6 @@ export default function DetailsModal(props: any) {
             )}
           </button>
           {isCommentsLoading && <div>Loading...</div>}
-    
-          {/* Scrollable Comments Section */}
           <div className="h-64 overflow-y-auto">
             {!isCommentsLoading &&
               comments.map((comment: any, index: number) => {
