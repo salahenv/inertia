@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { SkeletonLoaderTodo } from "../../components/Loader";
 import { NoFocus } from "../../icons";
 import useAuth from "../../hooks/auth";
@@ -9,6 +9,7 @@ import { debounce } from "@/app/utils";
 
 export default function ArchivedTodo() {
   useAuth();
+  const target = useRef(null);
   const [isTodoLoading, setIsTodoLoading] = useState(false);
   const [todos, setTodos] = useState<
     {
@@ -20,29 +21,52 @@ export default function ArchivedTodo() {
     }[]
   >([]);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [totalPage, setTotalPage] = useState(1);
 
   useEffect(() => {
+    console.log(page);
     getTodo(page);
   }, [page]);
 
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (
+  //       window.innerHeight + document.documentElement.scrollTop + 100 >=
+  //       document.documentElement.scrollHeight
+  //     ) {
+  //       if (hasMore && !isTodoLoading) {
+  //         setPage((prevPage) => prevPage + 1);
+  //       }
+  //     }
+  //   };
+
+  //   const debouncedHandleScroll = debounce(handleScroll, 200);
+
+  //   window.addEventListener("scroll", debouncedHandleScroll);
+  //   return () => window.removeEventListener("scroll", debouncedHandleScroll);
+  // }, [hasMore, isTodoLoading]);
+
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 100 >=
-        document.documentElement.scrollHeight
-      ) {
-        if (hasMore && !isTodoLoading) {
+
+    const observer = new IntersectionObserver((entries) => {
+      if(entries[0].isIntersecting) {
+        console.log("intersecting");
+        if(page <= totalPage && !isTodoLoading) {
           setPage((prevPage) => prevPage + 1);
         }
+      } 
+    });
+    if(target?.current) {
+      observer.observe(target?.current);
+    }
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      const current = target?.current;
+      if (current) {
+        observer.unobserve(current);
       }
     };
-
-    const debouncedHandleScroll = debounce(handleScroll, 200);
-
-    window.addEventListener("scroll", debouncedHandleScroll);
-    return () => window.removeEventListener("scroll", debouncedHandleScroll);
-  }, [hasMore, isTodoLoading]);
+  })
 
   const getTodo = async (page: number) => {
     try {
@@ -60,10 +84,14 @@ export default function ArchivedTodo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setTodos((prevTodos) => [...prevTodos, ...resData.data.todos]);
-        if (resData.data.todos.length === 0) {
-          setHasMore(false); // No more todos to load
-        }
+        const {
+          data: {
+            todos = [],
+            totalPages = 0,
+          } = {},
+        } = resData;
+        setTotalPage(totalPages);
+        setTodos((prevTodos) => [...prevTodos, ...todos]);
       } else {
         throw new Error("Failed to fetch todos.");
       }
@@ -124,12 +152,13 @@ export default function ArchivedTodo() {
                   />
                 </div>
               ))}
+              <div ref = {target}></div>
               {isTodoLoading && (
                 <div className="mt-4 text-gray-800 text-center">
                   <SkeletonLoaderTodo />
                 </div>
               )}
-              {!hasMore && (
+              {page > totalPage && (
                 <div className="mt-4 text-gray-800 text-center text-medium">
                   That’s all. You don’t have more archived todos.
                 </div>
