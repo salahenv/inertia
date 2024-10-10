@@ -25,7 +25,8 @@ export default function TodoItem(props: any) {
         showUpdatedDate = false,
         disabledInput = false,
         removeCb,
-        updateCb
+        updateCb,
+        missed,
     } = props;
     
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
@@ -110,6 +111,11 @@ export default function TodoItem(props: any) {
           {
             todo?.routine ? 
               <div className="bg-green-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">Routine</div>
+            : null
+          }
+          {
+            todo?.missed ? 
+              <div className="bg-red-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">Missed</div>
             : null
           }
           { showCreatedDate ? <TimeAndDate date={todo.createdAt}></TimeAndDate> : null}
