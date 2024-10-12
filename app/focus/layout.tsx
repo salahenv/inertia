@@ -18,7 +18,7 @@ export default function FocusLayout({
     <html lang="en">
 
       <body className={inter.className}>
-        <Header btnText = 'Todo'/>
+        <Header btnText = 'Todo' showMenu={true}/>
         {children}
       </body>
     </html>

@@ -18,7 +18,7 @@ export default function TodoLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header btnText = 'Focus'/>
+        <Header btnText = 'Focus' showMenu = {true}/>
         {children}
       </body>
     </html>
