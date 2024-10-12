@@ -344,7 +344,7 @@ export default function RoutineTodo() {
                   key={index} 
                   className={
                     `mb-2 border border-gray-300 p-4 rounded shadow 
-                    ${todo.isActive ? ' bg-green-100' : ' bg-red-100'}
+                    ${todo.isActive ? ' bg-green-50' : ' bg-red-50'}
                   `}>
                   <RoutineItem 
                     todo = {todo}
