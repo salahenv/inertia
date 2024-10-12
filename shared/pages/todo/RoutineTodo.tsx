@@ -340,7 +340,12 @@ export default function RoutineTodo() {
           ) : routines && routines.length ? (
             routines.map((todo, index) => {
               return (
-                <div key={index} className="mb-2 border border-gray-300 p-4 rounded shadow bg-white">
+                <div 
+                  key={index} 
+                  className={
+                    `mb-2 border border-gray-300 p-4 rounded shadow 
+                    ${todo.isActive ? ' bg-green-100' : ' bg-red-100'}
+                  `}>
                   <RoutineItem 
                     todo = {todo}
                     disabledInput = {true}
