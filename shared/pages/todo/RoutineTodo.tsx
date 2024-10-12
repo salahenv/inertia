@@ -115,7 +115,14 @@ export default function RoutineTodo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setRoutines(resData.data.todos);
+        const {
+          todos = [],
+        } = resData.data;
+        let routines = [
+          ...todos.filter((todo: any) => todo.isActive),
+          ...todos.filter((todo: any) => !todo.isActive)
+        ];
+        setRoutines(routines);
       } else {
       }
     } catch (error) {
