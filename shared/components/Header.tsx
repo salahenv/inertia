@@ -9,6 +9,7 @@ const Header = ({
   btnText,
   showMenu = false
   } : any) => {
+
     const router = useRouter();
     const onButtonClick = () => {
       if(btnText === 'Todo') {
@@ -18,6 +19,20 @@ const Header = ({
         router.push('/focus');
       }
     }
+
+    const [selectedMenu, setSelectedMenu] = useState('');
+
+    useEffect(() => {
+      const url  = window.location.href;
+      console.log(url);
+      if( url.includes('/focus')){
+        setSelectedMenu('focus');
+      } else if(url.includes('/todo/routine')) {
+        setSelectedMenu('routine');
+      } else {
+        setSelectedMenu('todo');
+      }
+    }, []);
 
   return (
     <div className='shadow z-10 sticky top-0 bg-white px-4 py-2 border-b border-solid border-gray-400 flex items-center'>
@@ -35,10 +50,14 @@ const Header = ({
       { showMenu ?
       <div className='flex'>
         <Link href = '/focus'>
-          <div className='font-medium cursor-pointer text-xl text-gray-600 ml-4 hover:text-gray-900'>Focus</div>
+          <div className={
+            `font-medium cursor-pointer text-xl ml-4 hover:text-blue-500 ${selectedMenu === 'focus' ? 'text-blue-600': 'text-gray-600'}`
+          }>Focus</div>
         </Link>
         <div className='relative group ml-4 z-50'>
-          <div className='font-medium cursor-pointer text-xl text-gray-600 hover:text-gray-900'>Todo</div>
+          <div  className={
+            `font-medium cursor-pointer text-xl hover:text-blue-500 ${selectedMenu === 'todo' ? 'text-blue-600': 'text-gray-600'}`
+          }>Todo</div>
           <div className='absolute hidden group-hover:block bg-white shadow p-2 rounded'>
             <Link href = '/todo'>
               <div className='text-gray-600 mb-1'>Today</div>
@@ -52,7 +71,9 @@ const Header = ({
           </div>
         </div>
         <Link href = '/todo/routine'>
-          <div className='font-medium cursor-pointer text-xl text-gray-600 ml-4 hover:text-gray-900'>Routine</div>
+          <div className={
+            `font-medium ml-4 cursor-pointer text-xl hover:text-blue-500 ${selectedMenu === 'routine' ? 'text-blue-600': 'text-gray-600'}`
+          }>Routine</div>
         </Link>
       </div> : null
       }

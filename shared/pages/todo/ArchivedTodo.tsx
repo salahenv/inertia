@@ -1,11 +1,9 @@
 "use client";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SkeletonLoaderTodo } from "../../components/Loader";
 import { NoFocus } from "../../icons";
 import useAuth from "../../hooks/auth";
 import TodoItem from "./components/TodoItem";
-import Link from "next/link";
-import { debounce } from "@/app/utils";
 
 export default function ArchivedTodo() {
   useAuth();
