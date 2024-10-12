@@ -118,11 +118,7 @@ export default function RoutineTodo() {
         const {
           todos = [],
         } = resData.data;
-        let routines = [
-          ...todos.filter((todo: any) => todo.isActive),
-          ...todos.filter((todo: any) => !todo.isActive)
-        ];
-        setRoutines(routines);
+        setRoutines(todos);
       } else {
       }
     } catch (error) {
