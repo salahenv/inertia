@@ -127,11 +127,10 @@ export default function TodoItem(props: any) {
           
           <div
             className="cursor-pointer"
-            onClick={(e) => onDeleteFocusTodo(e, todo)}
           >
             <button
-                disabled = {isRemovingTodo}
-                onClick={(e) => onUpdateTodo(e, todo, { archived: true })}
+                disabled = {isRemovingTodo || isUpdatingTodo}
+                onClick={(e) => onDeleteFocusTodo(e, todo)}
                 className="disabled:border-gray-200 disabled:text-gray-200 text-red-500 border border-red-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >Delete
             </button>
@@ -140,7 +139,7 @@ export default function TodoItem(props: any) {
           {
             showArchive ? 
             <button
-                disabled={isUpdatingTodo}
+                disabled={isUpdatingTodo || isRemovingTodo}
                 onClick={(e) => onUpdateTodo(e, todo, { archived: true })}
                 className="disabled:border-gray-200 disabled:text-gray-200  text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >Archive
@@ -150,7 +149,7 @@ export default function TodoItem(props: any) {
           {
             showUnArchive ? 
             <button
-                disabled={isUpdatingTodo}
+                disabled={isUpdatingTodo || isRemovingTodo}
                 onClick={(e) => onUpdateTodo(e, todo, { archived: false })}
                 className="disabled:border-gray-200 disabled:text-gray-200 text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
             >
