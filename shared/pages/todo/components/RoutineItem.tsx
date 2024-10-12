@@ -107,7 +107,7 @@ export default function RoutineItem(props: any) {
             totolCounter ? 
               <div 
                 className="font-medium text-xs bg-pink-200 text-gray-600 rounded px-2 py-1">
-                  Missed {Math.round((missedCounter / totolCounter) * 100)}% times <span className="ml-2">({missedCounter/totolCounter})</span>
+                  Missed {Math.round((missedCounter / totolCounter) * 100)}% times <span className="ml-2">({missedCounter + "/" + totolCounter})</span>
               </div> : null
           }
           {
