@@ -104,13 +104,6 @@ export default function RoutineItem(props: any) {
         <div className="mb-2 text-gray-800">{name}</div>
         <div className="flex gap-1 items-center flex-wrap mb-2">
           {
-            totolCounter ? 
-              <div 
-                className="font-medium text-xs bg-pink-200 text-gray-600 rounded px-2 py-1">
-                  Missed {Math.round((missedCounter / totolCounter) * 100)}% times<span className="ml-1">({missedCounter + "/" + totolCounter})</span>
-              </div> : null
-          }
-          {
             showRepeatMode ? 
             <div className="bg-blue-300 rounded px-2 py-1 px-2  text-gray-600 font-medium text-xs">{repeatMode.toUpperCase()}</div>
              : null
@@ -123,6 +116,15 @@ export default function RoutineItem(props: any) {
               })
             }</div>
              : null
+          }
+        </div>
+        <div className="flex gap-1 items-center flex-wrap mb-2">
+          {
+            totolCounter ? 
+              <div 
+                className="font-medium text-xs bg-pink-200 text-gray-600 rounded px-2 py-1">
+                  Missed {Math.round((missedCounter / totolCounter) * 100)}% times<span className="ml-1">({missedCounter + "/" + totolCounter})</span>
+              </div> : null
           }
           { showCreatedDate ? <TimeAndDate date={createdAt}></TimeAndDate> : null}
           { showUpdatedDate ? <TimeAndDate date={updatedAt}></TimeAndDate> : null}
