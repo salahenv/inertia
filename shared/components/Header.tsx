@@ -27,9 +27,9 @@ const Header = ({
       console.log(url);
       if( url.includes('/focus')){
         setSelectedMenu('focus');
-      } else if(url.includes('/todo/routine')) {
+      } else if(url.includes('/routine')) {
         setSelectedMenu('routine');
-      } else {
+      } else if(url.includes('/todo')) {
         setSelectedMenu('todo');
       }
     }, []);
@@ -70,7 +70,7 @@ const Header = ({
             </Link>
           </div>
         </div>
-        <Link href = '/todo/routine'>
+        <Link href = '/routine'>
           <div className={
             `font-medium ml-4 cursor-pointer text-xl hover:text-blue-500 ${selectedMenu === 'routine' ? 'text-blue-600 border-blue-600 border-b-4': 'text-gray-600'}`
           }>Routine</div>
