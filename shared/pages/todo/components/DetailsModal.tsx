@@ -101,12 +101,13 @@ export default function DetailsModal(props: any) {
           <textarea 
             placeholder="enter comment"
             rows={2} 
+            value = {commentText}
             className="w-full mb-2 p-4"
             onChange={(e) => setCommentText(e.target.value)}
           >
           </textarea>
           <button
-            disabled={isSavingComment}
+            disabled={isSavingComment || !commentText}
             className="disabled:opacity-75 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full mb-4"
             onClick={() => {
               createComment(_id);
