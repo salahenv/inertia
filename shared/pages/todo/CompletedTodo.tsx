@@ -11,6 +11,7 @@ import {formatDateString} from '../../../shared/dateUtils';
 import useAuth from '../../../shared/hooks/auth';
 import TodoItem from "./components/TodoItem";
 import Link from "next/link";
+import DetailsModal from "./components/DetailsModal";
 
 export default function CompletedTodo() {
   useAuth();
@@ -27,6 +28,8 @@ export default function CompletedTodo() {
   >([]);
   const [dayOffset, setDayOffset] = useState(1);
   const [selectedDay, setSelectedDay] = useState("Yesterday");
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [todo, setTodo] = useState(null);
 
   useEffect(() => {
     getTodoCompleted();
@@ -96,9 +99,26 @@ export default function CompletedTodo() {
     }
   };
 
+  const onDetailsClick = (todo: any) => {
+    setShowDetailsModal(true);
+    setTodo(todo);
+  }
+
+  const onCloseDetailsModal = () => {
+    setShowDetailsModal(false);
+    setTodo(null);
+  }
+
   return (
   
       <div className="bg-neutral-100 p-4 min-h-screen">
+        { 
+          showDetailsModal ? 
+          <DetailsModal
+            closeCb = {onCloseDetailsModal}
+            todo = {todo}
+          /> : null
+        }
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
             <CompletedIcon />
@@ -112,7 +132,10 @@ export default function CompletedTodo() {
           ) : todosCompleted && todosCompleted.length ? (
             todosCompleted.map((todo, index) => {
               return (
-                <div key={index} className="mb-2 border border-gray-300 p-4 rounded shadow bg-white">
+                <div
+                  onClick = {() => onDetailsClick(todo)}
+                  key={index} 
+                  className="mb-2 border border-gray-300 p-4 cursor-pointer rounded shadow bg-white">
                   <TodoItem 
                     todo = {todo}
                     disabledInput = {true}
