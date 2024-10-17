@@ -336,6 +336,7 @@ export default function RoutineTodo() {
                     showRepeatMode = {true}
                     showRepeatOnEvery = {true}
                     showCheckbox = {false}
+                    showDalete = {true}
                     updateCb = {updateCb}
                     removeCb = {removeCb}
                     showCreatedDate = {true}

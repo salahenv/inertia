@@ -131,7 +131,7 @@ export default function RoutineItem(props: any) {
         </div>
         <div className="flex gap-1 items-center flex-wrap">
           {
-            showDalete ? 
+            showDalete && !isActive ? 
           
           <div
             className="cursor-pointer"
