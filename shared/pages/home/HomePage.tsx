@@ -8,7 +8,7 @@ export default function HomePage() {
       <div className="bg-neutral-100 p-4 min-h-screen">
         <div className="">
           <div className="flex flex-col sm:flex-row sm:justify-start justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8">
-            <Link href="/focus">
+            <Link href="/inertia/focus">
               <div className="bg-orange-100 p-8">
                 <div className="flex text-blue-600 font-medium text-xl items-center">
                   <div className="mr-1">
@@ -18,7 +18,7 @@ export default function HomePage() {
                 </div>
               </div>
             </Link>
-            <Link href="/todo">
+            <Link href="/inertia/todo">
               <div className="bg-cyan-100 p-8">
                 <div className="flex text-blue-600 font-medium text-xl items-center">
                 <div className="mr-1">
