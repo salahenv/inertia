@@ -536,7 +536,7 @@ export default function FocusPage() {
                 </button>
               </div>
               <div className="mt-4">
-                {/* <div className="relative">
+                <div className="relative">
                   <input
                     type="text"
                     required
@@ -547,7 +547,7 @@ export default function FocusPage() {
                     onFocus={onInputFocus}
                     onBlur={onInputFocus}
                   ></input>
-                  {showTodoDropDown ? (
+                  {/* {showTodoDropDown ? (
                     <div className="md:h-48 overflow-y-scroll shadow-2xl rounded p-2 z-10 w-full absolute bg-gray-200 top-[42px] left-0">
                       {isTodoLoading ? (
                         <SkeletonLoaderFocus />
@@ -575,8 +575,8 @@ export default function FocusPage() {
                         </div>
                       )}
                     </div>
-                  ) : null}
-                </div> */}
+                  ) : null} */}
+                </div>
                 <div>
                   <div className="mb-2 text-neutral-900">
                     Focusing for
