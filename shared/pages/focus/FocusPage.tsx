@@ -536,7 +536,7 @@ export default function FocusPage() {
                 </button>
               </div>
               <div className="mt-4">
-                <div className="relative">
+                {/* <div className="relative">
                   <input
                     type="text"
                     required
@@ -576,7 +576,7 @@ export default function FocusPage() {
                       )}
                     </div>
                   ) : null}
-                </div>
+                </div> */}
                 <div>
                   <div className="mb-2 text-neutral-900">
                     Focusing for
