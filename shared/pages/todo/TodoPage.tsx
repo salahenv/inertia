@@ -16,7 +16,7 @@ export default function TodoPage() {
   const [showAddTodo, setShowAddTodo] = useState(true);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
-  
+
   const {
     todo: {
       todayTodo = [],
@@ -94,7 +94,7 @@ export default function TodoPage() {
   };
 
   const removeCb = (todo: any) => {
-    const uTodos = todos.filter((t) => {
+    const uTodos = todayTodo.filter((t: any) => {
       return t._id !== todo._id;
     });
     dispatch({
@@ -104,7 +104,7 @@ export default function TodoPage() {
   }
 
   const updateCb = (todo: any) => {
-    const uTodos = todos.map((t) => {
+    const uTodos = todayTodo.map((t: any) => {
       if(t._id === todo._id) {
         t = todo;
       }
