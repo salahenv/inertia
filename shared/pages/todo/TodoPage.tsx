@@ -153,6 +153,7 @@ export default function TodoPage() {
                             showArchive = {true}
                             removeCb = {removeCb}
                             updateCb = {updateCb}
+                            showStartFocus = {true}
                           />
                         </div>
                       );
