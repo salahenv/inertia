@@ -13,10 +13,8 @@ export default function TodoDetails() {
   const params = useParams();
   const [todo, setTodo] = useState<any>({});
   const [isTodoLoading, setIsTodoLoading] = useState(false);
-  const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [isSavingComment, setIsSavingComment] = useState(false);
-  const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
   const {
     todoId
@@ -25,11 +23,11 @@ export default function TodoDetails() {
   const {
     _id,
     name,
+    comments = [],
   } = todo;
 
   useEffect(() => {
     getTodoDetails();
-    getComments();
   }, [todoId]);
 
   const getTodoDetails = async () => {
@@ -58,32 +56,6 @@ export default function TodoDetails() {
     }
   };
 
-  const getComments = async () => {
-    setIsCommentsLoading(true);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/${todoId}/comments`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      const resData = await res.json();
-      if (resData.success) {
-        setComments(resData.data.comments);
-      } else {
-      }
-    } catch (error) {
-      alert(JSON.stringify(error));
-    } finally {
-      setIsCommentsLoading(false);
-    }
-  };
-
   const createComment = async (id: string) => {
     setIsSavingComment(true);
     const payload = {
@@ -104,7 +76,10 @@ export default function TodoDetails() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setComments(resData.data.comments || []);
+        setTodo({
+          ...todo,
+          comments: resData.data.comments
+        });
         setCommentText("");
       }
     } catch (error) {
@@ -122,8 +97,7 @@ export default function TodoDetails() {
           <div className="mt-8">
             <div className="text-lg text-gray-800">{name}</div>
           </div>
-          { isCommentsLoading ? <div>Loading...</div> :
-            <div className="mt-4">
+          <div className="mt-4">
               <textarea
                 placeholder="enter comment"
                 rows={2}
@@ -146,20 +120,20 @@ export default function TodoDetails() {
                   "Save"
                 )}
               </button>
-            
-                {
-                  comments.map((comment: any, index: number) => {
-                    return (
-                      <div key={index} className="mb-1">
-                        <div className="text-gray-800">{comment.text}</div>
-                        <div className="text-xs text-gray-500">
-                          {formatDate(comment.createdAt)}
-                        </div>
+
+              { comments.length ?
+                comments.map((comment: any, index: number) => {
+                  return (
+                    <div key={index} className="mb-1">
+                      <div className="text-gray-800">{comment.text}</div>
+                      <div className="text-xs text-gray-500">
+                        {formatDate(comment.createdAt)}
                       </div>
-                    );
-                })}
-            </div>
-          }
+                    </div>
+                  );
+                }) : <div className="text-center text-gray-400">No Comments Found</div>
+              }
+          </div>
         </div>
       }
     </div>
