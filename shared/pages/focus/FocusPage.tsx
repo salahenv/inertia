@@ -105,7 +105,7 @@ export default function FocusPage() {
       } else {
       }
     } catch (error) {
-      alert(JSON.stringify(error));
+      // alert(JSON.stringify(error));
     } finally {
       dispatch({
         type: "SET_IS_TODO_LOADING",
