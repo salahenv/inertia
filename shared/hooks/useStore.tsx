@@ -44,15 +44,21 @@ const focusReducer = (state: any, action: any) => {
         dayOffset: action.payload
       };
     }
+    default: {
+      return state;
+    }
   }
 };
 const todoReducer = (state: any, action: any) => {
   switch (action.type) {
-    case 'ADD_TODO_LIST': {
+    case 'SET_TODO_LIST': {
       return {
         ...state,
-        todos: action.payload
-      };
+        todayTodo: action.payload
+      } 
+    }
+    default: {
+      return state;
     }
   }
 }
@@ -64,13 +70,16 @@ const routineReducer = (state: any, action: any) => {
         routines: action.payload
       };
     }
+    default: {
+      return state;
+    }
   }
 }
 const rootReducer = (state: any, action: any) => {
   return {
-    focus: focusReducer(state, action),
-    todo: todoReducer(state, action),
-    routine: routineReducer(state, action)
+    focus: focusReducer(state.focus, action),
+    todo: todoReducer(state.todo, action),
+    routine: routineReducer(state.routine, action)
   }
 }
 
