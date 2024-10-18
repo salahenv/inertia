@@ -143,18 +143,20 @@ export default function TodoPage() {
                         <div 
                           key={index} 
                           className="mb-2 border border-gray-300 p-4 rounded shadow bg-white cursor-pointer"
-                          onClick = {() => onDetailsClick(todo)}
+                          // onClick = {() => onDetailsClick(todo)}
                         >
-                          <TodoItem 
-                            todo = {todo}
-                            disabledInput = {false}
-                            showCreatedDate = {true}
-                            showDalete = {true}
-                            showArchive = {true}
-                            removeCb = {removeCb}
-                            updateCb = {updateCb}
-                            showStartFocus = {true}
-                          />
+                          <Link href = {`/todo/${todo._id}`}>
+                            <TodoItem 
+                              todo = {todo}
+                              disabledInput = {false}
+                              showCreatedDate = {true}
+                              showDalete = {true}
+                              showArchive = {true}
+                              removeCb = {removeCb}
+                              updateCb = {updateCb}
+                              showStartFocus = {true}
+                            />
+                          </Link>
                         </div>
                       );
                     })

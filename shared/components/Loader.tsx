@@ -46,8 +46,24 @@ const SkeletonLoaderTodo = ({classNames}: any) => {
   );
 };
 
+const SkeletonLoaderTodoDetails = ({classNames}: any) => {
+  return (
+    <div>
+      <div className={"animate-pulse" + classNames}>
+        <div className="space-y-1">
+          <div className="h-16 bg-gray-200 rounded-md w-full"></div>
+          <div className="h-32 bg-gray-200 rounded-md w-full mb-8"></div>
+          <div className="h-16 bg-gray-200 rounded-md w-full"></div>
+          <div className="h-16 bg-gray-200 rounded-md w-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export {
     SkeletonLoaderFocus,
     SkeletonLoaderTimeSpent,
-    SkeletonLoaderTodo
+    SkeletonLoaderTodo,
+    SkeletonLoaderTodoDetails
 };

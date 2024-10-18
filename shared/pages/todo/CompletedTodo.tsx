@@ -133,14 +133,16 @@ export default function CompletedTodo() {
             todosCompleted.map((todo, index) => {
               return (
                 <div
-                  onClick = {() => onDetailsClick(todo)}
+                  // onClick = {() => onDetailsClick(todo)}
                   key={index} 
                   className="mb-2 border border-gray-300 p-4 cursor-pointer rounded shadow bg-white">
-                  <TodoItem 
-                    todo = {todo}
-                    disabledInput = {true}
-                    showUpdatedDate = {true}
-                  />
+                    <Link href = {`/todo/${todo._id}`}>
+                      <TodoItem 
+                        todo = {todo}
+                        disabledInput = {true}
+                        showUpdatedDate = {true}
+                      />
+                    </Link>
                 </div>
               );
             })
