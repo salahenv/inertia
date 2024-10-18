@@ -160,9 +160,9 @@ export default function TodoItem(props: any) {
           }
            {
             showStartFocus ? 
-            <Link href = {`/focus?todoId=${todo.id}`}>
+            <Link href = {`/focus?todoId=${todo._id}`}>
               <button
-                className="disabled:border-gray-200 disabled:text-gray-200 text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
+                className="disabled:border-gray-200 disabled:text-gray-200 text-gray-500 border border-blue-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
               >
                 Start Focus
             </button>
