@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import Timer from "../../components/Timer";
 import {
   SkeletonLoaderFocus,
@@ -23,14 +23,16 @@ import {
 } from "../../dateUtils";
 import TimeSpentBar from "../../components/TimeSpentBar";
 import useAuth from "../../hooks/auth";
-import PrevNextNav from "../../components/PrevNextNav";
 import { useFocusDispatch, useFocusStore } from "./useFocus";
 import FocusHeader from "./components/FocusHeader";
+import { useSearchParams } from "next/navigation";
 
 export default function FocusPage() {
   useAuth();
   const dispatch = useFocusDispatch();
   const focusStore = useFocusStore();
+  const searchParams = useSearchParams();
+  const todoId = searchParams.get('todoId');
 
   const [focusName, setFocusName] = useState("");
   const [startTime, setStartTime] = useState(0);
@@ -87,6 +89,13 @@ export default function FocusPage() {
         credentials: "include",
       });
       const resData = await res.json();
+      //
+      const foundTodo = resData?.data?.todo.find((t: any) => t._id === todoId);
+      console.log("====>", foundTodo);
+      if(foundTodo.name) {
+        setShowCreateModal(true);
+        setFocusName(foundTodo.name);
+      }
       if (resData.success) {
         dispatch({
           type: "ADD_TODO_LIST",

@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   formatDate,
 } from "../../../dateUtils";
+import Link from "next/link";
 
 function TimeAndDate({ date }: any) {
   return (
@@ -27,6 +28,7 @@ export default function TodoItem(props: any) {
         removeCb,
         updateCb,
         missed,
+        showStartFocus = false,
     } = props;
     
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
@@ -155,6 +157,17 @@ export default function TodoItem(props: any) {
             >
                 Un-Archive
             </button> : null
+          }
+           {
+            showStartFocus ? 
+            <Link href = {`/focus?todoId=${todo.id}`}>
+              <button
+                className="disabled:border-gray-200 disabled:text-gray-200 text-orange-500 border border-orange-500 font-medium text-xs cursor-pointer rounded px-2 py-1"
+              >
+                Start Focus
+            </button>
+            </Link>
+             : null
           }
         </div>
       </div>
