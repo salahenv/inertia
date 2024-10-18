@@ -68,11 +68,8 @@ export default function FocusPage() {
 
   useEffect(() => {
     getTags();
+    getTodo();
   }, []);
-
-  useEffect(() => {
-    showTodoDropDown ? getTodo() : null;
-  }, [showTodoDropDown]);
 
   const getTodo = async () => {
     try {
@@ -92,6 +89,7 @@ export default function FocusPage() {
       //
       const foundTodo = resData?.data?.todo.find((t: any) => t._id === todoId);
       console.log("====>", foundTodo);
+
       if(foundTodo.name) {
         setShowCreateModal(true);
         setFocusName(foundTodo.name);
