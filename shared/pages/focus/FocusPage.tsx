@@ -88,12 +88,11 @@ export default function FocusPage() {
       const resData = await res.json();
       //
       const foundTodo = resData?.data?.todo.find((t: any) => t._id === todoId);
-      console.log("====>", foundTodo);
-
       if(foundTodo.name) {
         setShowCreateModal(true);
         setFocusName(foundTodo.name);
       }
+      //
       if (resData.success) {
         dispatch({
           type: "ADD_TODO_LIST",
