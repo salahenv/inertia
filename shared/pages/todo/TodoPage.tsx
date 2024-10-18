@@ -2,9 +2,6 @@
 import { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
 import { SkeletonLoaderTodo } from "../../components/Loader";
-import {
-  IncompletedIcon,
-} from "../../../shared/icons";
 import useAuth from '../../../shared/hooks/auth';
 import Link from "next/link";
 import TodoItem from "./components/TodoItem";
@@ -55,7 +52,7 @@ export default function TodoPage() {
       } else {
       }
     } catch (error) {
-      alert(JSON.stringify(error));
+      console.log("error todo", error);
     } finally {
       setIsTodoLoading(false);
     }
