@@ -36,7 +36,7 @@ export default function TodoDetails() {
     setIsTodoLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/${todoId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/details/${todoId}`,
         {
           headers: {
             Accept: "application/json",
