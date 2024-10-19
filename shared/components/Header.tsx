@@ -49,7 +49,7 @@ const Header = ({
       </Link>
       { showMenu ?
       <div className='flex'>
-        <Link href = '/focus'>
+        <Link href = '/inertia/focus'>
           <div className={
             `font-medium cursor-pointer text-xl ml-4 hover:text-gray-800 ${selectedMenu === 'focus' ? 'text-blue-600 border-b-4 border-blue-600': 'text-gray-600'}`
           }>Focus</div>
@@ -59,18 +59,18 @@ const Header = ({
             `font-medium cursor-pointer text-xl hover:text-gray-800 ${selectedMenu === 'todo' ? 'text-blue-600 border-b-4 border-blue-600': 'text-gray-600'}`
           }>Todo</div>
           <div className='absolute hidden group-hover:block bg-white shadow px-4 py-2 rounded'>
-            <Link href = '/todo'>
+            <Link href = '/inertia/todo'>
               <div className='text-gray-600 mb-1 hover:text-gray-800'>Today</div>
             </Link>
-            <Link href = '/todo/completed'>
+            <Link href = '/inertia/todo/completed'>
               <div className='text-gray-600 mb-1 hover:text-gray-800'>Completed</div>
             </Link>
-            <Link href = '/todo/archived'>
+            <Link href = '/inertia/todo/archived'>
               <div className='text-gray-600 hover:text-gray-800'>Archived</div>
             </Link>
           </div>
         </div>
-        <Link href = '/routine'>
+        <Link href = '/inertia/routine'>
           <div className={
             `font-medium ml-4 cursor-pointer text-xl hover:text-gray-800 ${selectedMenu === 'routine' ? 'text-blue-600 border-blue-600 border-b-4': 'text-gray-600'}`
           }>Routine</div>

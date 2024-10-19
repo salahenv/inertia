@@ -6,7 +6,7 @@ import { Fragment } from "react";
 export default function Routine() {
     return (
         <Fragment>
-            <Header showMenu = {false}/>
+            <Header showMenu = {true}/>
             <RoutineTodo />
         </Fragment>
     );

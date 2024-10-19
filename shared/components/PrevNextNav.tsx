@@ -1,5 +1,5 @@
 import { NextIcon, PrevIcon } from "../icons";
-import { useFocusDispatch, useFocusStore } from "../pages/focus/useFocus";
+import { useStore, useDispatch } from "../hooks/useStore";
 import { useAppData } from "../hooks/AppDataProvider";
 
 const durationFilters = [
@@ -19,8 +19,13 @@ const durationFilters = [
 
 function PrevNextNav(props: any) {
   const appData = useAppData();
-  const dispatch = useFocusDispatch();
-  const focusStore = useFocusStore();
+  const dispatch = useDispatch();
+  const store = useStore();
+  const {
+    focus: {
+      range, dayOffset, selectedStartDay, selectedEndDay, isFocusLoading
+    } = {},
+  } = store;
   const { deviceType = "desktop" } = appData;
 
   const onPrevClick = () => {
@@ -39,10 +44,7 @@ function PrevNextNav(props: any) {
         payload: dayOffset - 1,
       });
     }
-  };
-
-  const { range, dayOffset, selectedStartDay, selectedEndDay, isFocusLoading } =
-    focusStore;
+  }
 
   const onDurationClick = (value: string) => {
     dispatch({

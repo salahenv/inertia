@@ -1,11 +1,13 @@
 import React from "react";
-import { useFocusStore } from "../pages/focus/useFocus";
+import { useStore } from "../hooks/useStore";
 
 const TimeSpentBar = () => {
-  const focusStore = useFocusStore();
+  const store = useStore();
   const {
-    focuses = []
-  } = focusStore || {};
+    focus: {
+      focuses = []
+    } = {}
+  } = store || {};
   const calculateTimeDifference = (start: string, end: string) => {
     const startTime = new Date(start).getTime();
     const endTime = new Date(end).getTime();

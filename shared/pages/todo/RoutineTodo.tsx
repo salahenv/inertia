@@ -188,7 +188,7 @@ export default function RoutineTodo() {
   }
 
   const updateCb = (routine: any) => {
-    const uRoutines = routines.map((r) => {
+    const uRoutines = routines.map((r: any) => {
       if(r._id === routine._id) {
         r = routine;
       }
