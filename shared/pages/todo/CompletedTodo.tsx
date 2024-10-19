@@ -12,24 +12,15 @@ import useAuth from '../../../shared/hooks/auth';
 import TodoItem from "./components/TodoItem";
 import Link from "next/link";
 import DetailsModal from "./components/DetailsModal";
+import { useDispatch, useStore } from "@/shared/hooks/useStore";
 
 export default function CompletedTodo() {
   useAuth();
+  const dispatch = useDispatch();
+  const store = useStore();
   const [isCompletedTodoLoading, setIsCompletedTodoLoading] = useState(false);
-  const [todosCompleted, setTodosCompleted] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      archived: boolean;
-    }[]
-  >([]);
   const [dayOffset, setDayOffset] = useState(1);
   const [selectedDay, setSelectedDay] = useState("Yesterday");
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [todo, setTodo] = useState(null);
 
   useEffect(() => {
     getTodoCompleted();
@@ -87,7 +78,10 @@ export default function CompletedTodo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setTodosCompleted(resData.data.todos);
+        dispatch({
+          type: 'SET_COMPLETED_TODO_LIST',
+          payload: resData.data.todos || [],
+        })
         const formatedDate = formatDateString(resData.data.date);
         setSelectedDay(formatedDate);
       } else {
@@ -99,26 +93,14 @@ export default function CompletedTodo() {
     }
   };
 
-  const onDetailsClick = (todo: any) => {
-    setShowDetailsModal(true);
-    setTodo(todo);
-  }
-
-  const onCloseDetailsModal = () => {
-    setShowDetailsModal(false);
-    setTodo(null);
-  }
+  const {
+    todo: {
+      completedTodo = [],
+    } = {},
+  } = store;
 
   return (
-  
       <div className="bg-neutral-100 p-4 min-h-screen">
-        { 
-          showDetailsModal ? 
-          <DetailsModal
-            closeCb = {onCloseDetailsModal}
-            todo = {todo}
-          /> : null
-        }
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="font-medium text-xl flex">
             <CompletedIcon />
@@ -129,11 +111,10 @@ export default function CompletedTodo() {
         <div>
           {isCompletedTodoLoading ? (
             <SkeletonLoaderTodo />
-          ) : todosCompleted && todosCompleted.length ? (
-            todosCompleted.map((todo, index) => {
+          ) : completedTodo && completedTodo.length ? (
+            completedTodo.map((todo: any, index: any) => {
               return (
                 <div
-                  // onClick = {() => onDetailsClick(todo)}
                   key={index} 
                   className="mb-2 border border-gray-300 p-4 cursor-pointer rounded shadow bg-white">
                     <Link href = {`/todo/${todo._id}`}>
@@ -153,9 +134,6 @@ export default function CompletedTodo() {
               </div>
               <div className="text-xl text-center mt-2 text-red-500">
                 No completed todo!
-              </div>
-              <div className="text-lg text-center mt-1 text-gray-500">
-                Create todo it will start reflecting
               </div>
             </div>
           )}

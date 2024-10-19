@@ -57,6 +57,18 @@ const todoReducer = (state: any, action: any) => {
         todayTodo: action.payload
       } 
     }
+    case 'SET_COMPLETED_TODO_LIST': {
+      return {
+        ...state,
+        completedTodo: action.payload
+      } 
+    }
+    case 'SET_ARCHIVED_TODO_LIST': {
+      return {
+        ...state,
+        archivedTodo: action.payload
+      } 
+    }
     default: {
       return state;
     }
