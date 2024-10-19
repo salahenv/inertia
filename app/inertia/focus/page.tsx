@@ -6,7 +6,7 @@ import { Fragment, Suspense } from "react";
 export default function Focus() {
   return (
     <Fragment>
-      <Header showMenu = {false}/>
+      <Header showMenu = {true}/>
       <Suspense fallback="loading">
         <FocusPage />
       </Suspense>
