@@ -12,28 +12,25 @@ import {
   CalendarIcon,
   ClockIcon,
   DeleteIcon,
-  NoFocus,
-  WhatsappIcon,
+  NoFocus
 } from "../../icons";
 import {
   formatDateString,
-  formatDate,
   getTimeFromDate,
   getDateByFormat,
 } from "../../dateUtils";
 import TimeSpentBar from "../../components/TimeSpentBar";
 import useAuth from "../../hooks/auth";
-import { useFocusDispatch, useFocusStore } from "./useFocus";
+import { useStore, useDispatch } from "@/shared/hooks/useStore";
 import FocusHeader from "./components/FocusHeader";
 import { useSearchParams } from "next/navigation";
 
 export default function FocusPage() {
   useAuth();
-  const dispatch = useFocusDispatch();
-  const focusStore = useFocusStore();
+  const dispatch = useDispatch();
+  const store = useStore();
   const searchParams = useSearchParams();
   const todoId = searchParams.get('todoId');
-
   const [focusName, setFocusName] = useState("");
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -43,27 +40,25 @@ export default function FocusPage() {
   const [showSuccessModal, setSuccessModal] = useState(false);
   const [isSaveFocusLoading, setIsSaveFocusLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState("");
-  const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] =
-    useState(false);
+  const [showCreateFocusAreaInput, setShowCreateFocusAreaInput] = useState(false);
   const [areaName, setAreaName] = useState("");
   const [isSaveFocusAreaLoading, setIsSaveFocusAreaLoading] = useState(false);
   const [isFocusUpdating, setIsFocusUpdating] = useState(false);
-  const [showTodoDropDown, setShowTodoDropDown] = useState(false);
+
 
   const {
-    focuses = [],
-    areas = [],
-    todos = [],
-    filteredTodos = [],
-    isFocusLoading = false,
-    isTodoLoading = false,
-    dayOffset = 0,
-    range = "daily",
-  } = focusStore || {};
+    focus: {
+      focuses = [],
+      areas = [],
+      todos = [],
+      isFocusLoading = false,
+      dayOffset = 0,
+      range = "daily",
+    } = {},
+  } = store;
 
   useEffect(() => {
     getFocus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayOffset, range]);
 
   useEffect(() => {
@@ -414,10 +409,6 @@ export default function FocusPage() {
     );
   });
 
-  const onInputFocus = (event: any) => {
-    event.type === "focus" ? setShowTodoDropDown(true) : null;
-  };
-
   const onInputChange = (value: string) => {
     setFocusName(value);
     if (value) {
@@ -428,18 +419,12 @@ export default function FocusPage() {
         type: "ADD_FILTERED_TODO_LIST",
         payload: filteredTodos,
       });
-      setShowTodoDropDown(!!filteredTodos.length);
     } else {
       dispatch({
         type: "ADD_FILTERED_TODO_LIST",
         payload: todos,
       });
     }
-  };
-
-  const onSelectTodo = (todoName: string) => {
-    setFocusName(todoName);
-    setShowTodoDropDown(false);
   };
 
   const onShare = async () => {
@@ -544,38 +529,7 @@ export default function FocusPage() {
                     placeholder="Enter focus name"
                     value={focusName}
                     onChange={(e) => onInputChange(e.target.value)}
-                    onFocus={onInputFocus}
-                    onBlur={onInputFocus}
                   ></input>
-                  {/* {showTodoDropDown ? (
-                    <div className="md:h-48 overflow-y-scroll shadow-2xl rounded p-2 z-10 w-full absolute bg-gray-200 top-[42px] left-0">
-                      {isTodoLoading ? (
-                        <SkeletonLoaderFocus />
-                      ) : (
-                        <div>
-                          <div className="border-b font-medium border-solid border-gray-400 text-gray-800 py-2">
-                            Active Todos
-                          </div>
-                          {filteredTodos
-                            .filter((todo: any) => !todo.completed)
-                            .map((todo: any, index: any) => {
-                              return (
-                                <div
-                                  onClick={() => onSelectTodo(todo.name)}
-                                  key={index}
-                                  className="cursor-pointer border-b border-solid border-gray-400 py-2 text-gray-800"
-                                >
-                                  {todo.name} -{" "}
-                                  <span className="text-gray-500 text-sm">
-                                    {formatDate(todo?.createdAt)}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                        </div>
-                      )}
-                    </div>
-                  ) : null} */}
                 </div>
                 <div>
                   <div className="mb-2 text-neutral-900">

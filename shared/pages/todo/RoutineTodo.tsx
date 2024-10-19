@@ -5,9 +5,9 @@ import {
   NoFocus,
 } from "../../../shared/icons";
 import useAuth from '../../../shared/hooks/auth';
-import Link from "next/link";
 import Spinner from "@/shared/components/Spinner";
 import RoutineItem from "./components/RoutineItem";
+import { useDispatch, useStore } from "@/shared/hooks/useStore";
 
 const repeatModes = [
     {
@@ -85,15 +85,19 @@ const monthDays = [
 export default function RoutineTodo() {
   useAuth();
   const [isCompletedTodoLoading, setIsCompletedTodoLoading] = useState(false);
-  const [routines, setRoutines] = useState<
-    any[]
-  >([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [routineName, setRoutineName] = useState('');
   const [selectedRepeatMode, setSelectedRepeatMode] = useState(repeatModes[1]);
   const [selectedRepeatOn, setSelectedRepeatOn] = useState<string[]>([]);
   const [isSavingRoutine, setIsSavingRoutine] = useState(false); 
+  const dispatch = useDispatch();
+  const store = useStore();
 
+  const {
+    routine: {
+      routines = [],
+    } = {},
+  } = store;
 
   useEffect(() => {
     getRoutineTodo();
@@ -118,7 +122,10 @@ export default function RoutineTodo() {
         const {
           todos = [],
         } = resData.data;
-        setRoutines(todos);
+        dispatch({
+          type: 'ADD_ROUTINE_LIST',
+          payload: todos
+        });
       } else {
       }
     } catch (error) {
@@ -151,7 +158,10 @@ export default function RoutineTodo() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setRoutines([...routines, resData.data.routine]);
+        dispatch({
+          type: 'ADD_ROUTINE_LIST',
+          payload: [...routines, resData.data.routine]
+        });
         setRoutineName("");
         toggleCreateRoutineModal();
       } else {
@@ -168,20 +178,26 @@ export default function RoutineTodo() {
   }
 
   const removeCb = (routine: any) => {
-    const uRoutines = routines.filter((t) => {
+    const uRoutines = routines.filter((t: any) => {
       return t._id !== routine._id;
     });
-    setRoutines(uRoutines);
+    dispatch({
+      type: 'ADD_ROUTINE_LIST',
+      payload: uRoutines
+    });
   }
 
   const updateCb = (routine: any) => {
-    const uTodos = routines.map((r) => {
+    const uRoutines = routines.map((r: any) => {
       if(r._id === routine._id) {
         r = routine;
       }
       return r;
     });
-    setRoutines(uTodos);
+    dispatch({
+      type: 'ADD_ROUTINE_LIST',
+      payload: uRoutines
+    });
   }
 
   const onSelectedRepeat = (selectedValue: string) => {
@@ -322,7 +338,7 @@ export default function RoutineTodo() {
           {isCompletedTodoLoading ? (
             <SkeletonLoaderTodo />
           ) : routines && routines.length ? (
-            routines.map((todo, index) => {
+            routines.map((todo: any, index: any) => {
               return (
                 <div 
                   key={index} 

@@ -6,26 +6,22 @@ import useAuth from '../../../shared/hooks/auth';
 import Link from "next/link";
 import TodoItem from "./components/TodoItem";
 import DetailsModal from "./components/DetailsModal";
+import { useDispatch, useStore } from "@/shared/hooks/useStore";
 
 export default function TodoPage() {
   useAuth();
+  const dispatch = useDispatch();
+  const store = useStore();
   const [isTodoLoading, setIsTodoLoading] = useState(false);
-  const [todos, setTodos] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      archived: boolean;
-      routine: boolean;
-    }[]
-  >([]);
   const [showAddTodo, setShowAddTodo] = useState(true);
   const [todoName, setTodoName] = useState("");
   const [isSavingTodo, setIsSavingTodo] = useState(false);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [todo, setTodo] = useState(null);
+
+  const {
+    todo: {
+      todayTodo = [],
+    } = {},
+  } = store;
 
   useEffect(() => {
     getTodo();
@@ -48,7 +44,10 @@ export default function TodoPage() {
       });
       const resData = await res.json();
       if (resData.success) {
-        setTodos(resData.data.todo);
+        dispatch({
+          type: 'SET_TODO_LIST',
+          payload: resData.data.todo || []
+        })
       } else {
       }
     } catch (error) {
@@ -79,7 +78,10 @@ export default function TodoPage() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setTodos([...todos, resData.data.todo]);
+        dispatch({
+          type: 'SET_TODO_LIST',
+          payload: [...todayTodo, resData.data.todo]
+        });
         setTodoName("");
         toggleAddTodo();
       } else {
@@ -92,41 +94,30 @@ export default function TodoPage() {
   };
 
   const removeCb = (todo: any) => {
-    const uTodos = todos.filter((t) => {
+    const uTodos = todayTodo.filter((t: any) => {
       return t._id !== todo._id;
     });
-    setTodos(uTodos);
+    dispatch({
+      type: 'SET_TODO_LIST',
+      payload: uTodos
+    });
   }
 
   const updateCb = (todo: any) => {
-    const uTodos = todos.map((t) => {
+    const uTodos = todayTodo.map((t: any) => {
       if(t._id === todo._id) {
         t = todo;
       }
       return t;
     });
-    setTodos(uTodos);
-  }
-
-  const onDetailsClick = (todo: any) => {
-    setShowDetailsModal(true);
-    setTodo(todo);
-  }
-
-  const onCloseDetailsModal = () => {
-    setShowDetailsModal(false);
-    setTodo(null);
+    dispatch({
+      type: 'SET_TODO_LIST',
+      payload: uTodos
+    });
   }
 
   return (
     <div className="bg-neutral-100 mb-32 min-h-screen">
-      { 
-        showDetailsModal ? 
-          <DetailsModal
-            closeCb = {onCloseDetailsModal}
-            todo = {todo}
-          /> : null
-      }
       <div className="p-4">
         <div>
           {isTodoLoading ? (
@@ -134,8 +125,8 @@ export default function TodoPage() {
           ) : (
             <div>
               <div>
-                {todos && todos.length
-                  ? todos.map((todo: any, index: number) => {
+                {todayTodo && todayTodo.length
+                  ? todayTodo.map((todo: any, index: number) => {
                       return (
                         <div 
                           key={index} 

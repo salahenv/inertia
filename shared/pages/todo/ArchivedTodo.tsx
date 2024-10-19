@@ -4,51 +4,30 @@ import { SkeletonLoaderTodo } from "../../components/Loader";
 import { NoFocus } from "../../icons";
 import useAuth from "../../hooks/auth";
 import TodoItem from "./components/TodoItem";
+import { useDispatch, useStore } from "@/shared/hooks/useStore";
 
 export default function ArchivedTodo() {
   useAuth();
+  const dispatch = useDispatch();
+  const store = useStore();
   const target = useRef(null);
   const [isTodoLoading, setIsTodoLoading] = useState(false);
-  const [todos, setTodos] = useState<
-    {
-      name: string;
-      completed: boolean;
-      _id: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[]
-  >([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
+  const {
+    todo: {
+      archivedTodo = [],
+    } = {},
+  } = store;
+
   useEffect(() => {
-    console.log(page);
     getTodo(page);
   }, [page]);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (
-  //       window.innerHeight + document.documentElement.scrollTop + 100 >=
-  //       document.documentElement.scrollHeight
-  //     ) {
-  //       if (hasMore && !isTodoLoading) {
-  //         setPage((prevPage) => prevPage + 1);
-  //       }
-  //     }
-  //   };
-
-  //   const debouncedHandleScroll = debounce(handleScroll, 200);
-
-  //   window.addEventListener("scroll", debouncedHandleScroll);
-  //   return () => window.removeEventListener("scroll", debouncedHandleScroll);
-  // }, [hasMore, isTodoLoading]);
-
   useEffect(() => {
-
     const observer = new IntersectionObserver((entries) => {
       if(entries[0].isIntersecting) {
-        console.log("intersecting");
         if(page <= totalPage && !isTodoLoading) {
           setPage((prevPage) => prevPage + 1);
         }
@@ -89,7 +68,10 @@ export default function ArchivedTodo() {
           } = {},
         } = resData;
         setTotalPage(totalPages);
-        setTodos((prevTodos) => [...prevTodos, ...todos]);
+        dispatch({
+          type: 'SET_ARCHIVED_TODO_LIST', 
+          payload: [...archivedTodo, ...todos]
+        })
       } else {
         throw new Error("Failed to fetch todos.");
       }
@@ -101,26 +83,32 @@ export default function ArchivedTodo() {
   };
 
   const removeCb = (todo: any) => {
-    const uTodos = todos.filter((t) => t._id !== todo._id);
-    setTodos(uTodos);
+    const uTodos = archivedTodo.filter((t: any) => t._id !== todo._id);
+    dispatch({
+      type: 'SET_ARCHIVED_TODO_LIST', 
+      payload: uTodos
+    });
   };
 
   const updateCb = (todo: any) => {
-    const uTodos = todos.map((t) => (t._id === todo._id ? todo : t));
-    setTodos(uTodos);
+    const uTodos = archivedTodo.map((t: any) => (t._id === todo._id ? todo : t));
+    dispatch({
+      type: 'SET_ARCHIVED_TODO_LIST', 
+      payload: uTodos
+    });
   };
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
-      {isTodoLoading && !todos.length ? (
+      {isTodoLoading && !archivedTodo.length ? (
         <div className="mt-4 text-gray-800 text-center">
           <SkeletonLoaderTodo />
         </div>
       ) : (
         <>
-          {todos.length > 0 ? (
+          {archivedTodo.length > 0 ? (
             <div>
-              {todos.map((todo, index) => (
+              {archivedTodo.map((todo: any, index: any) => (
                 <div
                   key={index}
                   className="mb-2 border border-gray-300 p-4 rounded shadow bg-white"

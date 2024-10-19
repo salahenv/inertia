@@ -22,12 +22,6 @@ import {
     );
     const storeContext = createContext<State>(initialState);
   
-    if (isPersistent) {
-      try {
-        initialState =
-          JSON.parse(localStorage.getItem(key) || '') || initialState;
-      } catch {}
-    }
     const reducer = (state: State, action: UserAction) => {
       const newState = userReducer(state, action);
       if (isPersistent) localStorage.setItem(key, JSON.stringify(newState));
