@@ -133,7 +133,7 @@ export default function TodoPage() {
                           className="mb-2 border border-gray-300 p-4 rounded shadow bg-white cursor-pointer"
                           // onClick = {() => onDetailsClick(todo)}
                         >
-                          <Link href = {`/todo/${todo._id}`}>
+                          <Link href = {`/inertia/todo/details/${todo._id}`}>
                             <TodoItem 
                               todo = {todo}
                               disabledInput = {false}

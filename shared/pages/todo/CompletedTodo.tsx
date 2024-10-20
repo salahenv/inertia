@@ -117,7 +117,7 @@ export default function CompletedTodo() {
                 <div
                   key={index} 
                   className="mb-2 border border-gray-300 p-4 cursor-pointer rounded shadow bg-white">
-                    <Link href = {`/todo/${todo._id}`}>
+                    <Link href = {`/inertia/todo/details/${todo._id}`}>
                       <TodoItem 
                         todo = {todo}
                         disabledInput = {true}

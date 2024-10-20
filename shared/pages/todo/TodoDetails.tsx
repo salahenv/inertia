@@ -7,54 +7,39 @@ import { useParams } from "next/navigation";
 import {
   SkeletonLoaderTodoDetails,
 } from "../../components/Loader";
+import { useDispatch, useStore } from "@/shared/hooks/useStore";
 
 export default function TodoDetails() {
   useAuth();
   const params = useParams();
-  const [todo, setTodo] = useState<any>({});
-  const [isTodoLoading, setIsTodoLoading] = useState(false);
+  const [todoDetails, setTodoDetails] = useState<any>({});
   const [commentText, setCommentText] = useState("");
   const [isSavingComment, setIsSavingComment] = useState(false);
+  const store = useStore();
+  const dispatch = useDispatch();
 
   const {
     todoId
   } = params;
 
   const {
-    _id,
-    name,
-    comments = [],
-  } = todo;
+    todo: {
+      todayTodo = [],
+      completedTodo = [],
+    },
+  } = store;
 
   useEffect(() => {
-    getTodoDetails();
-  }, [todoId]);
+    const foundTodo = [...todayTodo, ...completedTodo].find((todo: any) => todo._id === todoId);
+    setTodoDetails(foundTodo);
+  }, [todoId])
 
-  const getTodoDetails = async () => {
-    setIsTodoLoading(true);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/todo/details/${todoId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      const resData = await res.json();
-      if (resData.success) {
-        setTodo(resData.data.todo);
-      } else {
-      }
-    } catch (error) {
-      alert(JSON.stringify(error));
-    } finally {
-      setIsTodoLoading(false);
-    }
-  };
+  const {
+    _id,
+    name,
+    completed = false,
+    comments = [],
+  } = todoDetails;
 
   const createComment = async (id: string) => {
     setIsSavingComment(true);
@@ -76,10 +61,40 @@ export default function TodoDetails() {
       );
       const resData = await res.json();
       if (resData.success) {
-        setTodo({
-          ...todo,
+        setTodoDetails({
+          ...todoDetails,
           comments: resData.data.comments
         });
+        // update global store
+        if(completed) {
+          dispatch({
+            name: 'SET_COMPLETED_TODO_LIST',
+            payload: completedTodo.map((todo: any) => {
+              if(todo._id === todoId) {
+                return {
+                  ...todo,
+                  comments: resData.data.comments
+                }
+              } else {
+                return todo;
+              }
+            })
+          })
+        } else {
+          dispatch({
+            name: 'SET_TODO_LIST',
+            payload: todayTodo.map((todo: any) => {
+              if(todo._id === todoId) {
+                return {
+                  ...todo,
+                  comments: resData.data.comments
+                }
+              } else {
+                return todo;
+              }
+            })
+          })
+        }
         setCommentText("");
       }
     } catch (error) {
@@ -91,8 +106,6 @@ export default function TodoDetails() {
 
   return (
     <div className="bg-neutral-100 p-4 min-h-screen">
-      {
-        isTodoLoading ? <SkeletonLoaderTodoDetails /> :
         <div>
           <div className="mt-8">
             <div className="text-lg text-gray-800">{name}</div>
@@ -135,7 +148,6 @@ export default function TodoDetails() {
               }
           </div>
         </div>
-      }
     </div>
   );
 }

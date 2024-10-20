@@ -160,7 +160,7 @@ export default function TodoItem(props: any) {
           }
            {
             showStartFocus ? 
-            <Link href = {`/focus?todoId=${todo._id}`}>
+            <Link href = {`/inertia/focus?todoId=${todo._id}`}>
               <button
                 className="disabled:border-gray-200 disabled:text-gray-200 text-blue-700 border border-blue-700 font-medium text-xs cursor-pointer rounded px-2 py-1"
               >
