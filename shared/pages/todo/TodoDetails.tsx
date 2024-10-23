@@ -115,7 +115,7 @@ export default function TodoDetails() {
                 placeholder="enter comment"
                 rows={2}
                 value={commentText}
-                className="w-full mb-2 p-4"
+                className="w-full mb-2 p-4 text-gray-800"
                 onChange={(e) => setCommentText(e.target.value)}
               ></textarea>
               <button
