@@ -36,6 +36,7 @@ export default function TodoItem(props: any) {
 
   const onUpdateTodo = async (event: any, todo: any, payload: any) => {
     event.stopPropagation();
+    event.preventDefault();
     setIsUpdatingTodo(true);
     try {
       const res = await fetch(
@@ -68,6 +69,7 @@ export default function TodoItem(props: any) {
 
   const onDeleteFocusTodo = async (event: any, todo: any) => {
     event.stopPropagation();
+    event.preventDefault();
     setIsRemovingTodo(true);
     try {
       const res = await fetch(
